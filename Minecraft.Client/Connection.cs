@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft.Client
+namespace Decent.Minecraft.Client
 {
     /// <summary>
     /// A connection to a Minecraft game.
@@ -26,10 +26,16 @@ namespace Minecraft.Client
             _port = port;
         }
 
-        public async Task OpenAsync() {
+        public async Task OpenAsync()
+        {
             await _socket.ConnectAsync(_address, _port);
             _stream = _socket.GetStream();
             _streamReader = new StreamReader(_stream);
+        }
+
+        public void Open()
+        {
+            OpenAsync().Wait();
         }
 
         public void Close()
@@ -49,9 +55,24 @@ namespace Minecraft.Client
             await SendAsync(function, (IEnumerable)data);
         }
 
+        public void Send(string function, IEnumerable data)
+        {
+            SendAsync(function, data).Wait();
+        }
+
+        public void Send(string function, params object[] data)
+        {
+            SendAsync(function, data).Wait();
+        }
+
         public async Task<string> ReceiveAsync()
         {
             return await _streamReader.ReadLineAsync();
+        }
+
+        public string Receive()
+        {
+            return ReceiveAsync().Result;
         }
 
         public async Task<string> SendAndReceiveAsync(string function, IEnumerable data)
@@ -63,6 +84,16 @@ namespace Minecraft.Client
         public async Task<string> SendAndReceiveAsync(string function, params object[] data)
         {
             return await SendAndReceiveAsync(function, (IEnumerable)data);
+        }
+
+        public string SendAndReceive(string function, IEnumerable data)
+        {
+            return SendAndReceiveAsync(function, data).Result;
+        }
+
+        public string SendAndReceive(string function, params object[] data)
+        {
+            return SendAndReceiveAsync(function, data).Result;
         }
 
         protected virtual void Dispose(bool disposing)

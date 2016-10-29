@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Minecraft.Client
+namespace Decent.Minecraft.Client
 {
     public enum BlockType : byte
     {
