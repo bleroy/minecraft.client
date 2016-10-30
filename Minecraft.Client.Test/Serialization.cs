@@ -6,6 +6,7 @@ namespace Decent.Minecraft.Client.Test
     public class Serialization
     {
         [Theory,
+            InlineData(new object[] { }, ""),
             InlineData(new[] { 1, 2, 3 }, "1,2,3"),
             InlineData("foo", "foo"),
             InlineData(new object[] { 1, "foo", 2.3 }, "1,foo,2.3"),
