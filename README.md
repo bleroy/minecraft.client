@@ -14,7 +14,7 @@ Reference the library, then you can open a connection and start scripting the Mi
 world:
 
 ```csharp
-using (var world = World.Connect(args[0]))
+using (var world = World.Connect())
 {
     world.PostToChat("Hello from C# and .NET Core!");
     var originBlock = world.GetBlockType(0, 0, 0);
