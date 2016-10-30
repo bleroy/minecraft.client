@@ -14,13 +14,13 @@ Reference the library, then you can open a connection and start scripting the Mi
 world:
 
 ```csharp
-using (var connection = new Connection())
+using (var world = World.Connect(args[0]))
 {
-    connection.Open();
-    var world = new World(connection);
     world.PostToChat("Hello from C# and .NET Core!");
     var originBlock = world.GetBlockType(0, 0, 0);
     world.PostToChat($"Origin block is {originBlock}.");
+    var playerPosition = world.Player.GetPosition();
+    world.PostToChat($"Player is at {playerPosition}");
 }
 ```
 

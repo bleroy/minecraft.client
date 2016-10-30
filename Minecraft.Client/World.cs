@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using static Decent.Minecraft.Client.Block;
 
 namespace Decent.Minecraft.Client
 {
-    public class World
+    public class World : IDisposable
     {
-        public World(Connection connection)
+        internal World(Connection connection)
         {
             Connection = connection;
             Player = new Entity(Entity.EntityType.ThePlayer, connection, "player");
@@ -13,6 +14,14 @@ namespace Decent.Minecraft.Client
 
         private Connection Connection { get; }
         public Entity Player { get; }
+
+        public static World Connect(string address = "localhost", int port = 4711)
+        {
+            var connection = new Connection(address, port);
+            var world = new World(connection);
+            connection.Open();
+            return world;
+        }
 
         public async Task<BlockType> GetBlockTypeAsync(int x, int y, int z)
         {
@@ -32,6 +41,11 @@ namespace Decent.Minecraft.Client
         public void PostToChat(string message)
         {
             PostToChatAsync(message).Wait();
+        }
+
+        public void Dispose()
+        {
+            Connection.Close();
         }
     }
 }
