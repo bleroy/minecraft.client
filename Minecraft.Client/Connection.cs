@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -46,6 +47,7 @@ namespace Decent.Minecraft.Client
         public async Task SendAsync(string function, IEnumerable data)
         {
             var s = $"{function}({data.FlattenToString()})\n";
+            Debug.WriteLine(s);
             var buffer = Encoding.ASCII.GetBytes(s);
             await _stream.WriteAsync(buffer, 0, buffer.Length);
         }
