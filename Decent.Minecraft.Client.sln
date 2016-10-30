@@ -9,6 +9,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Decent.Minecraft.Scratch", 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Decent.Minecraft.Client.Test", "Minecraft.Client.Test\Decent.Minecraft.Client.Test.xproj", "{ABA3035B-2E87-4C5B-ABF8-EF77958FF316}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5408FFD6-4142-40D9-8B0C-EFDEBCA99451}"
+	ProjectSection(SolutionItems) = preProject
+		decent.minecraft.png = decent.minecraft.png
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
