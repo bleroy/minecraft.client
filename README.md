@@ -4,6 +4,28 @@ Decent Minecraft Client
 A client library for the original (Java) version of Minecraft.
 It requires Forge and the Raspberry Jam mod on the Minecraft side.
 
+How to use it
+-------------
+
+Requirements: Minecraft (the Java version, now the micro edition or the Windows 10 edition),
+Forge, and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
+
+Reference the library, then you can open a connection and start scripting the Minecraft
+world:
+
+```csharp
+using (var connection = new Connection())
+{
+    connection.Open();
+    var world = new World(connection);
+    world.PostToChat("Hello from C# and .NET Core!");
+    var originBlock = world.GetBlockType(0, 0, 0);
+    world.PostToChat($"Origin block is {originBlock}.");
+}
+```
+
+![Scripting Minecraft from C#](decent.minecraft.png)
+
 Status
 ------
 
