@@ -1,4 +1,4 @@
-﻿{
+{
   "description": "A client library for Minecraft (the original Java version).",
   "packOptions": {
     "summary": "A client library for the original version of Minecraft. It requires Forge and the Raspberry Jam mod on the Minecraft side.",
@@ -12,7 +12,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "1.6.0",
+    "System.Numerics.Vectors": "4.1.1"
   },
 
   "frameworks": {

@@ -1,19 +1,22 @@
 ﻿using System.Threading.Tasks;
+using static Decent.Minecraft.Client.Block;
 
 namespace Decent.Minecraft.Client
 {
     public class World
     {
-        private Connection _connection;
-
         public World(Connection connection)
         {
-            _connection = connection;
+            Connection = connection;
+            Player = new Entity(Entity.EntityType.ThePlayer, connection, "player");
         }
+
+        private Connection Connection { get; }
+        public Entity Player { get; }
 
         public async Task<BlockType> GetBlockTypeAsync(int x, int y, int z)
         {
-            return (BlockType)int.Parse(await _connection.SendAndReceiveAsync("world.getBlock", x, y, z));
+            return (BlockType)int.Parse(await Connection.SendAndReceiveAsync("world.getBlock", x, y, z));
         }
 
         public BlockType GetBlockType(int x, int y, int z)
@@ -23,7 +26,7 @@ namespace Decent.Minecraft.Client
 
         public async Task PostToChatAsync(string message)
         {
-            await _connection.SendAsync("chat.post", message.Replace('\r', ' ').Replace('\n', ' '));
+            await Connection.SendAsync("chat.post", message);
         }
 
         public void PostToChat(string message)

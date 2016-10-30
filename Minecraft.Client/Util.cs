@@ -12,7 +12,7 @@ namespace Decent.Minecraft.Client
                 var str = item as string;
                 if (str != null)
                 {
-                    yield return str;
+                    yield return str.Replace('\r', ' ').Replace('\n', ' ');
                     continue;
                 }
                 var enumerable = item as IEnumerable;
@@ -31,7 +31,7 @@ namespace Decent.Minecraft.Client
         public static string FlattenToString(this IEnumerable list)
         {
             var listAsString = list as string;
-            if (listAsString != null) return listAsString;
+            if (listAsString != null) return listAsString.Replace('\r', ' ').Replace('\n', ' ');
             return string.Join(",", Flatten(list).Cast<object>().Select(o => o.ToString()));
         }
     }

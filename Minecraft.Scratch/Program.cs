@@ -26,6 +26,8 @@ minecraft.client <raspberry pi ip>");
                 world.PostToChat("Hello from C# and .NET Core!");
                 var originBlock = world.GetBlockType(0, 0, 0);
                 world.PostToChat($"Origin block is {originBlock}.");
+                var playerPosition = world.Player.GetPosition();
+                world.PostToChat($"Player is at {playerPosition}");
             }
         }
     }
