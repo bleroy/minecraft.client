@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using System.Numerics;
 
 namespace Decent.Minecraft.Client
 {
@@ -33,6 +34,12 @@ namespace Decent.Minecraft.Client
             var listAsString = list as string;
             if (listAsString != null) return listAsString.Replace('\r', ' ').Replace('\n', ' ');
             return string.Join(",", Flatten(list).Cast<object>().Select(o => o.ToString()));
+        }
+
+        public static Vector3 ParseCoordinates(string coordinates)
+        {
+            var parsedCoordinates = coordinates.Split(',').Select(float.Parse).ToList();
+            return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
     }
 }

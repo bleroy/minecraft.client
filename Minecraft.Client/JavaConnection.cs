@@ -11,25 +11,29 @@ namespace Decent.Minecraft.Client
     /// <summary>
     /// A connection to a Minecraft game.
     /// </summary>
-    public class Connection : IDisposable
+    public class JavaConnection : IConnection
     {
         private TcpClient _socket;
         private NetworkStream _stream;
         private StreamReader _streamReader;
-        private string _address;
-        private int _port;
         private bool _disposedValue = false; // To detect redundant calls
+        public string Address { get; set; } = "localhost";
+        public int Port { get; set; } = 4711;
 
-        public Connection(string address = "localhost", int port = 4711)
+        public JavaConnection()
         {
             _socket = new TcpClient(AddressFamily.InterNetwork);
-            _address = address;
-            _port = port;
+        }
+
+        public JavaConnection(string address = "localhost", int port = 4711) : this()
+        {
+            Address = address;
+            Port = port;
         }
 
         public async Task OpenAsync()
         {
-            await _socket.ConnectAsync(_address, _port);
+            await _socket.ConnectAsync(Address, Port);
             _stream = _socket.GetStream();
             _streamReader = new StreamReader(_stream);
         }

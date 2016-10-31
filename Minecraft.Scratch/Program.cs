@@ -1,6 +1,6 @@
 ﻿using Decent.Minecraft.Client;
+using Decent.Minecraft.Client.Blocks;
 using System;
-using System.Threading.Tasks;
 
 namespace Minecraft.Scratch
 {
@@ -19,13 +19,14 @@ usage:
 minecraft.client <raspberry pi ip>");
                 return;
             }
-            using (var world = World.Connect(args[0]))
+            using (var world = World.Connect<JavaConnection>(args[0]))
             {
                 world.PostToChat("Hello from C# and .NET Core!");
                 var originBlock = world.GetBlockType(0, 0, 0);
                 world.PostToChat($"Origin block is {originBlock}.");
                 var playerPosition = world.Player.GetPosition();
                 world.PostToChat($"Player is at {playerPosition}");
+                var blockUnderPlayer = world.GetBlock(playerPosition.X, playerPosition.Y - 1, playerPosition.Z);
             }
         }
     }

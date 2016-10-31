@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
 {
     public partial class Entity
     {
-        internal Entity(EntityType type, Connection connection, string prefix = "entity")
+        internal Entity(EntityType type, IConnection connection, string prefix = "entity")
         {
             Type = type;
             Connection = connection;
@@ -14,14 +13,13 @@ namespace Decent.Minecraft.Client
         }
 
         public EntityType Type { get; }
-        protected Connection Connection { get; }
+        protected IConnection Connection { get; }
         protected string Prefix { get; }
 
         public async Task<Vector3> GetPositionAsync()
         {
             var response = await Connection.SendAndReceiveAsync(Prefix + ".getPos");
-            var coordinates = response.Split(',').Select(float.Parse).ToList();
-            return new Vector3(coordinates[0], coordinates[1], coordinates[2]);
+            return Util.ParseCoordinates(response);
         }
 
         public Vector3 GetPosition()
