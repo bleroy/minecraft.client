@@ -41,7 +41,7 @@ namespace Decent.Minecraft.Client
                 "world.getBlockWithData",
                 (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z));
             var splitResponse = response.Split(',');
-            var block = JavaBlockSerializer.Create(
+            var block = JavaBlock.Create(
                 (BlockType)int.Parse(splitResponse[0]),
                 byte.Parse(splitResponse[1])) as T;
             return block;

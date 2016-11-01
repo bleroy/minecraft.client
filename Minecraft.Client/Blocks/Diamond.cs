@@ -2,7 +2,7 @@
 {
     public class Diamond : Block
     {
-        public Diamond() : base(BlockType.DiamondBlock) { }
+        public Diamond() : base(BlockType.Diamond) { }
     }
 
     public class DiamondOre : Block

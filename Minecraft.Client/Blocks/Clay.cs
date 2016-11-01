@@ -2,12 +2,8 @@
 {
     public class Clay : Block
     {
-        public Clay(Color stain = Color.White) : base(BlockType.Clay)
-        {
-            Stain = stain;
-        }
-
-        public Color Stain { get; }
+        public Clay() : base(BlockType.Clay) { }
+        protected Clay(BlockType type) : base(type) { }
 
         public enum Color : byte
         {
@@ -28,5 +24,20 @@
             Red,
             Black
         }
+    }
+
+    public class HardenedClay : Clay
+    {
+        public HardenedClay() : base(BlockType.HardenedClay) { }
+    }
+
+    public class StainedClay : HardenedClay
+    {
+        public StainedClay(Color stain = Color.White) : base()
+        {
+            Stain = stain;
+        }
+
+        public Color Stain { get; }
     }
 }

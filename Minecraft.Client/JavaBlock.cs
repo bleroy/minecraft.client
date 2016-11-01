@@ -24,7 +24,7 @@ namespace Decent.Minecraft.Client
         static JavaBlock()
         {
             // Prepare the lookup table once and for all.
-            var _ctors = new Func<byte, Block>[(int)BlockType.NetherReactorCore];
+            var _ctors = new Func<byte, Block>[0x100];
 
             _ctors[(int)BlockType.Air] = d => new Air();
             _ctors[(int)BlockType.Bed] = d =>
@@ -39,13 +39,12 @@ namespace Decent.Minecraft.Client
                 }
             };
             _ctors[(int)BlockType.Bedrock] = d => new Bedrock();
-            _ctors[(int)BlockType.BedrockInvisible] = d => new InvisibleBedrock();
             _ctors[(int)BlockType.Bookshelf] = d => new Bookshelf();
-            _ctors[(int)BlockType.BrickBlock] = d => new BrickBlock();
+            _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
-            _ctors[(int)BlockType.Clay] = d => new Clay((Clay.Color)d);
-            _ctors[(int)BlockType.CoalOre] = d =>
+            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
+            _ctors[(int)BlockType.Coal] = d =>
             {
                 if (d == 1) return new Charcoal();
                 return new Coal();
@@ -57,7 +56,7 @@ namespace Decent.Minecraft.Client
             };
             _ctors[(int)BlockType.Cobweb] = d => new Cobweb();
             _ctors[(int)BlockType.CraftingTable] = d => new CraftingTable();
-            _ctors[(int)BlockType.DiamondBlock] = d => new Diamond();
+            _ctors[(int)BlockType.Diamond] = d => new Diamond();
             _ctors[(int)BlockType.DiamondOre] = d => new DiamondOre();
             _ctors[(int)BlockType.Dirt] = d =>
             {
@@ -69,10 +68,24 @@ namespace Decent.Minecraft.Client
             {
                 if ((d & 0x8) == 0)
                 {
-                    return new IronDoorBottom((d & 0x4) != 0, new[] { East, South, West, North }[d & 0xC]);
+                    return new IronDoorBottom((d & 0x4) != 0, new[] { East, South, West, North }[(d & 0xC) >> 2]);
                 }
                 return new IronDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
             };
+            _ctors[(int)BlockType.DoorWood] = d =>
+            {
+                if ((d & 0x8) == 0)
+                {
+                    return new WoodenDoorBottom((d & 0x4) != 0, new[] { East, South, West, North }[(d & 0xC) >> 2]);
+                }
+                return new WoodenDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
+            };
+            _ctors[(int)BlockType.Farmland] = d => new Farmland(d);
+            _ctors[(int)BlockType.Fence] = d => new Fence();
+            _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
+            _ctors[(int)BlockType.Fire] = d => new Fire(d);
+            _ctors[(int)BlockType.Grass] = d => new Grass();
+            _ctors[(int)BlockType.Wood] = d => new Wood((Wood.Species)(d & 0x3), (Orientation)(d & 0xC));
         }
 
         public static Block Create(BlockType type, byte data)
@@ -112,7 +125,7 @@ namespace Decent.Minecraft.Client
                     5));
             }
 
-            var clay = block as Clay;
+            var clay = block as StainedClay;
             if (clay != null)
             {
                 return new JavaBlock(BlockType.Clay, (byte)clay.Stain);
@@ -121,7 +134,7 @@ namespace Decent.Minecraft.Client
             var coal = block as Coal;
             if (coal != null)
             {
-                return new JavaBlock(BlockType.CoalOre, (byte)(coal is Charcoal ? 1 : 0));
+                return new JavaBlock(BlockType.Coal, (byte)(coal is Charcoal ? 1 : 0));
             }
 
             var cobblestone = block as Cobblestone;
@@ -152,6 +165,31 @@ namespace Decent.Minecraft.Client
                     doorBottom.Facing == South ? 1 :
                     doorBottom.Facing == West ? 2 :
                     3)));
+            }
+
+            var farmland = block as Farmland;
+            if (farmland != null)
+            {
+                return new JavaBlock(BlockType.Farmland, farmland.Wetness);
+            }
+
+            var fenceGate = block as FenceGate;
+            if (fenceGate != null)
+            {
+                return new JavaBlock(BlockType.FenceGate, (byte)((byte)fenceGate.Facing | (fenceGate.IsOpen ? 0x4 : 0x0)));
+            }
+
+            var fire = block as Fire;
+            if (fire != null)
+            {
+                return new JavaBlock(BlockType.Fire, fire.Intensity);
+            }
+
+            var wood = block as Wood;
+            if (wood != null)
+            {
+                return new JavaBlock(BlockType.Wood,
+                    (byte)((byte)wood.WoodSpecies ^ (byte)wood.Orientation));
             }
 
             // All other types are simply represented.

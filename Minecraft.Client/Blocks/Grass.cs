@@ -2,6 +2,6 @@
 {
     public class Grass : Block
     {
-        private Grass() : base(BlockType.Grass) { }
+        public Grass() : base(BlockType.Grass) { }
     }
 }

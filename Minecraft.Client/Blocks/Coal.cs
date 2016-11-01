@@ -2,8 +2,8 @@
 {
     public class Coal : Block
     {
-        public Coal() : base(BlockType.CoalOre) { }
-        protected Coal(bool charred) : base(BlockType.CoalOre)
+        public Coal() : base(BlockType.Coal) { }
+        protected Coal(bool charred) : base(BlockType.Coal)
         {
             IsCharred = charred;
         }
