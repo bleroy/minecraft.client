@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using static Decent.Minecraft.Client.Block;
 
 namespace Decent.Minecraft.Client
 {
-    public class World : IDisposable
+    public class JavaWorld : IWorld
     {
-        internal World(IConnection connection)
+        internal JavaWorld(IConnection connection)
         {
             Connection = connection;
-            Player = new Entity(Entity.EntityType.ThePlayer, connection, "player");
+            Player = new Entity(EntityType.ThePlayer, connection, "player");
         }
 
         private IConnection Connection { get; }
         public Entity Player { get; }
 
-        public static World Connect<T>(string address = "localhost", int port = 4711) where T : IConnection, new()
+        public static JavaWorld Connect(string address = "localhost", int port = 4711)
         {
-            var connection = new T { Address = address, Port = port };
-            var world = new World(connection);
+            var connection = new JavaConnection(address: address, port: port);
+            var world = new JavaWorld(connection);
             connection.Open();
             return world;
         }
@@ -42,7 +41,7 @@ namespace Decent.Minecraft.Client
                 "world.getBlockWithData",
                 (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z));
             var splitResponse = response.Split(',');
-            var block = Create(
+            var block = JavaBlockSerializer.Create(
                 (BlockType)int.Parse(splitResponse[0]),
                 byte.Parse(splitResponse[1])) as T;
             return block;

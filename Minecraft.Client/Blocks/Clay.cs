@@ -7,17 +7,7 @@
             Stain = stain;
         }
 
-        public Color Stain
-        {
-            get
-            {
-                return (Color)Data;
-            }
-            set
-            {
-                Data = (byte)value;
-            }
-        }
+        public Color Stain { get; }
 
         public enum Color : byte
         {

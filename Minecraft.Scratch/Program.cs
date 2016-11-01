@@ -1,5 +1,4 @@
 ﻿using Decent.Minecraft.Client;
-using Decent.Minecraft.Client.Blocks;
 using System;
 
 namespace Minecraft.Scratch
@@ -19,7 +18,7 @@ usage:
 minecraft.client <raspberry pi ip>");
                 return;
             }
-            using (var world = World.Connect<JavaConnection>(args[0]))
+            using (var world = JavaWorld.Connect(args[0]))
             {
                 world.PostToChat("Hello from C# and .NET Core!");
                 var originBlock = world.GetBlockType(0, 0, 0);

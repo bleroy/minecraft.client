@@ -2,21 +2,11 @@
 {
     public class Cactus : Block
     {
-        public Cactus(byte age) : base(BlockType.Cactus, age)
+        public Cactus(byte age) : base(BlockType.Cactus)
         {
             Age = age;
         }
 
-        public byte Age
-        {
-            get
-            {
-                return Data;
-            }
-            set
-            {
-                Data = value;
-            }
-        }
+        public byte Age { get; }
     }
 }

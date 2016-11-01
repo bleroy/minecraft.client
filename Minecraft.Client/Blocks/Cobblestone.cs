@@ -3,7 +3,12 @@
     public class Cobblestone : Block
     {
         public Cobblestone() : base(BlockType.Cobblestone) { }
-        protected Cobblestone(bool mossy) : base(BlockType.Cobblestone, (byte)(mossy ? 1 : 0)) { }
+        protected Cobblestone(bool mossy) : base(BlockType.Cobblestone)
+        {
+            IsMossy = mossy;
+        }
+
+        protected bool IsMossy { get; }
     }
 
     public class MossyCobblestone : Cobblestone

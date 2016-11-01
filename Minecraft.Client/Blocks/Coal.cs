@@ -3,7 +3,12 @@
     public class Coal : Block
     {
         public Coal() : base(BlockType.CoalOre) { }
-        protected Coal(bool charred) : base(BlockType.CoalOre, (byte)(charred ? 1 : 0)) { }
+        protected Coal(bool charred) : base(BlockType.CoalOre)
+        {
+            IsCharred = charred;
+        }
+
+        protected bool IsCharred { get; }
     }
 
     public class Charcoal : Coal
