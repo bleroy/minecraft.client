@@ -125,6 +125,7 @@ you can get the position of the player using `Player.GetPosition`, and you can g
 Many more commands need to be implemented.
 You can find the list of commands and their Python implementation [in the Raspberry Jam Mod GitHub repository](https://github.com/arpruss/raspberryjammod/blob/master/mcpipy/mcpi/minecraft.py).
 Make sure you implement both an asynchronous and a synchronous version of each method.
+Finally, once you've implemented a command, don't forget to add it to the `IWorld` interface.
 
 ### New protocols
 

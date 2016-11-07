@@ -18,7 +18,7 @@ namespace Decent.Minecraft.Client
         Task<T> GetBlockAsync<T>(float x, float y, float z) where T : Block;
         BlockType GetBlockType(float x, float y, float z);
         Task<BlockType> GetBlockTypeAsync(float x, float y, float z);
-        void PostToChat(string message);
+        IWorld PostToChat(string message);
         Task PostToChatAsync(string message);
     }
 }

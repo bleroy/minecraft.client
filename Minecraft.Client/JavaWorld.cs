@@ -87,9 +87,10 @@ namespace Decent.Minecraft.Client
             await Connection.SendAsync("chat.post", message);
         }
 
-        public void PostToChat(string message)
+        public IWorld PostToChat(string message)
         {
             PostToChatAsync(message).Wait();
+            return this;
         }
 
         public void Dispose()
