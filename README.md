@@ -1,7 +1,7 @@
-Decent Minecraft Client
-=======================
+Decent .NET Minecraft Client
+============================
 
-A client library for the original (Java) version of Minecraft.
+A .NET client library for the original (Java) version of Minecraft.
 It requires Forge and the Raspberry Jam mod on the Minecraft side.
 
 How to use it
