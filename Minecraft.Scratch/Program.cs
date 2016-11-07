@@ -1,5 +1,7 @@
 ﻿using Decent.Minecraft.Client;
+using Decent.Minecraft.Client.Blocks;
 using System;
+using System.Numerics;
 
 namespace Minecraft.Scratch
 {
@@ -21,11 +23,12 @@ minecraft.client <raspberry pi ip>");
             using (var world = JavaWorld.Connect(args[0]))
             {
                 world.PostToChat("Hello from C# and .NET Core!");
-                var originBlock = world.GetBlockType(0, 0, 0);
-                world.PostToChat($"Origin block is {originBlock}.");
                 var playerPosition = world.Player.GetPosition();
                 world.PostToChat($"Player is at {playerPosition}");
-                var blockUnderPlayer = world.GetBlock(playerPosition.X, playerPosition.Y - 1, playerPosition.Z);
+                var blockUnderPlayer = world.GetBlock(playerPosition - new Vector3(0, 1, 0));
+                world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
+                var wood = new Wood(Wood.Species.Oak, Orientation.UpDown);
+                world.SetBlock(wood, playerPosition + new Vector3(0, 0, 1));
             }
         }
     }

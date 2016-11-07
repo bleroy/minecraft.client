@@ -120,8 +120,8 @@ Entities will be an easy contribution once I've started creating the basic infra
 This is a medium difficulty contribution.
 
 Very few commands are currently implemented: you can echo messages to the chat using `PostToChat`,
-you can get the position of the player using `Player.GetPosition`, and you can get a block using
-`GetBlock`.
+you can get the position of the player using `Player.GetPosition`, and you can get or set a block using
+`GetBlock` and `SetBlock`.
 Many more commands need to be implemented.
 You can find the list of commands and their Python implementation [in the Raspberry Jam Mod GitHub repository](https://github.com/arpruss/raspberryjammod/blob/master/mcpipy/mcpi/minecraft.py).
 Make sure you implement both an asynchronous and a synchronous version of each method.

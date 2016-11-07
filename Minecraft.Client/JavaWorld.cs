@@ -82,9 +82,39 @@ namespace Decent.Minecraft.Client
             return GetBlock<Block>(coordinates);
         }
 
-        public async Task PostToChatAsync(string message)
+        public IWorld SetBlock(Block block, float x, float y, float z)
         {
+            SetBlockAsync(block, x, y, z).Wait();
+            return this;
+        }
+
+        public IWorld SetBlock(Block block, Vector3 coordinates)
+        {
+            SetBlockAsync(block, coordinates).Wait();
+            return this;
+        }
+
+        public async Task<IWorld> SetBlockAsync(Block block, float x, float y, float z)
+        {
+            var javaBlock = JavaBlock.From(block);
+            await Connection.SendAsync(
+                "world.setBlock",
+                (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z),
+                (byte)javaBlock.Type, javaBlock.Data & 0xF);
+            return this;
+        }
+
+        public async Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates)
+        {
+            await SetBlockAsync(block, coordinates.X, coordinates.Y, coordinates.Z);
+            return this;
+        }
+
+        public async Task<IWorld> PostToChatAsync(string message)
+        {
+            Console.WriteLine(message);
             await Connection.SendAsync("chat.post", message);
+            return this;
         }
 
         public IWorld PostToChat(string message)

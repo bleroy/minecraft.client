@@ -18,7 +18,11 @@ namespace Decent.Minecraft.Client
         Task<T> GetBlockAsync<T>(float x, float y, float z) where T : Block;
         BlockType GetBlockType(float x, float y, float z);
         Task<BlockType> GetBlockTypeAsync(float x, float y, float z);
+        IWorld SetBlock(Block block, float x, float y, float z);
+        IWorld SetBlock(Block block, Vector3 coordinates);
+        Task<IWorld> SetBlockAsync(Block block, float x, float y, float z);
+        Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates);
         IWorld PostToChat(string message);
-        Task PostToChatAsync(string message);
+        Task<IWorld> PostToChatAsync(string message);
     }
 }
