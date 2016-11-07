@@ -62,8 +62,77 @@ I also want to be able to run this with Mono (that should actually already work,
 this is just .NET Standard) on a Raspberry Pi: the protocol that Raspberry Jam implements
 is natively present on the Raspberry Pi version.
 
-Can I help?
------------
+Can I help? - Up for grabs
+--------------------------
 
 Sure. Just let me know what you'd like to work on, so we don't duplicate efforts, but yes,
 hacking is highly encouraged.
+
+### Blocks
+
+This is an easy contribution.
+
+There's a couple hundred blocks to implement. Some of them, such as `Diamond`, are very simple,
+and some are a little more complex, such as `Fire`.
+In some cases, such as `Clay`, a class hierarchy makes sense.
+
+If you're interested in implementing blocks, look at the existing blocks in the `Blocks` folder,
+then choose one from the `BlockType` enum that doesn't exist yet and implement it.
+A block is a class that derives from `Block`.
+In the simplest case, the class is empty:
+
+```csharp
+public class Diamond : Block
+{
+    public Diamond() : base(BlockType.Diamond) { }
+}
+```
+
+The block class is only part of the implementation, that is supposed to be a simple data structure
+with no knowledge of the communication protocol with Minecraft.
+The code that does know about the protocol must be implemented in `JavaBlock`, in the `JavaBlock`
+static constructor, and in the `public static JavaBlock From(Block block)` method.
+
+The static constructor describes how to instantiate the correct block type from data that was
+passed in. In simple cases, there is no data, and the block contruction logic can be very simple:
+
+```csharp
+_ctors[(int)BlockType.Diamond] = d => new Diamond();
+```
+
+In more complex cases, the data must be decomposed and the corresponding properties must be set
+on the block object.
+
+The reverse operation implemented in the `From` method is recreating a `JavaBlock` ready to be
+transmitted to Minecraft from a concrete block.
+If the block you're implementing has no data, nothing has to be implemented, and this part can be
+skipped.
+
+The description of the format of the data for each block type that has data can be found in The
+[Minecraft documentation wiki Data values page](http://minecraft.gamepedia.com/Data_values).
+
+### Entities
+
+Entities will be an easy contribution once I've started creating the basic infrastructure.
+
+### Commands
+
+This is a medium difficulty contribution.
+
+Very few commands are currently implemented: you can echo messages to the chat using `PostToChat`,
+you can get the position of the player using `Player.GetPosition`, and you can get a block using
+`GetBlock`.
+Many more commands need to be implemented.
+You can find the list of commands and their Python implementation [in the Raspberry Jam Mod GitHub repository](https://github.com/arpruss/raspberryjammod/blob/master/mcpipy/mcpi/minecraft.py).
+Make sure you implement both an asynchronous and a synchronous version of each method.
+
+### New protocols
+
+This is a difficult contribution.
+
+Currently, this library can only talk to the Java implementation of Minecraft, and to the Raspberry
+Pi version (hopefully, I haven't verified it yet).
+The code is architected so that it should be possible to implement alternative protocols by
+reimplementing `JavaConnection`, `JavaWorld`, and `JavaBlock`.
+This way, a single API could in theory be used to script other versions of the Minecraft client and
+of Minecraft servers.
