@@ -24,7 +24,7 @@ namespace Decent.Minecraft.Client
         static JavaBlock()
         {
             // Prepare the lookup table once and for all.
-            var _ctors = new Func<byte, Block>[0x100];
+            _ctors = new Func<byte, Block>[0x100];
 
             _ctors[(int)BlockType.Air] = d => new Air();
             _ctors[(int)BlockType.Bed] = d =>
@@ -92,6 +92,7 @@ namespace Decent.Minecraft.Client
         {
             // Look-up the right construction logic
             var ctor = _ctors[(int)type];
+            if (ctor == null) return new UnknownBlock(type, data);
             // Execute it, which will return a block of the correct concrete type
             // (which is not necessarily "Concrete", but can be Clay, Wood, etc.)
             return ctor(data);
@@ -190,6 +191,12 @@ namespace Decent.Minecraft.Client
             {
                 return new JavaBlock(BlockType.Wood,
                     (byte)((byte)wood.WoodSpecies ^ (byte)wood.Orientation));
+            }
+
+            var unknown = block as UnknownBlock;
+            if (unknown != null)
+            {
+                return new JavaBlock(unknown.Type, unknown.Data);
             }
 
             // All other types are simply represented.
