@@ -73,7 +73,9 @@ namespace Decent.Minecraft.Client
 
         public async Task<string> ReceiveAsync()
         {
-            return await _streamReader.ReadLineAsync();
+            var response = await _streamReader.ReadLineAsync();
+            Debug.WriteLine(">" + response);
+            return response;
         }
 
         public string Receive()
