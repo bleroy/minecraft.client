@@ -44,6 +44,7 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
             _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
+            _ctors[(int)BlockType.Wool] = d => new Wool((Clay.Color)d);
             _ctors[(int)BlockType.Coal] = d =>
             {
                 if (d == 1) return new Charcoal();
@@ -130,6 +131,12 @@ namespace Decent.Minecraft.Client
             if (clay != null)
             {
                 return new JavaBlock(BlockType.Clay, (byte)clay.Stain);
+            }
+
+            var wool = block as Wool;
+            if (wool != null)
+            {
+                return new JavaBlock(BlockType.Wool, (byte)wool.Stain);
             }
 
             var coal = block as Coal;

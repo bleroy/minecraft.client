@@ -9,7 +9,9 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "Minecraft.Client": "1.0.0-*"
+    "Minecraft.Client": "1.0.0-*",
+    "CoreCompat.System.Drawing": "1.0.0-beta006",
+    "Magick.NET.Core-Q8": "7.0.3.502"
   },
 
   "frameworks": {
