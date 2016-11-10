@@ -58,6 +58,12 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.CraftingTable] = d => new CraftingTable();
             _ctors[(int)BlockType.Diamond] = d => new Diamond();
             _ctors[(int)BlockType.DiamondOre] = d => new DiamondOre();
+            _ctors[(int)BlockType.Gold] = d => new Gold();
+            _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
+            _ctors[(int)BlockType.Iron] = d => new Iron();
+            _ctors[(int)BlockType.IronOre] = d => new IronOre();
+            _ctors[(int)BlockType.Emerald] = d => new Emerald();
+            _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
             _ctors[(int)BlockType.Dirt] = d =>
             {
                 if (d == 2) return new Podzol();

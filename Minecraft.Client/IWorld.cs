@@ -22,6 +22,10 @@ namespace Decent.Minecraft.Client
         IWorld SetBlock(Block block, Vector3 coordinates);
         Task<IWorld> SetBlockAsync(Block block, float x, float y, float z);
         Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates);
+        Task<int> GetHeightAsync(Vector3 coordinates);
+        Task<int> GetHeightAsync(float x, float z);
+        int GetHeight(Vector3 coordinates);
+        int GetHeight(float x, float z);
         IWorld PostToChat(string message);
         Task<IWorld> PostToChatAsync(string message);
     }
