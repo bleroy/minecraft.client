@@ -17,6 +17,14 @@ namespace Decent.Minecraft.Client
                     yield return str.Replace('\r', ' ').Replace('\n', ' ');
                     continue;
                 }
+
+                decimal d;
+                if (decimal.TryParse(item?.ToString(), out d))
+                {
+                    yield return d.ToString(CultureInfo.InvariantCulture);
+                    continue;
+                }
+
                 var enumerable = item as IEnumerable;
                 if (enumerable == null)
                 {
