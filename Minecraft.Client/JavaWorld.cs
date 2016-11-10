@@ -128,5 +128,27 @@ namespace Decent.Minecraft.Client
         {
             Connection.Close();
         }
+
+        public async Task<int> GetHeightAsync(Vector3 coordinates)
+        {
+            return await GetHeightAsync(coordinates.X, coordinates.Z);
+        }
+
+        public async Task<int> GetHeightAsync(float x, float z)
+        {
+            var response = await Connection.SendAndReceiveAsync(
+                "world.getHeight", (int)Math.Floor(x), (int)Math.Floor(z));
+            return int.Parse(response);
+        }
+
+        public int GetHeight(Vector3 coordinates)
+        {
+            return GetHeightAsync(coordinates).Result;
+        }
+
+        public int GetHeight(float x, float z)
+        {
+            return GetHeightAsync(x, z).Result;
+        }
     }
 }
