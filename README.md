@@ -7,14 +7,14 @@ It requires Forge and the Raspberry Jam mod on the Minecraft side.
 How to use it
 -------------
 
-Requirements: Minecraft (the Java version, now the micro edition or the Windows 10 edition),
-Forge, and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
+Requirements: Minecraft (the Java version, not the micro edition or the Windows 10 edition),
+[Forge](http://files.minecraftforge.net/), and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
 
 Reference the library, then you can open a connection and start scripting the Minecraft
 world:
 
 ```csharp
-using (var world = World.Connect())
+using (var world = JavaWorld.Connect())
 {
     world.PostToChat("Hello from C# and .NET Core!");
     var originBlock = world.GetBlockType(0, 0, 0);
