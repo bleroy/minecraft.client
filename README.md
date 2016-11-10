@@ -8,7 +8,7 @@ How to use it
 -------------
 
 Requirements: Minecraft (the Java version, now the micro edition or the Windows 10 edition),
-Forge, and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
+[Forge](http://files.minecraftforge.net/), and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
 
 Reference the library, then you can open a connection and start scripting the Minecraft
 world:
