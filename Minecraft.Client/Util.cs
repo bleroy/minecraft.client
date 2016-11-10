@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
@@ -38,7 +39,9 @@ namespace Decent.Minecraft.Client
 
         public static Vector3 ParseCoordinates(string coordinates)
         {
-            var parsedCoordinates = coordinates.Split(',').Select(float.Parse).ToList();
+            var parsedCoordinates = coordinates.Split(',')
+                .Select(c => float.Parse(c, NumberFormatInfo.InvariantInfo))
+                .ToList();
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
     }
