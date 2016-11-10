@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -121,6 +124,37 @@ namespace Decent.Minecraft.Client
         {
             PostToChatAsync(message).Wait();
             return this;
+        }
+
+        public async Task ClearEventsAsync()
+        {
+            await Connection.SendAsync("events.clear");
+        }
+
+        public void ClearEvents()
+        {
+            ClearEventsAsync().Wait();
+        }
+
+        public async Task<IEnumerable<ChatMessage>> WaitForChatMessagesAsync()
+        {
+            var response = await Connection.SendAndReceiveAsync("events.chat.posts");
+            return response
+                .Split('|')
+                .Select(Util.FixPipe)
+                .Select(msg =>
+                {
+                    var comma = msg.IndexOf(',');
+                    if (comma == -1) throw new FormatException("Bad message format");
+                    return new ChatMessage(
+                        int.Parse(msg.Substring(0, comma)),
+                        msg.Substring(comma + 1));
+                });
+        }
+
+        public IEnumerable<ChatMessage> WaitForChatMessages()
+        {
+            return WaitForChatMessagesAsync().Result;
         }
 
         public void Dispose()

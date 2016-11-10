@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace Decent.Minecraft.Client
 {
@@ -43,6 +44,11 @@ namespace Decent.Minecraft.Client
                 .Select(c => float.Parse(c, NumberFormatInfo.InvariantInfo))
                 .ToList();
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
+        }
+
+        public static string FixPipe(string s)
+        {
+            return s.Replace("&#124;", "|").Replace("&amp;", "&");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -24,5 +25,9 @@ namespace Decent.Minecraft.Client
         Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates);
         IWorld PostToChat(string message);
         Task<IWorld> PostToChatAsync(string message);
+        Task ClearEventsAsync();
+        void ClearEvents();
+        Task<IEnumerable<ChatMessage>> WaitForChatMessagesAsync();
+        IEnumerable<ChatMessage> WaitForChatMessages();
     }
 }

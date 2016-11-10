@@ -29,6 +29,10 @@ minecraft.client <raspberry pi ip>");
                 world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
                 var wood = new Wood(Wood.Species.Oak, Orientation.UpDown);
                 world.SetBlock(wood, playerPosition + new Vector3(0, 0, 1));
+                foreach(var msg in world.WaitForChatMessages())
+                {
+                    world.PostToChat($"You said \"{msg.Message}\".");
+                }
             }
         }
     }
