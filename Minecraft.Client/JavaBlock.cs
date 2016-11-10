@@ -138,6 +138,12 @@ namespace Decent.Minecraft.Client
                 return new JavaBlock(BlockType.Coal, (byte)(coal is Charcoal ? 1 : 0));
             }
 
+            var stone = block as Stone;
+            if (stone != null)
+            {
+                return new JavaBlock(BlockType.Stone, (byte)stone.Variant);
+            }
+
             var cobblestone = block as Cobblestone;
             if (cobblestone != null)
             {
