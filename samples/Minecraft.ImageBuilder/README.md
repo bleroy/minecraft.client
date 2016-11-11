@@ -3,6 +3,8 @@
 I've created a small class library at the MVP Summit Hackathon 2016 which automatically creates Minecraft blocks based on a given image.
 See an animated gif on <a href="https://t.co/z1mDTfCBoV">Twitter</a>!
 
+![Image Builder](Assets/preview.png "Creating the MVP logo using the Image Builder")
+
 ```csharp
 public static void Main(string[] args)
 {
