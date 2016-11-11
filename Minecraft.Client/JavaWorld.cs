@@ -9,11 +9,11 @@ namespace Decent.Minecraft.Client
         internal JavaWorld(IConnection connection)
         {
             Connection = connection;
-            Player = new Entity(EntityType.ThePlayer, connection, "player");
+            Player = new Player(connection);
         }
 
         private IConnection Connection { get; }
-        public Entity Player { get; }
+        public Player Player { get; }
 
         public static JavaWorld Connect(string address = "localhost", int port = 4711)
         {
