@@ -3,7 +3,6 @@ using Decent.Minecraft.Client.Blocks;
 using ImageMagick;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using System.Linq;
 using System.Threading;
@@ -16,7 +15,7 @@ namespace Minecraft.Scratch
         {
             using (var world = JavaWorld.Connect(args[0]))
             {
-                var imageBuilder = new MinecraftImageBuilder(world);
+                var imageBuilder = new Minecraft.ImageBuilder.ImageBuilder(world);
 
                 imageBuilder.DrawImage("mvp.jpg", 100);
             }

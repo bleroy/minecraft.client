@@ -7,14 +7,14 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Minecraft.Scratch
+namespace Minecraft.ImageBuilder
 {
-    public class MinecraftImageBuilder
+    public class ImageBuilder
     {
         private Dictionary<MagickColor, Clay.Color> colorPalette;
         private IWorld world;
 
-        public MinecraftImageBuilder(IWorld world)
+        public ImageBuilder(IWorld world)
         {
             this.world = world;
 
@@ -24,12 +24,12 @@ namespace Minecraft.Scratch
         public void DrawImage(string imagePath, int maxSize = 100)
         {
             var targetPosition = world.Player.GetPosition() + new Vector3(-30, 0, -30);
-            
+
             MagickImage image = new MagickImage(imagePath);
-            
+
             // resize image
             if (image.Width > maxSize || image.Height > maxSize)
-            { 
+            {
                 if (image.Width > image.Height)
                 {
                     image.Resize(maxSize, (int)Math.Floor((double)(image.Height * maxSize) / image.Width));
@@ -65,7 +65,7 @@ namespace Minecraft.Scratch
         {
             // set a default color
             Clay.Color nearestColor = Clay.Color.Black;
-            
+
             double minimumDistance = 500;
 
             double pixelRed = Convert.ToDouble(pixelColor.R);
@@ -78,9 +78,9 @@ namespace Minecraft.Scratch
                 var red = Math.Pow(color.Key.R - pixelRed, 2.0);
                 var green = Math.Pow(color.Key.G - pixelGreen, 2.0);
                 var blue = Math.Pow(color.Key.B - pixelBlue, 2.0);
-                
+
                 var temp = Math.Sqrt(blue + green + red);
-                
+
                 // explore the result and store the nearest color
                 if (temp == 0.0)
                 {
