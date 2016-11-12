@@ -4,4 +4,4 @@ bin
 obj
 *.lock.json
 .vscode
-Decent.Minecraft.Client.sln.GhostDoc.xml
+*.GhostDoc.xml
