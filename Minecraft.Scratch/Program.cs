@@ -27,6 +27,7 @@ minecraft.client <raspberry pi ip>");
                 world.PostToChat($"Player is at {playerPosition}");
                 var blockUnderPlayer = world.GetBlock(playerPosition - new Vector3(0, 1, 0));
                 world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
+                
                 var chest = new Chest(Direction.East);
                 world.SetBlock(chest, playerPosition + new Vector3(0, 0, 1));
                 chest = new Chest(Direction.North);
@@ -35,6 +36,14 @@ minecraft.client <raspberry pi ip>");
                 world.SetBlock(chest, playerPosition + new Vector3(5, 0, 1));
                 chest = new Chest(Direction.West);
                 world.SetBlock(chest, playerPosition + new Vector3(7, 0, 1));
+
+                // Create grass and put a snowy layer on top of it
+                // to create a snowy grass block.
+                var grass = new Grass();
+                world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
+                var snowLayer = new SnowLayer();
+                world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
+
                 var height = world.GetHeight(playerPosition);
                 world.PostToChat($"The height of the world under the player is {height}.");
             }
