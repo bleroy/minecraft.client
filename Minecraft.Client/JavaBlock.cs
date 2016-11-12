@@ -64,6 +64,8 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.IronOre] = d => new IronOre();
             _ctors[(int)BlockType.Emerald] = d => new Emerald();
             _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
+            _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
+            _ctors[(int)BlockType.SnowLayer] = d => new SnowLayer();
             _ctors[(int)BlockType.Dirt] = d =>
             {
                 if (d == 2) return new Podzol();
