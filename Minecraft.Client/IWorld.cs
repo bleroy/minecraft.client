@@ -18,10 +18,14 @@ namespace Decent.Minecraft.Client
         Task<T> GetBlockAsync<T>(float x, float y, float z) where T : Block;
         BlockType GetBlockType(float x, float y, float z);
         Task<BlockType> GetBlockTypeAsync(float x, float y, float z);
+        Block[,,] GetBlocks(Vector3 corner1, Vector3 corner2);
+        Task<Block[,,]> GetBlocksAsync(Vector3 corner1, Vector3 corner2);
         IWorld SetBlock(Block block, float x, float y, float z);
         IWorld SetBlock(Block block, Vector3 coordinates);
         Task<IWorld> SetBlockAsync(Block block, float x, float y, float z);
         Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates);
+        IWorld SetBlocks(Block block, Vector3 corner1, Vector3 corner2);
+        Task<IWorld> SetBlocksAsync(Block block, Vector3 corner1, Vector3 corner2);
         Task<int> GetHeightAsync(Vector3 coordinates);
         Task<int> GetHeightAsync(float x, float z);
         int GetHeight(Vector3 coordinates);
