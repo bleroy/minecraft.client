@@ -54,7 +54,7 @@ namespace Decent.Minecraft.Client
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
 
-        public static Vector3 RelativeDirection(this Vector3 current, Direction direction)
+        public static Vector3 Towards(this Vector3 current, Direction direction)
         {
             switch (direction)
             {
@@ -73,6 +73,12 @@ namespace Decent.Minecraft.Client
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
             }
+            return current;
+        }
+
+        public static Vector3 Downwards(this Vector3 current, int numOfBlocks = 1)
+        {
+            current.Y -= numOfBlocks;
             return current;
         }
     }

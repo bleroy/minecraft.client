@@ -3,7 +3,6 @@ using Decent.Minecraft.Client.Blocks;
 using System;
 using System.Linq;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Minecraft.Scratch
@@ -19,7 +18,7 @@ namespace Minecraft.Scratch
             catch (AggregateException ae)
             {
                 Console.WriteLine("Oooops! Something went exceptionally bad...");
-                Console.WriteLine(ae.InnerExceptions.FirstOrDefault().Message);
+                Console.WriteLine(ae.InnerExceptions?.FirstOrDefault()?.Message);
             }
         }
 
@@ -45,9 +44,9 @@ minecraft.client <raspberry pi ip>");
 
                     world.PostToChat("Hello from C# and .NET Core!");
                     world.Player.SetPosition(new Vector3(0, 0, 0));
-                    var playerPosition = player.GetPosition();
+                    var playerPosition = await player.GetPositionAsync();
                     world.PostToChat($"Player is at {playerPosition}");
-                    var blockUnderPlayer = world.GetBlock(playerPosition - new Vector3(0, 1, 0));
+                    var blockUnderPlayer = await world.GetBlockAsync(playerPosition.Downwards());
                     world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
 
                     while (true)
@@ -76,8 +75,7 @@ minecraft.client <raspberry pi ip>");
                                 break;
                             case ConsoleKey.T:
                                 Console.WriteLine("Where do you want to go? Enter X,Y,Z coordinates and press Enter:");
-                                var destination = Console.ReadLine();
-                                var destCoord = destination.ParseCoordinates();
+                                var destCoord = Console.ReadLine().ParseCoordinates();
                                 playerPosition = await player.SetPositionAsync(destCoord);
                                 world.PostToChat($"Player is now at {playerPosition}");
                                 break;
@@ -102,7 +100,7 @@ minecraft.client <raspberry pi ip>");
                                     if (direction.HasValue)
                                     {
                                         var chest = new Chest(direction.Value);
-                                        world.SetBlock(chest, playerPosition.RelativeDirection(direction.Value));
+                                        world.SetBlock(chest, playerPosition.Towards(direction.Value));
                                     }
                                     break;
                                 }
