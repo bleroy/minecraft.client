@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -45,12 +46,34 @@ namespace Decent.Minecraft.Client
             return string.Join(",", Flatten(list).Cast<object>().Select(o => o.ToString()));
         }
 
-        public static Vector3 ParseCoordinates(string coordinates)
+        public static Vector3 ParseCoordinates(this string coordinates)
         {
             var parsedCoordinates = coordinates.Split(',')
                 .Select(c => float.Parse(c, NumberFormatInfo.InvariantInfo))
                 .ToList();
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
+        }
+
+        public static Vector3 RelativeDirection(this Vector3 current, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.North:
+                    current.Z -= 1;
+                    break;
+                case Direction.South:
+                    current.Z += 1;
+                    break;
+                case Direction.West:
+                    current.X -= 1;
+                    break;
+                case Direction.East:
+                    current.X += 1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+            return current;
         }
     }
 }

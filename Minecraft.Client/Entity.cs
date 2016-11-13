@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
@@ -19,12 +20,64 @@ namespace Decent.Minecraft.Client
         public async Task<Vector3> GetPositionAsync()
         {
             var response = await Connection.SendAndReceiveAsync(Prefix + ".getPos");
-            return Util.ParseCoordinates(response);
+            return response.ParseCoordinates();
         }
 
         public Vector3 GetPosition()
         {
             return GetPositionAsync().Result;
         }
+
+        public Vector3 GetDirection()
+        {
+            var response = Connection.SendAndReceiveAsync(Prefix + ".getDirection").Result;
+            return response.ParseCoordinates();
+        }
+
+        public async Task<Vector3> SetPositionAsync(Vector3 to)
+        {
+            await Connection.SendAsync(Prefix + ".setPos",
+                (int)Math.Floor(to.X),
+                (int)Math.Floor(to.Y),
+                (int)Math.Floor(to.Z)
+                );
+            return await GetPositionAsync();
+        }
+
+        public Vector3 SetPosition(Vector3 to)
+        {
+            return SetPositionAsync(to).Result;
+        }
+
+        public Vector3 Move(Direction towards)
+        {
+            return MoveAsync(towards).Result;
+        }
+
+        public async Task<Vector3> MoveAsync(Direction towards)
+        {
+            var position = await GetPositionAsync();
+            switch (towards)
+            {
+                case Direction.North:
+                    position.Z -= 1;
+                    break;
+                case Direction.South:
+                    position.Z += 1;
+                    break;
+                case Direction.West:
+                    position.X -= 1;
+                    break;
+                case Direction.East:
+                    position.X += 1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(towards), towards, null);
+            }
+            return await SetPositionAsync(position);
+        }
+
+       
+
     }
 }

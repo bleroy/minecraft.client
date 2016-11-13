@@ -33,9 +33,16 @@ namespace Decent.Minecraft.Client
 
         public async Task OpenAsync()
         {
-            await _socket.ConnectAsync(Address, Port);
-            _stream = _socket.GetStream();
-            _streamReader = new StreamReader(_stream);
+            try
+            {
+                await _socket.ConnectAsync(Address, Port);
+                _stream = _socket.GetStream();
+                _streamReader = new StreamReader(_stream);
+            }
+            catch (SocketException e)
+            {
+                throw new FailedToConnectToMineCraftEngine(e);
+            }
         }
 
         public void Open()
