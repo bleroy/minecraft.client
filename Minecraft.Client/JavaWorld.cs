@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -40,11 +41,15 @@ namespace Decent.Minecraft.Client
             var response = await Connection.SendAndReceiveAsync(
                 "world.getBlockWithData",
                 (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z));
+            return DeserializeBlock(response) as T;
+        }
+
+        private static Block DeserializeBlock(string response)
+        {
             var splitResponse = response.Split(',');
-            var block = JavaBlock.Create(
+            return  JavaBlock.Create(
                 (BlockType)int.Parse(splitResponse[0]),
-                byte.Parse(splitResponse[1])) as T;
-            return block;
+                byte.Parse(splitResponse[1]));
         }
 
         public async Task<T> GetBlockAsync<T>(Vector3 coordinates) where T : Block
@@ -149,6 +154,61 @@ namespace Decent.Minecraft.Client
         public int GetHeight(float x, float z)
         {
             return GetHeightAsync(x, z).Result;
+        }
+
+        public Block[,,] GetBlocks(Vector3 corner1, Vector3 corner2)
+        {
+            return GetBlocksAsync(corner1, corner2).Result;
+        }
+
+        public async Task<Block[,,]> GetBlocksAsync(Vector3 corner1, Vector3 corner2)
+        {
+            var x1 = (int)Math.Floor(corner1.X);
+            var y1 = (int)Math.Floor(corner1.Y);
+            var z1 = (int)Math.Floor(corner1.Z);
+            var x2 = (int)Math.Floor(corner2.X);
+            var y2 = (int)Math.Floor(corner2.Y);
+            var z2 = (int)Math.Floor(corner2.Z);
+
+            var response = await Connection.SendAndReceiveAsync(
+                "world.getBlocksWithData", x1, y1, z1, x2, y2, z2);
+            var result = new Block[Math.Abs(x1 - x2) + 1, Math.Abs(y1 - y2) + 1, Math.Abs(z1 - z2) + 1];
+            var x = 0;
+            var y = 0;
+            var z = 0;
+            foreach(var block in response.Split('|').Select(DeserializeBlock))
+            {
+                z++;
+                if (z > result.GetLength(2))
+                {
+                    z = 0;
+                    x++;
+                    if (x > result.GetLength(0))
+                    {
+                        x = 0;
+                        y++;
+                    }
+                }
+                result[x, y, z] = block;
+            }
+            return result;
+        }
+
+        public IWorld SetBlocks(Block block, Vector3 corner1, Vector3 corner2)
+        {
+            SetBlocksAsync(block, corner1, corner2).Wait();
+            return this;
+        }
+
+        public async Task<IWorld> SetBlocksAsync(Block block, Vector3 corner1, Vector3 corner2)
+        {
+            var javaBlock = JavaBlock.From(block);
+            await Connection.SendAsync(
+                "world.setBlocks",
+                (int)Math.Floor(corner1.X), (int)Math.Floor(corner1.Y), (int)Math.Floor(corner1.Z),
+                (int)Math.Floor(corner2.X), (int)Math.Floor(corner2.Y), (int)Math.Floor(corner2.Z),
+                (byte)javaBlock.Type, javaBlock.Data & 0xF);
+            return this;
         }
     }
 }

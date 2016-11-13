@@ -59,6 +59,7 @@ minecraft.client <raspberry pi ip>");
                         Console.WriteLine("M = Move towards north/south/east/west");
                         Console.WriteLine("C = Place chest towards north/south/east/west");
                         Console.WriteLine("H = Height under the player");
+                        Console.WriteLine("S = Add snow");
                         //Console.WriteLine("F = Move forward");
                         Console.WriteLine("Press ESC to stop");
 
@@ -109,6 +110,17 @@ minecraft.client <raspberry pi ip>");
                                 {
                                     var height = world.GetHeight(playerPosition);
                                     world.PostToChat($"The height of the world under the player is {height}.");
+                                }
+                                break;
+                            case ConsoleKey.S:
+                                {
+                                    // Create grass and put a snowy layer on top of it
+                                    // to create a snowy grass block.
+                                    var grass = new Grass();
+                                    world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
+                                    var snowLayer = new SnowLayer();
+                                    world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
+                                    Console.WriteLine("Snow added");
                                 }
                                 break;
                             default:

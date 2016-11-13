@@ -4,3 +4,4 @@ bin
 obj
 *.lock.json
 .vscode
+*.GhostDoc.xml
