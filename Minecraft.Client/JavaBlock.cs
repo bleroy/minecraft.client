@@ -43,7 +43,6 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
-            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
             _ctors[(int)BlockType.Coal] = d =>
             {
                 if (d == 1) return new Charcoal();
@@ -58,14 +57,6 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.CraftingTable] = d => new CraftingTable();
             _ctors[(int)BlockType.Diamond] = d => new Diamond();
             _ctors[(int)BlockType.DiamondOre] = d => new DiamondOre();
-            _ctors[(int)BlockType.Gold] = d => new Gold();
-            _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
-            _ctors[(int)BlockType.Iron] = d => new Iron();
-            _ctors[(int)BlockType.IronOre] = d => new IronOre();
-            _ctors[(int)BlockType.Emerald] = d => new Emerald();
-            _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
-            _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
-            _ctors[(int)BlockType.SnowLayer] = d => new SnowLayer();
             _ctors[(int)BlockType.Dirt] = d =>
             {
                 if (d == 2) return new Podzol();
@@ -88,11 +79,26 @@ namespace Decent.Minecraft.Client
                 }
                 return new WoodenDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
             };
+            _ctors[(int)BlockType.Emerald] = d => new Emerald();
+            _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
             _ctors[(int)BlockType.Farmland] = d => new Farmland(d);
             _ctors[(int)BlockType.Fence] = d => new Fence();
             _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[(int)BlockType.Fire] = d => new Fire(d);
+            _ctors[(int)BlockType.Gold] = d => new Gold();
+            _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
             _ctors[(int)BlockType.Grass] = d => new Grass();
+            _ctors[(int)BlockType.Iron] = d => new Iron();
+            _ctors[(int)BlockType.IronOre] = d => new IronOre();
+            _ctors[(int)BlockType.MossStone] = d => new MossStone();
+            _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
+            _ctors[(int)BlockType.SnowLayer] = d => new SnowLayer();
+            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
+            _ctors[(int)BlockType.StoneBricks] = d =>
+                d == 0 ? new StoneBricks() :
+                d == 1 ? new MossyStoneBricks() :
+                d == 2 ? new CrackedStoneBricks() :
+                (Block)new ChiseledStoneBricks();
             _ctors[(int)BlockType.Wood] = d => new Wood((Wood.Species)(d & 0x3), (Orientation)(d & 0xC));
         }
 
@@ -176,6 +182,7 @@ namespace Decent.Minecraft.Client
                     3)));
             }
 
+
             var farmland = block as Farmland;
             if (farmland != null)
             {
@@ -192,6 +199,12 @@ namespace Decent.Minecraft.Client
             if (fire != null)
             {
                 return new JavaBlock(BlockType.Fire, fire.Intensity);
+            }
+
+            var stoneBrick = block as StoneBricks;
+            if (stoneBrick != null)
+            {
+                return new JavaBlock(BlockType.StoneBricks, (byte)stoneBrick.Quality);
             }
 
             var wood = block as Wood;
