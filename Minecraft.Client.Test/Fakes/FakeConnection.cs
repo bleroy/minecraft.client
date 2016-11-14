@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace Decent.Minecraft.Client.Test.Fakes
             return Task.Run(() =>
             {
                 var command = new KeyValuePair<string, IList>(function, data);
-                Console.WriteLine($"Sendng and receiving: {command.Key}");
+                Debug.WriteLine($"Sendng and receiving: {command.Key}");
                 _commandHistory.Add(command);
 
                 if (command.Key.EndsWith(".getPos"))
@@ -56,7 +57,7 @@ namespace Decent.Minecraft.Client.Test.Fakes
             return Task.Run(() =>
             {
                 var command = new KeyValuePair<string, IList>(function, data);
-                Console.WriteLine($"Sendng: {command.Key}");
+                Debug.WriteLine($"Sendng: {command.Key}");
                 _commandHistory.Add(command);
             });
         }
