@@ -38,11 +38,11 @@ Please pick an option:
                     var command = Console.ReadKey().KeyChar.ToString().ToUpperInvariant();
                     Console.WriteLine();
 
-                    var playerPosition = world.Player.GetPosition();
-                    world.PostToChat($"Player is at {playerPosition}");
-                    var blockUnderPlayer = world.GetBlock(playerPosition - new Vector3(0, 1, 0));
+                    var tilePosition = world.Player.GetTilePosition();
+                    world.PostToChat($"Player is on {tilePosition}.");
+                    var blockUnderPlayer = world.GetBlock(tilePosition - new Vector3(0, 1, 0));
                     world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
-                    var height = world.GetHeight(playerPosition);
+                    var height = world.GetHeight(tilePosition);
                     world.PostToChat($"The height of the world under the player is {height}.");
 
                     switch (command)
@@ -50,25 +50,25 @@ Please pick an option:
                         case "Q":
                             return;
                         case "1":
-                            new Castle(world, playerPosition, 21).Build();
+                            new Castle(world, tilePosition + new Vector3(20, 0, 0), 51).Build();
                             break;
                         case "2":
                             var chest = new Chest(Direction.East);
-                            world.SetBlock(chest, playerPosition + new Vector3(-1, 0, 0));
+                            world.SetBlock(chest, tilePosition + new Vector3(-1, 0, 0));
                             chest = new Chest(Direction.North);
-                            world.SetBlock(chest, playerPosition + new Vector3(0, 0, 1));
+                            world.SetBlock(chest, tilePosition + new Vector3(0, 0, 1));
                             chest = new Chest(Direction.South);
-                            world.SetBlock(chest, playerPosition + new Vector3(0, 0, -1));
+                            world.SetBlock(chest, tilePosition + new Vector3(0, 0, -1));
                             chest = new Chest(Direction.West);
-                            world.SetBlock(chest, playerPosition + new Vector3(1, 0, 0));
+                            world.SetBlock(chest, tilePosition + new Vector3(1, 0, 0));
                             break;
                         case "3":
                             // Create grass and put a snowy layer on top of it
                             // to create a snowy grass block.
                             var grass = new Grass();
-                            world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
+                            world.SetBlock(grass, tilePosition + new Vector3(0, 0, 3));
                             var snowLayer = new SnowLayer();
-                            world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
+                            world.SetBlock(snowLayer, tilePosition + new Vector3(0, 1, 3));
                             break;
                     }
                 }

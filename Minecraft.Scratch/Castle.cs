@@ -1,5 +1,6 @@
 ﻿using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -12,7 +13,10 @@ namespace Minecraft.Scratch
         {
             World = world;
             Util = new Util(world);
-            Position = position;
+            Position = new Vector3(
+                (float)Math.Round(position.X),
+                (float)Math.Round(position.Y),
+                (float)Math.Round(position.Z));
             WallSize = wallSize;
         }
 
@@ -31,7 +35,7 @@ namespace Minecraft.Scratch
 
         public async Task BuildAsync()
         {
-            var groundY = await World.GetHeightAsync(Position) + 1;
+            var groundY = await Util.GetHeightBelowAsync(Position) + 1;
             // Walls
             await CrenellatedSquareWithInnerWall(
                 new Vector3(Position.X, groundY, Position.Z),
@@ -85,7 +89,7 @@ namespace Minecraft.Scratch
             {
                 var height = (x - corner1.X + z - corner1.Z) % 2 == 0 ?
                     altHeight : baseHeight;
-                var y0 = await World.GetHeightAsync(x, z);
+                var y0 = await Util.GetHeightBelowAsync(new Vector3(x, corner1.Y, z));
                 await Util.RectangularPrismAsync(
                     new Vector3(x, y0, z),
                     new Vector3(x, corner1.Y + height, z),
@@ -110,7 +114,7 @@ namespace Minecraft.Scratch
 
             while (true)
             {
-                var y0 = await World.GetHeightAsync(x, z);
+                var y0 = await Util.GetHeightBelowAsync(new Vector3(x, corner1.Y, z));
                 await World.SetBlocksAsync(water, new Vector3(x, y0 - depth + 1, z), new Vector3(x, y0, z));
                 if (x >= corner2.X && z >= corner2.Z) return;
                 if (x < corner2.X)

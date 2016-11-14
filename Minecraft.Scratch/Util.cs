@@ -16,6 +16,21 @@ namespace Minecraft.Scratch
 
         private IWorld World { get; }
 
+        public async Task<int> GetHeightBelowAsync(Vector3 position)
+        {
+            var y0 = position.Y - 255;
+            var y = position.Y;
+            while (position.Y > y0)
+            {
+                if (await World.GetBlockTypeAsync(position.X, y, position.Z) != BlockType.Air)
+                {
+                    return (int)y;
+                }
+                y--;
+            }
+            return (int)Min(await World.GetHeightAsync(position.X, position.Z), y);
+        }
+
         public async Task RectangularPrismAsync(Vector3 corner1, Vector3 corner2, Block block)
         {
             var x1 = (int)Round(corner1.X);
