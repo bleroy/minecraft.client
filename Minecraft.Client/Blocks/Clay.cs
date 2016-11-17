@@ -40,4 +40,14 @@
 
         public Color Stain { get; }
     }
+
+    public class Wool : Clay
+    {
+        public Wool(Color stain = Color.White) : base(BlockType.Wool)
+        {
+            Stain = stain;
+        }
+
+        public Color Stain { get; set; }
+    }
 }

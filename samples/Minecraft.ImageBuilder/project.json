@@ -1,0 +1,18 @@
+﻿{
+  "description": "A library creating Minecraft blocks using an image.",
+  "authors": [ "Roman Schacherl" ],
+  "copyright": "Roman Schacherl 2016",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Magick.NET.Core-Q8": "7.0.3.502",
+    "Minecraft.Client": "1.0.0-*",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

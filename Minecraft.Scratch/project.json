@@ -9,7 +9,8 @@
       "type": "platform",
       "version": "1.0.0"
     },
-    "Minecraft.Client": "1.0.0-*"
+    "Minecraft.Client": "1.0.0-*",
+    "Minecraft.ImageBuilder": "1.0.0-*"
   },
 
   "frameworks": {
