@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using static System.Math;
 
-namespace Minecraft.Scratch
+namespace Decent.Minecraft.Castle
 {
     public class Util
     {

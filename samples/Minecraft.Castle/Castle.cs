@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Minecraft.Scratch
+namespace Decent.Minecraft.Castle
 {
     public class Castle
     {

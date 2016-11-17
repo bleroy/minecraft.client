@@ -1,4 +1,5 @@
-﻿using Decent.Minecraft.Client;
+﻿using Decent.Minecraft.Castle;
+using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
 using Decent.Minecraft.ImageBuilder;
 using System;

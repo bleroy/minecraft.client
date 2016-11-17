@@ -1,6 +1,6 @@
 ﻿using Decent.Minecraft.Client;
 
-namespace Minecraft.Scratch
+namespace Decent.Minecraft.Castle
 {
     public class BlockProbability
     {
