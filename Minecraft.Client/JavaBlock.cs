@@ -43,8 +43,6 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
-            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
-            _ctors[(int)BlockType.Wool] = d => new Wool((Clay.Color)d);
             _ctors[(int)BlockType.Coal] = d =>
             {
                 if (d == 1) return new Charcoal();
@@ -95,13 +93,14 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.MossStone] = d => new MossStone();
             _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
             _ctors[(int)BlockType.SnowLayer] = d => new SnowLayer();
-            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Clay.Color)d);
+            _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Color)d);
             _ctors[(int)BlockType.StoneBricks] = d =>
                 d == 0 ? new StoneBricks() :
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (Block)new ChiseledStoneBricks();
             _ctors[(int)BlockType.Wood] = d => new Wood((Wood.Species)(d & 0x3), (Orientation)(d & 0xC));
+            _ctors[(int)BlockType.Wool] = d => new Wool((Color)d);
         }
 
         public static Block Create(BlockType type, byte data)
@@ -140,18 +139,6 @@ namespace Decent.Minecraft.Client
                     chest.Facing == South ? 3 :
                     chest.Facing == West ? 4 :
                     5));
-            }
-
-            var clay = block as StainedClay;
-            if (clay != null)
-            {
-                return new JavaBlock(BlockType.Clay, (byte)clay.Stain);
-            }
-
-            var wool = block as Wool;
-            if (wool != null)
-            {
-                return new JavaBlock(BlockType.Wool, (byte)wool.Stain);
             }
 
             var coal = block as Coal;
@@ -209,6 +196,12 @@ namespace Decent.Minecraft.Client
                 return new JavaBlock(BlockType.Fire, fire.Intensity);
             }
 
+            var stainedClay = block as StainedClay;
+            if (stainedClay != null)
+            {
+                return new JavaBlock(BlockType.Clay, (byte)stainedClay.Color);
+            }
+
             var stoneBrick = block as StoneBricks;
             if (stoneBrick != null)
             {
@@ -220,6 +213,12 @@ namespace Decent.Minecraft.Client
             {
                 return new JavaBlock(BlockType.Wood,
                     (byte)((byte)wood.WoodSpecies ^ (byte)wood.Orientation));
+            }
+
+            var wool = block as Wool;
+            if (wool != null)
+            {
+                return new JavaBlock(BlockType.Wool, (byte)wool.Color);
             }
 
             var unknown = block as UnknownBlock;

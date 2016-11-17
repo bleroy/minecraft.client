@@ -1,6 +1,8 @@
 ﻿using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
+using Decent.Minecraft.ImageBuilder;
 using System;
+using System.IO;
 using System.Numerics;
 
 namespace Minecraft.Scratch
@@ -31,6 +33,7 @@ Please pick an option:
 [1] Build a castle
 [2] Surround with chests
 [3] Create some snow
+[4] Render an image as blocks
 
 [Q] Quit
 ");
@@ -69,6 +72,12 @@ Please pick an option:
                             world.SetBlock(grass, tilePosition + new Vector3(0, 0, 3));
                             var snowLayer = new SnowLayer();
                             world.SetBlock(snowLayer, tilePosition + new Vector3(0, 1, 3));
+                            break;
+                        case "4":
+                            var imageBuilder = new ImageBuilder(world);
+                            imageBuilder.DrawImage(
+                                Path.Combine(".", "Media", "Minecraft.gif"),
+                                tilePosition + new Vector3(-30, 0, -30));
                             break;
                     }
                 }

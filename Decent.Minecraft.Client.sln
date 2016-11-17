@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Minecraft.ImageBuilder", "samples\Minecraft.ImageBuilder\Minecraft.ImageBuilder.xproj", "{8BBF5D89-E92A-40AF-92A7-B15E94024D26}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Decent.Minecraft.ImageBuilder", "samples\Minecraft.ImageBuilder\Decent.Minecraft.ImageBuilder.xproj", "{8BBF5D89-E92A-40AF-92A7-B15E94024D26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

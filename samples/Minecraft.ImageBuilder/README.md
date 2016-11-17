@@ -10,7 +10,7 @@ public static void Main(string[] args)
 {
     using (var world = JavaWorld.Connect(args[0]))
     {
-        var imageBuilder = new Minecraft.ImageBuilder.ImageBuilder(world);
+        var imageBuilder = new Decent.Minecraft.ImageBuilder.ImageBuilder(world);
 
         imageBuilder.DrawImage("mvp.jpg", 100);
     }

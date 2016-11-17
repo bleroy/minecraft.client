@@ -3,28 +3,49 @@ using Decent.Minecraft.Client.Blocks;
 using ImageMagick;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 
-namespace Minecraft.ImageBuilder
+namespace Decent.Minecraft.ImageBuilder
 {
     public class ImageBuilder
     {
-        private Dictionary<MagickColor, Clay.Color> colorPalette;
-        private IWorld world;
+        private static Dictionary<MagickColor, Color> _colorPalette;
+        private IWorld _world;
 
         public ImageBuilder(IWorld world)
         {
-            this.world = world;
-
-            this.colorPalette = GetMinecraftColors();
+            _world = world;
         }
 
-        public void DrawImage(string imagePath, int maxSize = 100)
+        /// <summary>
+        /// Maps colors from Minecraft colored blocks to the Color enumeration
+        /// see http://minecraft.gamepedia.com/Data_values#Wool.2C_Stained_Clay.2C_Stained_Glass_and_Carpet
+        /// </summary>
+        static ImageBuilder()
         {
-            var targetPosition = world.Player.GetPosition() + new Vector3(-30, 0, -30);
+            _colorPalette = new Dictionary<MagickColor, Color>()
+            {
+                { MagickColor.FromRgb(221, 221, 221), Color.White },
+                { MagickColor.FromRgb(219, 125, 62), Color.Orange },
+                { MagickColor.FromRgb(179, 80, 188), Color.Magenta },
+                { MagickColor.FromRgb(107, 138, 201), Color.LightBlue },
+                { MagickColor.FromRgb(177, 166, 39), Color.Yellow },
+                { MagickColor.FromRgb(65, 174, 56), Color.Lime },
+                { MagickColor.FromRgb(208, 132, 153), Color.Pink },
+                { MagickColor.FromRgb(64, 64, 64), Color.Gray },
+                { MagickColor.FromRgb(154, 161, 161), Color.LightGray },
+                { MagickColor.FromRgb(46, 110, 137), Color.Cyan },
+                { MagickColor.FromRgb(126, 61, 181), Color.Purple },
+                { MagickColor.FromRgb(46, 56, 141), Color.Blue },
+                { MagickColor.FromRgb(79, 50, 31), Color.Brown },
+                { MagickColor.FromRgb(53, 70, 27), Color.Green },
+                { MagickColor.FromRgb(150, 52, 48), Color.Red },
+                { MagickColor.FromRgb(25, 22, 22), Color.Black }
+            };
+        }
 
+        public void DrawImage(string imagePath, Vector3 targetPosition, int maxSize = 100)
+        {
             MagickImage image = new MagickImage(imagePath);
 
             // resize image
@@ -53,7 +74,7 @@ namespace Minecraft.ImageBuilder
 
                     var brick = new Wool(color);
 
-                    world.SetBlock(brick, targetPosition + new Vector3(x, y, 1));
+                    _world.SetBlock(brick, targetPosition + new Vector3(x, y, 0));
                 }
             }
         }
@@ -61,10 +82,10 @@ namespace Minecraft.ImageBuilder
         /// <summary>
         /// Algorithm taken on http://www.codeproject.com/Articles/17044/Find-the-Nearest-Color-with-C-Using-the-Euclidean
         /// </summary>
-        private Clay.Color GetClosestMinecraftColor(MagickColor pixelColor)
+        private Color GetClosestMinecraftColor(MagickColor pixelColor)
         {
             // set a default color
-            Clay.Color nearestColor = Clay.Color.Black;
+            Color nearestColor = Color.Black;
 
             double minimumDistance = 500;
 
@@ -72,7 +93,7 @@ namespace Minecraft.ImageBuilder
             double pixelGreen = Convert.ToDouble(pixelColor.G);
             double pixelBlue = Convert.ToDouble(pixelColor.B);
 
-            foreach (var color in colorPalette)
+            foreach (var color in _colorPalette)
             {
                 // compute the Euclidean distance between the two colors
                 var red = Math.Pow(color.Key.R - pixelRed, 2.0);
@@ -95,33 +116,6 @@ namespace Minecraft.ImageBuilder
             }
 
             return nearestColor;
-        }
-
-        /// <summary>
-        /// Maps colors of the Minecraft wools to the Color enumeration
-        /// see http://minecraft.gamepedia.com/Data_values#Wool.2C_Stained_Clay.2C_Stained_Glass_and_Carpet
-        /// </summary>
-        private Dictionary<MagickColor, Clay.Color> GetMinecraftColors()
-        {
-            var colorPalette = new Dictionary<MagickColor, Clay.Color>();
-            colorPalette.Add(MagickColor.FromRgb(221, 221, 221), Clay.Color.White);
-            colorPalette.Add(MagickColor.FromRgb(219, 125, 62), Clay.Color.Orange);
-            colorPalette.Add(MagickColor.FromRgb(179, 80, 188), Clay.Color.Magenta);
-            colorPalette.Add(MagickColor.FromRgb(107, 138, 201), Clay.Color.LightBlue);
-            colorPalette.Add(MagickColor.FromRgb(177, 166, 39), Clay.Color.Yellow);
-            colorPalette.Add(MagickColor.FromRgb(65, 174, 56), Clay.Color.Lime);
-            colorPalette.Add(MagickColor.FromRgb(208, 132, 153), Clay.Color.Pink);
-            colorPalette.Add(MagickColor.FromRgb(64, 64, 64), Clay.Color.Gray);
-            colorPalette.Add(MagickColor.FromRgb(154, 161, 161), Clay.Color.LightGray);
-            colorPalette.Add(MagickColor.FromRgb(46, 110, 137), Clay.Color.Cyan);
-            colorPalette.Add(MagickColor.FromRgb(126, 61, 181), Clay.Color.Purple);
-            colorPalette.Add(MagickColor.FromRgb(46, 56, 141), Clay.Color.Blue);
-            colorPalette.Add(MagickColor.FromRgb(79, 50, 31), Clay.Color.Brown);
-            colorPalette.Add(MagickColor.FromRgb(53, 70, 27), Clay.Color.Green);
-            colorPalette.Add(MagickColor.FromRgb(150, 52, 48), Clay.Color.Red);
-            colorPalette.Add(MagickColor.FromRgb(25, 22, 22), Clay.Color.Black);
-
-            return colorPalette;
         }
     }
 }

@@ -5,25 +5,6 @@
         public Clay() : base(BlockType.Clay) { }
         protected Clay(BlockType type) : base(type) { }
 
-        public enum Color : byte
-        {
-            White = 0,
-            Orange,
-            Magenta,
-            LightBlue,
-            Yellow,
-            Lime,
-            Pink,
-            Gray,
-            LightGray,
-            Cyan,
-            Purple,
-            Blue,
-            Brown,
-            Green,
-            Red,
-            Black
-        }
     }
 
     public class HardenedClay : Clay
@@ -31,23 +12,13 @@
         public HardenedClay() : base(BlockType.HardenedClay) { }
     }
 
-    public class StainedClay : HardenedClay
+    public class StainedClay : HardenedClay, IColoredBlock
     {
-        public StainedClay(Color stain = Color.White) : base()
+        public StainedClay(Color color = Color.White) : base()
         {
-            Stain = stain;
+            Color = color;
         }
 
-        public Color Stain { get; }
-    }
-
-    public class Wool : Clay
-    {
-        public Wool(Color stain = Color.White) : base(BlockType.Wool)
-        {
-            Stain = stain;
-        }
-
-        public Color Stain { get; set; }
+        public Color Color { get; }
     }
 }
