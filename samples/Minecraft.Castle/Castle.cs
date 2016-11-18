@@ -27,10 +27,10 @@ namespace Decent.Minecraft.Castle
 
         private IEnumerable<BlockProbability> _distribution = new BlockProbability[]
         {
-            new BlockProbability(new MossStone(), 5f),
-            new BlockProbability(new MossyStoneBricks(), 10f),
+            new BlockProbability(new StoneBricks(), 65f),
             new BlockProbability(new CrackedStoneBricks(), 20f),
-            new BlockProbability(new StoneBricks(), 65f)
+            new BlockProbability(new MossyStoneBricks(), 10f),
+            new BlockProbability(new MossStone(), 5f)
         };
 
         public async Task BuildAsync()
