@@ -122,7 +122,7 @@ Press ESC to quit
                                 // to create a snowy grass block.
                                 var grass = new Grass();
                                 world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
-                                var snowLayer = new SnowLayer();
+                                var snowLayer = new Snow();
                                 world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
                                 Console.WriteLine("Snow added");
                                 break;

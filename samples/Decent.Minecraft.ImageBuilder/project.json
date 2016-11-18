@@ -6,7 +6,7 @@
 
   "dependencies": {
     "Magick.NET.Core-Q8": "7.0.3.502",
-    "Minecraft.Client": "1.0.0-*",
+    "Decent.Minecraft.Client": "1.0.0-*",
     "NETStandard.Library": "1.6.0"
   },
 

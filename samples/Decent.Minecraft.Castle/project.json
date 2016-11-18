@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Minecraft.Client": "1.0.0-*",
+    "Decent.Minecraft.Client": "1.0.0-*",
     "NETStandard.Library": "1.6.0"
   },
 

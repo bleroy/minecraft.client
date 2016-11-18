@@ -11,7 +11,7 @@ namespace Decent.Minecraft.Client
     {
         public byte Data { get; }
 
-        public JavaBlock(BlockType type, byte data) : base(type)
+        public JavaBlock(BlockType type, byte data = 0) : base(type)
         {
             Data = data;
         }
@@ -50,7 +50,7 @@ namespace Decent.Minecraft.Client
             };
             _ctors[(int) BlockType.Stone] = d =>
             {
-                if (Enum.IsDefined(typeof(Stone.StoneVariants), d)) return new Stone((Stone.StoneVariants) d);
+                if (Enum.IsDefined(typeof(Mineral), d)) return new Stone((Mineral) d);
                 return new Stone();
             };
             _ctors[(int)BlockType.Cobblestone] = d =>
@@ -97,14 +97,15 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.IronOre] = d => new IronOre();
             _ctors[(int)BlockType.MossStone] = d => new MossStone();
             _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
-            _ctors[(int)BlockType.SnowLayer] = d => new SnowLayer();
+            _ctors[(int)BlockType.Snow] = d => new Snow(8);
+            _ctors[(int)BlockType.SnowLayer] = d => new Snow(d);
             _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Color)d);
             _ctors[(int)BlockType.StoneBricks] = d =>
                 d == 0 ? new StoneBricks() :
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (Block)new ChiseledStoneBricks();
-            _ctors[(int)BlockType.Wood] = d => new Wood((Wood.Species)(d & 0x3), (Orientation)(d & 0xC));
+            _ctors[(int)BlockType.Wood] = d => new Wood((WoodSpecies)(d & 0x3), (Orientation)(d & 0xC));
             _ctors[(int)BlockType.Wool] = d => new Wool((Color)d);
         }
 
@@ -133,7 +134,7 @@ namespace Decent.Minecraft.Client
             var cactus = block as Cactus;
             if (cactus != null)
             {
-                return new JavaBlock(BlockType.Cactus, cactus.Age);
+                return new JavaBlock(BlockType.Cactus, (byte)cactus.Age);
             }
 
             var chest = block as Chest;
@@ -155,7 +156,7 @@ namespace Decent.Minecraft.Client
             var stone = block as Stone;
             if (stone != null)
             {
-                return new JavaBlock(BlockType.Stone, (byte)stone.Variant);
+                return new JavaBlock(BlockType.Stone, (byte)stone.Mineral);
             }
 
             var cobblestone = block as Cobblestone;
@@ -192,7 +193,7 @@ namespace Decent.Minecraft.Client
             var farmland = block as Farmland;
             if (farmland != null)
             {
-                return new JavaBlock(BlockType.Farmland, farmland.Wetness);
+                return new JavaBlock(BlockType.Farmland, (byte)farmland.Wetness);
             }
 
             var fenceGate = block as FenceGate;
@@ -205,6 +206,14 @@ namespace Decent.Minecraft.Client
             if (fire != null)
             {
                 return new JavaBlock(BlockType.Fire, fire.Intensity);
+            }
+
+            var snow = block as Snow;
+            if (snow != null)
+            {
+                return snow.Thickness == 8 ?
+                    new JavaBlock(BlockType.Snow) :
+                    new JavaBlock(BlockType.SnowLayer, (byte)snow.Thickness);
             }
 
             var stainedClay = block as StainedClay;
@@ -223,7 +232,7 @@ namespace Decent.Minecraft.Client
             if (wood != null)
             {
                 return new JavaBlock(BlockType.Wood,
-                    (byte)((byte)wood.WoodSpecies ^ (byte)wood.Orientation));
+                    (byte)((byte)wood.Species ^ (byte)wood.Orientation));
             }
 
             var wool = block as Wool;
@@ -239,7 +248,7 @@ namespace Decent.Minecraft.Client
             }
 
             // All other types are simply represented.
-            return new JavaBlock(block.Type, 0);
+            return new JavaBlock(block.Type);
         }
     }
 }
