@@ -54,21 +54,21 @@ namespace Decent.Minecraft.Client
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
 
-        public static Vector3 Towards(this Vector3 current, Direction direction)
+        public static Vector3 Towards(this Vector3 current, Direction direction, int times = 1)
         {
             switch (direction)
             {
                 case Direction.North:
-                    current.Z -= 1;
+                    current.Z -= times;
                     break;
                 case Direction.South:
-                    current.Z += 1;
+                    current.Z += times;
                     break;
                 case Direction.West:
-                    current.X -= 1;
+                    current.X -= times;
                     break;
                 case Direction.East:
-                    current.X += 1;
+                    current.X += times;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);

@@ -43,90 +43,89 @@ minecraft.client <raspberry pi ip>");
             {
                 using (var world = JavaWorld.Connect(args[0]))
                 {
+                    await world.PostToChatAsync("Hello from C# and .NET Core!");
                     var player = world.Player;
-
-                    world.PostToChat("Hello from C# and .NET Core!");
-                    var playerPosition = await player.GetPositionAsync();
-                    world.PostToChat($"Player is at {playerPosition}");
-                    var blockUnderPlayer = await world.GetBlockAsync(playerPosition.Downwards());
-                    world.PostToChat($"Block under player is {blockUnderPlayer.Type}.");
 
                     while (true)
                     {
-                        Console.WriteLine("");
-                        Console.WriteLine("Available commands:");
-                        Console.WriteLine("P = Get current position");
-                        Console.WriteLine("T = Transport to a given position");
-                        Console.WriteLine("M = Move towards north/south/east/west");
-                        Console.WriteLine("C = Place chest towards north/south/east/west");
-                        Console.WriteLine("H = Height under the player");
-                        Console.WriteLine("S = Add snow");
-                        Console.WriteLine("Press ESC to stop");
+                        Console.WriteLine(@"
+Available commands:
+
+P = Get current position
+T = Transport to a given position
+M = Move towards north/south/east/west
+C = Build a castle
+I = Render a picture
+H = Height under the player
+S = Add snow
+
+Press ESC to quit
+
+");
+
+                        Vector3 playerPosition = new Vector3();
+                        Direction? direction;
 
                         var cmd = Console.ReadKey();
-                        if (cmd.Key == ConsoleKey.Escape)
-                            break;
-
                         Console.WriteLine();
                         switch (cmd.Key)
                         {
+                            case ConsoleKey.Escape:
+                                return;
                             case ConsoleKey.P:
-                    var playerPosition = world.Player.GetPosition();
-                    world.PostToChat($"Player is on {tilePosition}.");
+                                playerPosition = await player.GetTilePositionAsync();
+                                Console.WriteLine($"Player is on {playerPosition}.");
                                 break;
                             case ConsoleKey.T:
                                 Console.WriteLine("Where do you want to go? Enter X,Y,Z coordinates and press Enter:");
                                 var destCoord = Console.ReadLine().ParseCoordinates();
-                    var blockUnderPlayer = world.GetBlock(playerPosition - new Vector3(0, 1, 0));
-                                world.PostToChat($"Player is now at {playerPosition}");
-                                break;
-                            case ConsoleKey.F:
-                                world.PostToChat($"Moving player forward");
-                    var height = world.GetHeight(playerPosition);
-                                world.PostToChat($"Player is at {playerPosition}");
+                                await player.SetPositionAsync(destCoord);
+                                playerPosition = await player.GetTilePositionAsync();
+                                Console.WriteLine($"Player is now at {playerPosition}");
                                 break;
                             case ConsoleKey.M:
+                                direction = GetDirection();
+                                if (direction.HasValue)
                                 {
-                                    var direction = GetDirection();
-                                    if (direction.HasValue)
-                                    {
-                            new Castle(world, playerPosition, 21).Build();
-                                        Console.WriteLine($"Player moved {direction} to {playerPosition}");
-                                    }
+                                    playerPosition = await player.GetTilePositionAsync();
+                                    await player.SetPositionAsync(playerPosition.Towards(direction.Value));
+                                    playerPosition = await player.GetTilePositionAsync();
+                                    Console.WriteLine($"Player moved {direction} to {playerPosition}");
                                 }
                                 break;
                             case ConsoleKey.C:
+                                direction = GetDirection();
+                                if (direction.HasValue)
                                 {
-                                    var direction = GetDirection();
-                            world.SetBlock(chest, playerPosition + new Vector3(-1, 0, 0));
-                                    {
-                                        var chest = new Chest(direction.Value);
-                            world.SetBlock(chest, playerPosition + new Vector3(0, 0, 1));
-                                    }
-                                    break;
+                                    playerPosition = await player.GetTilePositionAsync();
+                                    new Castle(world, playerPosition.Towards(direction.Value, 30)).Build();
                                 }
+                                break;
+                            case ConsoleKey.I:
+                                direction = GetDirection();
+                                if (direction.HasValue)
+                                {
+                                    playerPosition = await player.GetTilePositionAsync();
+                                    var imageBuilder = new ImageBuilder(world);
+                                    imageBuilder.DrawImage(
+                                        Path.Combine(".", "Media", "Minecraft.gif"),
+                                        playerPosition.Towards(direction.Value, 20));
+                                }
+                                break;
                             case ConsoleKey.H:
-                                {
-                                    var height = world.GetHeight(playerPosition);
-                            world.SetBlock(chest, playerPosition + new Vector3(0, 0, -1));
-                                }
-                            world.SetBlock(chest, playerPosition + new Vector3(1, 0, 0));
+                                var height = world.GetHeight(playerPosition);
+                                Console.WriteLine($"Height under the player is {height}");
                                 break;
                             case ConsoleKey.S:
-                                {
-                                    // Create grass and put a snowy layer on top of it
-                                    // to create a snowy grass block.
-                                    var grass = new Grass();
-                            world.SetBlock(grass, tilePosition + new Vector3(0, 0, 3));
-                                    var snowLayer = new SnowLayer();
-                            world.SetBlock(snowLayer, tilePosition + new Vector3(0, 1, 3));
-                                    Console.WriteLine("Snow added");
-                                }
+                                playerPosition = await player.GetTilePositionAsync();
+                                // Create grass and put a snowy layer on top of it
+                                // to create a snowy grass block.
+                                var grass = new Grass();
+                                world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
+                                var snowLayer = new SnowLayer();
+                                world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
+                                Console.WriteLine("Snow added");
                                 break;
-                            imageBuilder.DrawImage(
-                                Path.Combine(".", "Media", "Minecraft.gif"),
-                                tilePosition + new Vector3(-30, 0, -30));
-                            break;
                         }
                     }
                 }
@@ -142,26 +141,20 @@ minecraft.client <raspberry pi ip>");
             ConsoleKeyInfo cmd;
             Console.WriteLine("Which direction? (N,S,E,W)");
             cmd = Console.ReadKey();
-            Direction? direction = null;
             switch (cmd.Key)
             {
                 case ConsoleKey.N:
-                    direction = Direction.North;
-                    break;
+                    return Direction.North;
                 case ConsoleKey.S:
-                    direction = Direction.South;
-                    break;
+                    return Direction.South;
                 case ConsoleKey.E:
-                    direction = Direction.East;
-                    break;
+                    return Direction.East;
                 case ConsoleKey.W:
-                    direction = Direction.West;
-                    break;
+                    return Direction.West;
                 default:
                     Console.WriteLine("Unknown direction...");
-                    break;
+                    return null;
             }
-            return direction;
         }
     }
 }
