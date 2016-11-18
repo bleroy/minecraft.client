@@ -46,35 +46,39 @@ namespace Decent.Minecraft.ImageBuilder
 
         public void DrawImage(string imagePath, Vector3 targetPosition, int maxSize = 100)
         {
-            MagickImage image = new MagickImage(imagePath);
-
-            // resize image
-            if (image.Width > maxSize || image.Height > maxSize)
+            using (MagickImage image = new MagickImage(imagePath))
             {
-                if (image.Width > image.Height)
+
+                // resize image
+                if (image.Width > maxSize || image.Height > maxSize)
                 {
-                    image.Resize(maxSize, (int)Math.Floor((double)(image.Height * maxSize) / image.Width));
+                    if (image.Width > image.Height)
+                    {
+                        image.Resize(maxSize, (int)Math.Floor((double)(image.Height * maxSize) / image.Width));
+                    }
+                    else
+                    {
+                        image.Resize((int)Math.Floor((double)(image.Width * maxSize) / image.Height), maxSize);
+                    }
                 }
-                else
+
+                // get all pixels
+                using (var pixelCollection = image.GetPixels())
                 {
-                    image.Resize((int)Math.Floor((double)(image.Width * maxSize) / image.Height), maxSize);
-                }
-            }
 
-            // get all pixels
-            var pixelCollection = image.GetPixels();
+                    // iterate over pixels and draw a block
+                    for (int y = 0; y < image.Height; y++)
+                    {
+                        for (int x = 0; x < image.Width; x++)
+                        {
+                            var pixel = pixelCollection.GetPixel(x, image.Height - y - 1);
+                            var color = GetClosestMinecraftColor(pixel.ToColor());
 
-            // iterate over pixels and draw a block
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    var pixel = pixelCollection.GetPixel(x, image.Height - y - 1);
-                    var color = GetClosestMinecraftColor(pixel.ToColor());
+                            var brick = new Wool(color);
 
-                    var brick = new Wool(color);
-
-                    _world.SetBlock(brick, targetPosition + new Vector3(x, y, 0));
+                            _world.SetBlock(brick, targetPosition + new Vector3(x, y, 0));
+                        }
+                    }
                 }
             }
         }
