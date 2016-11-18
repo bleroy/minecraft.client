@@ -48,11 +48,7 @@ namespace Decent.Minecraft.Client
                 if (d == 1) return new Charcoal();
                 return new Coal();
             };
-            _ctors[(int) BlockType.Stone] = d =>
-            {
-                if (Enum.IsDefined(typeof(Mineral), d)) return new Stone((Mineral) d);
-                return new Stone();
-            };
+            _ctors[(int) BlockType.Stone] = d => new Stone((Mineral) d);
             _ctors[(int)BlockType.Cobblestone] = d =>
             {
                 if (d == 1) return new MossyCobblestone();
