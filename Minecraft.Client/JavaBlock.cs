@@ -48,6 +48,11 @@ namespace Decent.Minecraft.Client
                 if (d == 1) return new Charcoal();
                 return new Coal();
             };
+            _ctors[(int) BlockType.Stone] = d =>
+            {
+                if (Enum.IsDefined(typeof(Stone.StoneVariants), d)) return new Stone((Stone.StoneVariants) d);
+                return new Stone();
+            };
             _ctors[(int)BlockType.Cobblestone] = d =>
             {
                 if (d == 1) return new MossyCobblestone();
@@ -145,6 +150,12 @@ namespace Decent.Minecraft.Client
             if (coal != null)
             {
                 return new JavaBlock(BlockType.Coal, (byte)(coal is Charcoal ? 1 : 0));
+            }
+
+            var stone = block as Stone;
+            if (stone != null)
+            {
+                return new JavaBlock(BlockType.Stone, (byte)stone.Variant);
             }
 
             var cobblestone = block as Cobblestone;

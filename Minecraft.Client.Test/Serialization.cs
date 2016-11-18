@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using FluentAssertions;
 using Xunit;
 
 namespace Decent.Minecraft.Client.Test
@@ -15,7 +16,7 @@ namespace Decent.Minecraft.Client.Test
                 "1,2.1,2.2,2.3,3.1,3.21,3.22,4")]
         public void FlattenListGivesCorrectString(IEnumerable list, string expectedOutput)
         {
-            Assert.Equal(expectedOutput, Util.FlattenToString(list));
+            expectedOutput.Should().Be(list.FlattenToString());
         }
     }
 }
