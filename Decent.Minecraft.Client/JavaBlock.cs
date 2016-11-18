@@ -48,7 +48,6 @@ namespace Decent.Minecraft.Client
                 if (d == 1) return new Charcoal();
                 return new Coal();
             };
-            _ctors[(int) BlockType.Stone] = d => new Stone((Mineral) d);
             _ctors[(int)BlockType.Cobblestone] = d =>
             {
                 if (d == 1) return new MossyCobblestone();
@@ -96,6 +95,7 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Snow] = d => new Snow(8);
             _ctors[(int)BlockType.SnowLayer] = d => new Snow(d);
             _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Color)d);
+            _ctors[(int)BlockType.Stone] = d => new Stone((Mineral)d);
             _ctors[(int)BlockType.StoneBricks] = d =>
                 d == 0 ? new StoneBricks() :
                 d == 1 ? new MossyStoneBricks() :

@@ -19,7 +19,7 @@ namespace Decent.Minecraft.Client.Test
                 [InlineData(Direction.West, "X", -1)]
                 public async Task The_player_should_move_one_block_in_the_given_direction(
                     Direction towards, 
-                    string axe,
+                    string axis,
                     int expectedPosition)
                 {
                     var connection = new FakeConnection();
@@ -28,10 +28,9 @@ namespace Decent.Minecraft.Client.Test
 
                     await player.MoveAsync(towards);
 
-                    var setPosCommand = connection.GetLastCommand("player.setPos");
-                    var axeIndex = axe == "X" ? 0 : 2;
-                    setPosCommand.Value[axeIndex].Should().Be(expectedPosition,
-                        $"moving {towards} means decrementing along the {axe}-axes");
+                    var setPosition = connection.LastPosition.ParseCoordinates();
+                    (axis == "X" ? setPosition.X : setPosition.Z).Should().Be(expectedPosition,
+                        $"moving {towards} means decrementing along the {axis}-axes");
                 }
             }
         }

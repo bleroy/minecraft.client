@@ -1,25 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client.Test.Fakes
 {
     public class FakeConnection : IConnection
     {
-        readonly List<KeyValuePair<string, IList>> _commandHistory = new List<KeyValuePair<string, IList>>();
-
-        public KeyValuePair<string, IList> GetLastCommand()
-        {
-            return _commandHistory.Last();
-        }
-
-        public KeyValuePair<string, IList> GetLastCommand(string command)
-        {
-            return _commandHistory.Last(c => c.Key.EndsWith(command));
-        }
+        public string LastPosition { get; set; } = "0,0,0";
 
         public void Dispose() { }
         public void Close() { }
@@ -29,23 +16,16 @@ namespace Decent.Minecraft.Client.Test.Fakes
         public string Address { get; set; }
         public int Port { get; set; }
 
-
         public Task<string> SendAndReceiveAsync(string function, params object[] data)
         {
             return Task.Run(() =>
             {
-                var command = new KeyValuePair<string, IList>(function, data);
-                Debug.WriteLine($"Sendng and receiving: {command.Key}");
-                _commandHistory.Add(command);
+                var args = data.FlattenToString();
+                Debug.WriteLine($"Sending and receiving: {function}({args})");
 
-                if (command.Key.EndsWith(".getPos"))
+                if (function.EndsWith(".getPos"))
                 {
-                    if (_commandHistory.Any(c => c.Key.EndsWith(".setPos")))
-                    {
-                        var lastOrDefault = _commandHistory.LastOrDefault(c => c.Key.EndsWith(".setPos"));
-                        return lastOrDefault.Value.FlattenToString();
-                    }
-                    return "0,0,0";
+                    return LastPosition;
                 }
 
                 return string.Empty;
@@ -56,9 +36,12 @@ namespace Decent.Minecraft.Client.Test.Fakes
         {
             return Task.Run(() =>
             {
-                var command = new KeyValuePair<string, IList>(function, data);
-                Debug.WriteLine($"Sendng: {command.Key}");
-                _commandHistory.Add(command);
+                var args = data.FlattenToString();
+                Debug.WriteLine($"Sending: {function}({args})");
+                if (function.EndsWith(".setPos"))
+                {
+                    LastPosition = args;
+                }
             });
         }
 

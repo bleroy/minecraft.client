@@ -27,12 +27,11 @@ namespace Decent.Minecraft.Client.Test
             [InlineData((byte)Mineral.Stone, Mineral.Stone)]
             [InlineData((byte)Mineral.Andesite, Mineral.Andesite)]
             [InlineData(Mineral.SmoothGranite, Mineral.SmoothGranite)]
-            [InlineData(0x20, Mineral.Stone)]  // unknown variant should return default variant
-            [InlineData(null, Mineral.Stone)]  // unknown variant should return default variant
-            public void It_should_return_a_stone_block_with_the_variant_specified(byte serializedData, Mineral expected)
+            [InlineData(0x20, (Mineral)0x20)]
+            [InlineData(null, Mineral.Stone)]
+            public void It_should_return_a_stone_block_with_the_variant_specified(byte serializedData, Mineral? expected)
             {
                 var actual = JavaBlock.Create(BlockType.Stone, serializedData) as Stone;
-
                 actual.Should().NotBeNull("deserializing a Stone block should return a Stone object");
                 actual.Type.Should().Be(BlockType.Stone);
                 actual.Mineral.Should().Be(expected, "the variant should be deserialized correctly");
