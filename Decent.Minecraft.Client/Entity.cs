@@ -60,27 +60,27 @@ namespace Decent.Minecraft.Client
             return SetPositionAsync(to).Result;
         }
 
-        public Vector3 Move(Direction towards)
+        public Vector3 Move(Direction towards, int steps = 1)
         {
-            return MoveAsync(towards).Result;
+            return MoveAsync(towards, steps).Result;
         }
 
-        public async Task<Vector3> MoveAsync(Direction towards)
+        public async Task<Vector3> MoveAsync(Direction towards, int steps = 1)
         {
             var position = await GetPositionAsync();
             switch (towards)
             {
                 case Direction.North:
-                    position.Z -= 1;
+                    position.Z -= steps;
                     break;
                 case Direction.South:
-                    position.Z += 1;
+                    position.Z += steps;
                     break;
                 case Direction.West:
-                    position.X -= 1;
+                    position.X -= steps;
                     break;
                 case Direction.East:
-                    position.X += 1;
+                    position.X += steps;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(towards), towards, null);
