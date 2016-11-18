@@ -4,4 +4,9 @@
     {
         public Water() : base(BlockType.Water) { }
     }
+
+    public class WaterStationary : Block
+    {
+        public WaterStationary() : base(BlockType.WaterStationary) { }
+    }
 }
