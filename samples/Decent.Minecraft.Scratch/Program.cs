@@ -130,7 +130,7 @@ Press ESC to quit
                     }
                 }
             }
-            catch (FailedToConnectToMineCraftEngine e)
+            catch (FailedToConnectToMinecraftEngine e)
             {
                 Console.WriteLine(e.Message);
             }

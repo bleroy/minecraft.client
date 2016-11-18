@@ -2,10 +2,10 @@
 
 namespace Decent.Minecraft.Client
 {
-    public class FailedToConnectToMineCraftEngine : Exception
+    public class FailedToConnectToMinecraftEngine : Exception
     {
-        public FailedToConnectToMineCraftEngine(Exception innerException)
-            : base("Failed to connect MineCraft. Is MineCraft running?", innerException)
+        public FailedToConnectToMinecraftEngine(Exception innerException)
+            : base("Failed to connect Minecraft. Is MineCraft running?", innerException)
         { }
     }
 }

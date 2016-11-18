@@ -41,7 +41,7 @@ namespace Decent.Minecraft.Client
             }
             catch (SocketException e)
             {
-                throw new FailedToConnectToMineCraftEngine(e);
+                throw new FailedToConnectToMinecraftEngine(e);
             }
         }
 
