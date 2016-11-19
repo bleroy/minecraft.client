@@ -2,11 +2,12 @@
 {
     public class Water : Block
     {
-        public Water() : base(BlockType.Water) { }
+        public Water() : base(BlockType.WaterStationary) { }
+        protected Water(BlockType blockType) : base(blockType) { }
     }
 
-    public class WaterStationary : Block
+    public class WaterFlowing : Water
     {
-        public WaterStationary() : base(BlockType.WaterStationary) { }
+        public WaterFlowing() : base(BlockType.WaterFlowing) { }
     }
 }

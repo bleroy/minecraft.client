@@ -91,7 +91,7 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Iron] = d => new Iron();
             _ctors[(int)BlockType.IronOre] = d => new IronOre();
             _ctors[(int)BlockType.LavaFlowing] = d => new LavaFlowing();
-            _ctors[(int)BlockType.LavaStationary] = d => new LavaStationary();
+            _ctors[(int)BlockType.LavaStationary] = d => new Lava();
             _ctors[(int)BlockType.MossStone] = d => new MossStone();
             _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
             _ctors[(int)BlockType.Snow] = d => new Snow(8);
@@ -103,7 +103,7 @@ namespace Decent.Minecraft.Client
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (Block)new ChiseledStoneBricks();
-            _ctors[(int)BlockType.WaterStationary] = d => new WaterStationary();
+            _ctors[(int)BlockType.WaterStationary] = d => new Water();
             _ctors[(int)BlockType.Wood] = d => new Wood((WoodSpecies)(d & 0x3), (Orientation)(d & 0xC));
             _ctors[(int)BlockType.Wool] = d => new Wool((Color)d);
         }

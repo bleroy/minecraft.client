@@ -2,15 +2,11 @@
 {
     public class Lava : Block
     {
-        public Lava() : base(BlockType.Lava) { }
+        public Lava() : base(BlockType.LavaStationary) { }
+        protected Lava(BlockType blockType) : base(blockType) { }
     }
 
-    public class LavaStationary : Block
-    {
-        public LavaStationary() : base(BlockType.LavaStationary) { }
-    }
-
-    public class LavaFlowing : Block
+    public class LavaFlowing : Lava
     {
         public LavaFlowing() : base(BlockType.LavaFlowing) { }
     }
