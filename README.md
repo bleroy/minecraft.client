@@ -8,7 +8,7 @@ How to use it
 -------------
 
 Requirements: Minecraft (the Java version, not the micro edition or the Windows 10 edition),
-Forge, and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
+[Forge](http://files.minecraftforge.net/), and the [Raspberry Jam Mod](https://github.com/arpruss/raspberryjammod/releases)].
 
 Reference the library, then you can open a connection and start scripting the Minecraft
 world:
@@ -115,6 +115,12 @@ The description of the format of the data for each block type that has data can 
 
 Entities will be an easy contribution once I've started creating the basic infrastructure.
 
+### Tests
+
+This is an easy to medium contribution.
+
+There are lots of blocks that need testing of their serialization and deserialization logic. We also need tests for infrastructure pieces such as `JavaWorld`. Finally, we'll ultimately need functional tests.
+
 ### Commands
 
 This is a medium difficulty contribution.
@@ -137,3 +143,8 @@ The code is architected so that it should be possible to implement alternative p
 reimplementing `JavaConnection`, `JavaWorld`, and `JavaBlock`.
 This way, a single API could in theory be used to script other versions of the Minecraft client and
 of Minecraft servers.
+
+Tips and tricks
+---------------
+
+It is useful, while developing scripts, to be able to switch to another application without the game going into pause. This can be done by editing the `options.txt` file under your Minecraft folder (`%appdata%\.minecraft\` on Windows, `~/Library/Application Support/minecraft/` on macOS, and `~/.minecraft/` on Linux) and setting `pauseOnLostFocus` to `false`.
