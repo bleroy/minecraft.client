@@ -115,6 +115,12 @@ The description of the format of the data for each block type that has data can 
 
 Entities will be an easy contribution once I've started creating the basic infrastructure.
 
+### Tests
+
+This is an easy to medium contribution.
+
+There are lots of blocks that need testing of their serialization and deserialization logic. We also need tests for infrastructure pieces such as `JavaWorld`. Finally, we'll ultimately need functional tests.
+
 ### Commands
 
 This is a medium difficulty contribution.
