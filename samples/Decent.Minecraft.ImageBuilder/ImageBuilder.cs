@@ -1,15 +1,19 @@
 ﻿using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
-using ImageMagick;
+using ImageSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
+
+using ImageColor = ImageSharp.Color;
+using MinecraftColor = Decent.Minecraft.Client.Color;
 
 namespace Decent.Minecraft.ImageBuilder
 {
     public class ImageBuilder
     {
-        private static Dictionary<MagickColor, Color> _colorPalette;
+        private static Dictionary<ImageColor, MinecraftColor> _colorPalette;
         private IWorld _world;
 
         public ImageBuilder(IWorld world)
@@ -23,56 +27,52 @@ namespace Decent.Minecraft.ImageBuilder
         /// </summary>
         static ImageBuilder()
         {
-            _colorPalette = new Dictionary<MagickColor, Color>()
+            _colorPalette = new Dictionary<ImageColor, MinecraftColor>()
             {
-                { MagickColor.FromRgb(221, 221, 221), Color.White },
-                { MagickColor.FromRgb(219, 125, 62), Color.Orange },
-                { MagickColor.FromRgb(179, 80, 188), Color.Magenta },
-                { MagickColor.FromRgb(107, 138, 201), Color.LightBlue },
-                { MagickColor.FromRgb(177, 166, 39), Color.Yellow },
-                { MagickColor.FromRgb(65, 174, 56), Color.Lime },
-                { MagickColor.FromRgb(208, 132, 153), Color.Pink },
-                { MagickColor.FromRgb(64, 64, 64), Color.Gray },
-                { MagickColor.FromRgb(154, 161, 161), Color.LightGray },
-                { MagickColor.FromRgb(46, 110, 137), Color.Cyan },
-                { MagickColor.FromRgb(126, 61, 181), Color.Purple },
-                { MagickColor.FromRgb(46, 56, 141), Color.Blue },
-                { MagickColor.FromRgb(79, 50, 31), Color.Brown },
-                { MagickColor.FromRgb(53, 70, 27), Color.Green },
-                { MagickColor.FromRgb(150, 52, 48), Color.Red },
-                { MagickColor.FromRgb(25, 22, 22), Color.Black }
+                { new ImageColor(221, 221, 221), MinecraftColor.White },
+                { new ImageColor(219, 125, 62), MinecraftColor.Orange },
+                { new ImageColor(179, 80, 188), MinecraftColor.Magenta },
+                { new ImageColor(107, 138, 201), MinecraftColor.LightBlue },
+                { new ImageColor(177, 166, 39), MinecraftColor.Yellow },
+                { new ImageColor(65, 174, 56), MinecraftColor.Lime },
+                { new ImageColor(208, 132, 153), MinecraftColor.Pink },
+                { new ImageColor(64, 64, 64), MinecraftColor.Gray },
+                { new ImageColor(154, 161, 161), MinecraftColor.LightGray },
+                { new ImageColor(46, 110, 137), MinecraftColor.Cyan },
+                { new ImageColor(126, 61, 181), MinecraftColor.Purple },
+                { new ImageColor(46, 56, 141), MinecraftColor.Blue },
+                { new ImageColor(79, 50, 31), MinecraftColor.Brown },
+                { new ImageColor(53, 70, 27), MinecraftColor.Green },
+                { new ImageColor(150, 52, 48), MinecraftColor.Red },
+                { new ImageColor(25, 22, 22), MinecraftColor.Black }
             };
         }
 
         public void DrawImage(string imagePath, Vector3 targetPosition, int maxSize = 100)
         {
-            using (MagickImage image = new MagickImage(imagePath))
+            using (var stream = File.OpenRead(imagePath))
             {
-
+                var image = new Image(stream);
+                Image<ImageColor, uint> resized = null;
                 // resize image
                 if (image.Width > maxSize || image.Height > maxSize)
                 {
-                    if (image.Width > image.Height)
-                    {
-                        image.Resize(maxSize, (int)Math.Floor((double)(image.Height * maxSize) / image.Width));
-                    }
-                    else
-                    {
-                        image.Resize((int)Math.Floor((double)(image.Width * maxSize) / image.Height), maxSize);
-                    }
+                    resized = (image.Width > image.Height)
+                        ? image.Resize(maxSize, (int)Math.Floor((double)(image.Height * maxSize) / image.Width))
+                        : image.Resize((int)Math.Floor((double)(image.Width * maxSize) / image.Height), maxSize);
                 }
-
+                resized = resized ?? image;
                 // get all pixels
-                using (var pixelCollection = image.GetPixels())
+                using (var pixels = resized.Lock())
                 {
 
                     // iterate over pixels and draw a block
-                    for (int y = 0; y < image.Height; y++)
+                    for (int y = 0; y < resized.Height; y++)
                     {
-                        for (int x = 0; x < image.Width; x++)
+                        for (int x = 0; x < resized.Width; x++)
                         {
-                            var pixel = pixelCollection.GetPixel(x, image.Height - y - 1);
-                            var color = GetClosestMinecraftColor(pixel.ToColor());
+                            var pixel = pixels[x, resized.Height - y - 1];
+                            var color = GetClosestMinecraftColor(pixel);
 
                             var brick = new Wool(color);
 
@@ -86,10 +86,10 @@ namespace Decent.Minecraft.ImageBuilder
         /// <summary>
         /// Algorithm taken on http://www.codeproject.com/Articles/17044/Find-the-Nearest-Color-with-C-Using-the-Euclidean
         /// </summary>
-        private Color GetClosestMinecraftColor(MagickColor pixelColor)
+        private MinecraftColor GetClosestMinecraftColor(ImageColor pixelColor)
         {
             // set a default color
-            Color nearestColor = Color.Black;
+            MinecraftColor nearestColor = MinecraftColor.Black;
 
             double minimumDistance = 500;
 

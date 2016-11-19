@@ -109,7 +109,8 @@ Press ESC to quit
                                     var imageBuilder = new ImageBuilder(world);
                                     imageBuilder.DrawImage(
                                         Path.Combine(".", "Media", "Minecraft.gif"),
-                                        playerPosition.Towards(direction.Value, 20));
+                                        playerPosition.Towards(direction.Value, 20),
+                                        maxSize: 100);
                                 }
                                 break;
                             case ConsoleKey.H:
