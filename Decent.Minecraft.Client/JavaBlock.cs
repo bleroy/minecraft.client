@@ -81,6 +81,7 @@ namespace Decent.Minecraft.Client
             };
             _ctors[(int)BlockType.Emerald] = d => new Emerald();
             _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
+			_ctors[(int)BlockType.EndStone] = d => new EndStone();
             _ctors[(int)BlockType.Farmland] = d => new Farmland(d);
             _ctors[(int)BlockType.Fence] = d => new Fence();
             _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
