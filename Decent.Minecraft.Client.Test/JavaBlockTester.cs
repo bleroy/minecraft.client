@@ -70,6 +70,35 @@ namespace Decent.Minecraft.Client.Test
 			}
 		}
 
+		public class For_a_glowstone
+		{
+			public class When_serializing
+			{
+				[Fact]
+				public void It_should_return_a_JavaBlock_for_the_glowstone()
+				{
+					var original = new Glowstone();
+
+					var javaBlock = JavaBlock.From(original);
+
+					javaBlock.Type.Should().Be(BlockType.Glowstone);
+				}
+			}
+
+			public class When_deserializing
+			{
+				[Fact]
+				public void It_should_return_a_glowstone()
+				{
+					const BlockType blockType = BlockType.Glowstone;
+
+					var deserialized = JavaBlock.Create(blockType, new byte()) as Glowstone;
+
+					deserialized.Should().NotBeNull();
+				}
+			}
+		}
+
 	}
 
 	public static class ByteExtensions

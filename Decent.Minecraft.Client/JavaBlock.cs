@@ -86,6 +86,7 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Fence] = d => new Fence();
             _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[(int)BlockType.Fire] = d => new Fire(d);
+			_ctors[(int)BlockType.Glowstone] = d => new Glowstone();
             _ctors[(int)BlockType.Gold] = d => new Gold();
             _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
             _ctors[(int)BlockType.Grass] = d => new Grass();
