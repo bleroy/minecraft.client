@@ -8,8 +8,6 @@
     /// </summary>
     public class Bedrock : Block
     {
-        public Bedrock() : base(BlockType.Bedrock)
-        {
-        }
+        public Bedrock() : base(BlockType.Bedrock) { }
     }
 }
