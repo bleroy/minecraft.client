@@ -5,3 +5,4 @@ obj
 *.lock.json
 .vscode
 *.GhostDoc.xml
+.idea
