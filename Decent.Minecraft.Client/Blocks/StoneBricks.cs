@@ -1,5 +1,8 @@
 ﻿namespace Decent.Minecraft.Client.Blocks
 {
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Stone_Bricks">Gamepedia link</a>.
+    /// </summary>
     public class StoneBricks : Block
     {
         public StoneBricks() : this(StoneQuality.Normal) { }
@@ -20,16 +23,25 @@
         }
     }
 
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Stone_Bricks">Gamepedia link</a>.
+    /// </summary>
     public class MossyStoneBricks : StoneBricks
     {
         public MossyStoneBricks() : base(StoneQuality.Mossy) { }
     }
 
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Stone_Bricks">Gamepedia link</a>.
+    /// </summary>
     public class CrackedStoneBricks : StoneBricks
     {
         public CrackedStoneBricks() : base(StoneQuality.Cracked) { }
     }
 
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Stone_Bricks">Gamepedia link</a>.
+    /// </summary>
     public class ChiseledStoneBricks : StoneBricks
     {
         public ChiseledStoneBricks() : base(StoneQuality.Chiseled) { }
