@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// TODO: make wood species a property
-    /// <a href="http://minecraft.gamepedia.com/Cobblestone">Gamepedia link</a>.
+    /// <a href="http://minecraft.gamepedia.com/Door">Gamepedia link</a>.
     /// </summary>
     public abstract class Door : Block
     {
