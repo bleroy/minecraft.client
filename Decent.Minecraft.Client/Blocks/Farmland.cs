@@ -2,6 +2,9 @@
 
 namespace Decent.Minecraft.Client.Blocks
 {
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Cobblestone">Gamepedia link</a>.
+    /// </summary>
     public class Farmland : Block
     {
         public Farmland(int wetness) : base(BlockType.Farmland)

@@ -1,6 +1,9 @@
 ﻿namespace Decent.Minecraft.Client.Blocks
 {
-    //TODO: make wood species a property
+    /// <summary>
+    /// TODO: make wood species a property
+    /// <a href="http://minecraft.gamepedia.com/Cobblestone">Gamepedia link</a>.
+    /// </summary>
     public abstract class Door : Block
     {
         protected Door(BlockType type) : base(type) { }

@@ -2,6 +2,9 @@
 
 namespace Decent.Minecraft.Client.Blocks
 {
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Fire">Gamepedia link</a>.
+    /// </summary>
     public class Fire : Block
     {
         public Fire(byte intensity) : base(BlockType.Fire)

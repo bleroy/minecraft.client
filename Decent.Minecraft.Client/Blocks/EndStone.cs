@@ -1,6 +1,9 @@
 ﻿namespace Decent.Minecraft.Client.Blocks
 {
-	public class EndStone : Block
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Cobblestone">Gamepedia link</a>.
+    /// </summary>
+    public class EndStone : Block
 	{
 		public EndStone() : base(BlockType.EndStone) { }
 	}
