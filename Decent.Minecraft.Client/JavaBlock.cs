@@ -44,11 +44,7 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
-            _ctors[(int)BlockType.Coal] = d =>
-            {
-                if (d == 1) return new Charcoal();
-                return new Coal();
-            };
+            _ctors[(int)BlockType.Coal] = d => new Coal();
             _ctors[(int)BlockType.Cobblestone] = d =>
             {
                 if (d == 1) return new MossyCobblestone();
@@ -163,12 +159,6 @@ namespace Decent.Minecraft.Client
                     5));
             }
 
-            var coal = block as Coal;
-            if (coal != null)
-            {
-                return new JavaBlock(BlockType.Coal, (byte)(coal is Charcoal ? 1 : 0));
-            }
-
             var stone = block as Stone;
             if (stone != null)
             {
@@ -221,7 +211,7 @@ namespace Decent.Minecraft.Client
             var fire = block as Fire;
             if (fire != null)
             {
-                return new JavaBlock(BlockType.Fire, fire.Intensity);
+                return new JavaBlock(BlockType.Fire, (byte)fire.Intensity);
             }
 
             var snow = block as Snow;
