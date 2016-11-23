@@ -39,6 +39,7 @@ namespace Decent.Minecraft.Client
                 }
             };
             _ctors[(int)BlockType.Bedrock] = d => new Bedrock();
+            _ctors[(int)BlockType.Bone] = d => new Bone();
             _ctors[(int)BlockType.Bookshelf] = d => new Bookshelf();
             _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
@@ -90,12 +91,23 @@ namespace Decent.Minecraft.Client
             _ctors[(int)BlockType.Gold] = d => new Gold();
             _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
             _ctors[(int)BlockType.Grass] = d => new Grass();
+            _ctors[(int)BlockType.Hay] = d => new Hay();
             _ctors[(int)BlockType.Iron] = d => new Iron();
+            _ctors[(int)BlockType.IronBars] = d => new IronBars();
             _ctors[(int)BlockType.IronOre] = d => new IronOre();
+            _ctors[(int)BlockType.Jukebox] = d => new Jukebox();
+            _ctors[(int)BlockType.JackOLantern] = d => new JackOLantern();
             _ctors[(int)BlockType.LavaFlowing] = d => new LavaFlowing();
             _ctors[(int)BlockType.LavaStationary] = d => new Lava();
+            _ctors[(int)BlockType.Leaves] = d => new Leaves();
+            _ctors[(int)BlockType.Magma] = d => new Magma();
             _ctors[(int)BlockType.MossStone] = d => new MossStone();
+            _ctors[(int)BlockType.Melon] = d => new Melon();
+            _ctors[(int)BlockType.Netherrack] = d => new Netherrack();
+            _ctors[(int)BlockType.NetherWartBlock] = d => new NetherWartBlock();
             _ctors[(int)BlockType.Obsidian] = d => new Obsidian();
+            _ctors[(int)BlockType.Pumpkin] = d => new Pumpkin();
+            _ctors[(int)BlockType.QuartzOre] = d => new QuartzOre();
             _ctors[(int)BlockType.Snow] = d => new Snow(8);
             _ctors[(int)BlockType.SnowLayer] = d => new Snow(d);
             _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Color)d);
@@ -105,6 +117,9 @@ namespace Decent.Minecraft.Client
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (Block)new ChiseledStoneBricks();
+            _ctors[(int)BlockType.SoulSand] = d => new SoulSand();
+            _ctors[(int)BlockType.TNT] = d => new TNT();
+            _ctors[(int)BlockType.WaterLily] = d => new WaterLily();
             _ctors[(int)BlockType.WaterStationary] = d => new Water();
             _ctors[(int)BlockType.Wood] = d => new Wood((WoodSpecies)(d & 0x3), (Orientation)(d & 0xC));
             _ctors[(int)BlockType.Wool] = d => new Wool((Color)d);

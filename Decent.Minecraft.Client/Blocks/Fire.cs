@@ -2,9 +2,12 @@
 
 namespace Decent.Minecraft.Client.Blocks
 {
+    /// <summary>
+    /// <a href="http://minecraft.gamepedia.com/Fire">Gamepedia link</a>.
+    /// </summary>
     public class Fire : Block
     {
-        public Fire(byte intensity) : base(BlockType.Fire)
+        public Fire(int intensity) : base(BlockType.Fire)
         {
             if (intensity < 0 || intensity > 15)
             {
@@ -13,6 +16,6 @@ namespace Decent.Minecraft.Client.Blocks
             Intensity = intensity;
         }
 
-        public byte Intensity { get; }
+        public int Intensity { get; }
     }
 }
