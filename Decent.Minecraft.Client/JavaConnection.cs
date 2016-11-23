@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
@@ -17,6 +19,8 @@ namespace Decent.Minecraft.Client
         private NetworkStream _stream;
         private StreamReader _streamReader;
         private bool _disposedValue = false; // To detect redundant calls
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
         public string Address { get; set; } = "localhost";
         public int Port { get; set; } = 4711;
 
@@ -58,13 +62,18 @@ namespace Decent.Minecraft.Client
         public async Task SendAsync(string function, IEnumerable data)
         {
             var s = $"{function}({data.FlattenToString()})\n";
-            Debug.WriteLine(s);
-            var buffer = Encoding.ASCII.GetBytes(s);
+            Debug.WriteLineIf(!function.StartsWith("events."), $"Sending: {s}");
+            await _semaphore.WaitAsync();
             try
             {
+                var buffer = Encoding.ASCII.GetBytes(s);
                 await _stream.WriteAsync(buffer, 0, buffer.Length);
             }
-            catch (ObjectDisposedException) {}
+            catch (ObjectDisposedException) { }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public async Task SendAsync(string function, params object[] data)
@@ -84,15 +93,20 @@ namespace Decent.Minecraft.Client
 
         public async Task<string> ReceiveAsync()
         {
+            await _semaphore.WaitAsync();
             try
             {
                 var response = await _streamReader.ReadLineAsync();
-                Debug.WriteLine(">" + response);
+                Debug.WriteLineIf(!string.IsNullOrEmpty(response), $"Received: {response}");
                 return response;
             }
             catch (ObjectDisposedException)
             {
                 return null;
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 
@@ -103,8 +117,25 @@ namespace Decent.Minecraft.Client
 
         public async Task<string> SendAndReceiveAsync(string function, IEnumerable data)
         {
-            await SendAsync(function, data);
-            return await ReceiveAsync();
+            var s = $"{function}({data.FlattenToString()})\n";
+            Debug.WriteLineIf(!function.StartsWith("events."), $"Sending: {s}");
+            await _semaphore.WaitAsync();
+            try
+            {
+                var buffer = Encoding.ASCII.GetBytes(s);
+                await _stream.WriteAsync(buffer, 0, buffer.Length);
+                var response = await _streamReader.ReadLineAsync();
+                Debug.WriteLineIf(!string.IsNullOrEmpty(response), $"Received: {response}");
+                return response;
+            }
+            catch (ObjectDisposedException)
+            {
+                return null;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public async Task<string> SendAndReceiveAsync(string function, params object[] data)
