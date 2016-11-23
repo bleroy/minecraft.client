@@ -23,7 +23,7 @@ namespace Decent.Minecraft.Client.Test
                     int expectedPosition)
                 {
                     var connection = new FakeConnection();
-                    var player = new Player(connection);
+                    var player = new JavaPlayer(connection);
                     await player.SetPositionAsync(new Vector3(0, 0, 0));
 
                     await player.MoveAsync(towards);

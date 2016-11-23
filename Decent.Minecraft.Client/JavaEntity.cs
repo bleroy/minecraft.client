@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
 {
-    // TODO: have an abstraction for this, as this really is JavaEntity at the moment.
-    public partial class Entity
+    public partial class JavaEntity : IEntity
     {
-        internal Entity(EntityType type, IConnection connection, string prefix = "entity")
+        internal JavaEntity(EntityType type, IConnection connection, string prefix = "entity")
         {
             Type = type;
             Connection = connection;

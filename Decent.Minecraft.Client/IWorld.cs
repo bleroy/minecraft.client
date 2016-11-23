@@ -7,7 +7,7 @@ namespace Decent.Minecraft.Client
 {
     public interface IWorld : IDisposable
     {
-        Player Player { get; }
+        IPlayer Player { get; }
 
         Block GetBlock(Vector3 coordinates);
         Block GetBlock(float x, float y, float z);

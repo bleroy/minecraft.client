@@ -1,8 +1,8 @@
 ﻿namespace Decent.Minecraft.Client
 {
-    public class Player : Entity
+    public class JavaPlayer : JavaEntity, IPlayer
     {
-        public Player(IConnection connection)
+        public JavaPlayer(IConnection connection)
             : base(EntityType.ThePlayer, connection, "player")
         {
         }
