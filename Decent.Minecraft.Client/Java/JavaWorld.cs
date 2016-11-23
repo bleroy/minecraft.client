@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decent.Minecraft.Client
+namespace Decent.Minecraft.Client.Java
 {
     public class JavaWorld : IWorld
     {

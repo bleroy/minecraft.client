@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Decent.Minecraft.Client
+namespace Decent.Minecraft.Client.Java
 {
     public partial class JavaEntity : IEntity
     {

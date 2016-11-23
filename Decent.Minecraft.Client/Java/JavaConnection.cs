@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Decent.Minecraft.Client
+namespace Decent.Minecraft.Client.Java
 {
     /// <summary>
     /// A connection to a Minecraft game.

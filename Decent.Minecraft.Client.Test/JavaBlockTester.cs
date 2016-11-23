@@ -1,5 +1,6 @@
 ﻿using System;
 using Decent.Minecraft.Client.Blocks;
+using Decent.Minecraft.Client.Java;
 using FluentAssertions;
 using Xunit;
 

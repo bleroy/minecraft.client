@@ -2,7 +2,7 @@
 using System;
 using static Decent.Minecraft.Client.Direction;
 
-namespace Decent.Minecraft.Client
+namespace Decent.Minecraft.Client.Java
 {
     /// <summary>
     /// A representation of a Minecraft block used in communication with Java Minecraft instances.

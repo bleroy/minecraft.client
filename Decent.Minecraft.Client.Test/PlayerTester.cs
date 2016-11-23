@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Threading.Tasks;
+using Decent.Minecraft.Client.Java;
 using Decent.Minecraft.Client.Test.Fakes;
 using FluentAssertions;
 using Xunit;
