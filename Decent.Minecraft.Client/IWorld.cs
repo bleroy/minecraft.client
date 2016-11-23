@@ -34,5 +34,6 @@ namespace Decent.Minecraft.Client
         IWorld PostToChat(string message);
         Task<IWorld> PostToChatAsync(string message);
         event EventHandler<ChatEventArgs> PostedToChat;
+        event EventHandler<BlockEventArgs> BlockHit;
     }
 }

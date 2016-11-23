@@ -60,6 +60,7 @@ I = Render a picture
 H = Height under the player
 S = Add snow
 E = Eavesdrop on chat (CTRL+E to cancel)
+B = Monitor block hits (CTRL+B to cancel)
 
 Press ESC to quit
 
@@ -136,10 +137,24 @@ Press ESC to quit
                                 if (ctrl)
                                 {
                                     world.PostedToChat -= _onChatMessage;
+                                    Console.WriteLine("Stopped listening to chat messages.");
                                 }
                                 else
                                 {
                                     world.PostedToChat += _onChatMessage;
+                                    Console.WriteLine("Started listening to chat messages.");
+                                }
+                                break;
+                            case ConsoleKey.B:
+                                if (ctrl)
+                                {
+                                    world.BlockHit -= _onBlockHit;
+                                    Console.WriteLine("Stopped monitoring block hits.");
+                                }
+                                else
+                                {
+                                    world.BlockHit += _onBlockHit;
+                                    Console.WriteLine("Started monitoring block hits.");
                                 }
                                 break;
                         }
@@ -155,6 +170,11 @@ Press ESC to quit
         private static EventHandler<ChatEventArgs> _onChatMessage = (object sender, ChatEventArgs args) =>
         {
             Console.WriteLine($"{args.EntityId} posted: {args.Message}");
+        };
+
+        private static EventHandler<BlockEventArgs> _onBlockHit = (object sender, BlockEventArgs args) =>
+        {
+            Console.WriteLine($"A block was hit by {args.EntityId} at ({args.Position}) facing {args.Facing}.");
         };
 
         private static Direction? GetDirection()
