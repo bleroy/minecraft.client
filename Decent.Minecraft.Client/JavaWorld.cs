@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
@@ -127,6 +129,159 @@ namespace Decent.Minecraft.Client
         {
             PostToChatAsync(message).Wait();
             return this;
+        }
+
+        public async Task ClearEventsAsync()
+        {
+            await Connection.SendAsync("events.clear");
+        }
+
+        public void ClearEvents()
+        {
+            ClearEventsAsync().Wait();
+        }
+
+        private EventHandler<ChatEventArgs> _postedToChat;
+        private CancellationTokenSource _listeningToChatCancellationTokenSource;
+        public int ChatPollingInterval { get; set; } = 100;
+
+        public event EventHandler<ChatEventArgs> PostedToChat
+        {
+            add
+            {
+                if (_postedToChat == null)
+                {
+                    _listeningToChatCancellationTokenSource = new CancellationTokenSource();
+
+                    StartListeningToChat(_listeningToChatCancellationTokenSource.Token);
+                }
+                _postedToChat += value;
+            }
+            remove
+            {
+                _postedToChat -= value;
+                if (_postedToChat == null)
+                {
+                    _listeningToChatCancellationTokenSource.Cancel();
+                }
+            }
+        }
+
+        private async void StartListeningToChat(CancellationToken cancellationToken)
+        {
+            // Get current chats and throw them away to clear the mod-side buffer.
+            await Connection.SendAndReceiveAsync("events.chat.posts");
+            // Then start polling
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var chat = await GetChatMessagesAsync();
+                if (chat.Count != 0)
+                {
+                    foreach (var message in chat)
+                    {
+                        _postedToChat?.Invoke(this, message);
+                    }
+                }
+                await Task.Delay(ChatPollingInterval);
+            }
+        }
+
+        private async Task<IList<ChatEventArgs>> GetChatMessagesAsync()
+        {
+            var response = await Connection.SendAndReceiveAsync("events.chat.posts");
+            if (string.IsNullOrEmpty(response))
+            {
+                return new ChatEventArgs[] { };
+            }
+            return response
+                .Split('|')
+                .Select(Util.FixPipe)
+                .Select(msg =>
+                {
+                    var comma = msg.IndexOf(',');
+                    if (comma == -1) throw new FormatException("Bad message format");
+                    return new ChatEventArgs(
+                        int.Parse(msg.Substring(0, comma)),
+                        msg.Substring(comma + 1));
+                })
+                .ToList();
+        }
+
+        private EventHandler<BlockEventArgs> _blockHit;
+        private CancellationTokenSource _blockHitCancellationTokenSource;
+        public int BlockHitPollingInterval { get; set; } = 100;
+
+        /// <summary>
+        /// An event that triggers when a block is hit by the player.
+        /// </summary>
+        /// <remarks>
+        /// Note that depending on your Minecraft client configuration, block hit events may only trigger on right-clicks and with the sword equipped.
+        /// See <see cref="https://github.com/arpruss/raspberryjammod/blob/6ab289c3c3dd774577c695fe1b4e69d82abfd469/src/main/java/mobi/omegacentauri/raspberryjammod/APIHandler.java#L966"/>
+        /// for the conditions that trigger the event on the Minecraft mod side.
+        /// </remarks>
+        public event EventHandler<BlockEventArgs> BlockHit
+        {
+            add
+            {
+                if (_blockHit == null)
+                {
+                    _blockHitCancellationTokenSource = new CancellationTokenSource();
+
+                    StartListeningToBlockHits(_blockHitCancellationTokenSource.Token);
+                }
+                _blockHit += value;
+            }
+            remove
+            {
+                _blockHit -= value;
+                if (_blockHit == null)
+                {
+                    _blockHitCancellationTokenSource.Cancel();
+                }
+            }
+        }
+
+        private async void StartListeningToBlockHits(CancellationToken cancellationToken)
+        {
+            // Get current block hits and throw them away to clear the mod-side buffer.
+            await Connection.SendAndReceiveAsync("events.block.hits");
+            // Then start polling
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var blockHits = await GetBlockHitsAsync();
+                if (blockHits.Count != 0)
+                {
+                    foreach (var blockHit in blockHits)
+                    {
+                        _blockHit?.Invoke(this, blockHit);
+                    }
+                }
+                await Task.Delay(BlockHitPollingInterval);
+            }
+        }
+
+        private async Task<IList<BlockEventArgs>> GetBlockHitsAsync()
+        {
+            var response = await Connection.SendAndReceiveAsync("events.block.hits");
+            if (string.IsNullOrEmpty(response))
+            {
+                return new BlockEventArgs[] { };
+            }
+            return response
+                .Split('|')
+                .Select(Util.FixPipe)
+                .Select(msg =>
+                {
+                    var splitMsg = msg.Split(',');
+                    if (splitMsg.Length != 5) throw new FormatException("Bad message format");
+                    return new BlockEventArgs(
+                        int.Parse(splitMsg[4]),
+                        new Vector3(int.Parse(splitMsg[0]), int.Parse(splitMsg[1]), int.Parse(splitMsg[2])),
+                        (Facing)Enum.Parse(typeof(Facing), splitMsg[3]));
+                })
+                .Where(hit => hit.Facing != Facing.Nowhere)
+                .Distinct()
+                .ToList();
         }
 
         public void Dispose()

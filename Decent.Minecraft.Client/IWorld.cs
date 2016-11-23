@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -32,5 +33,7 @@ namespace Decent.Minecraft.Client
         int GetHeight(float x, float z);
         IWorld PostToChat(string message);
         Task<IWorld> PostToChatAsync(string message);
+        event EventHandler<ChatEventArgs> PostedToChat;
+        event EventHandler<BlockEventArgs> BlockHit;
     }
 }
