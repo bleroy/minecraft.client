@@ -60,7 +60,11 @@ namespace Decent.Minecraft.Client
             var s = $"{function}({data.FlattenToString()})\n";
             Debug.WriteLine(s);
             var buffer = Encoding.ASCII.GetBytes(s);
-            await _stream.WriteAsync(buffer, 0, buffer.Length);
+            try
+            {
+                await _stream.WriteAsync(buffer, 0, buffer.Length);
+            }
+            catch (ObjectDisposedException) {}
         }
 
         public async Task SendAsync(string function, params object[] data)
@@ -80,9 +84,16 @@ namespace Decent.Minecraft.Client
 
         public async Task<string> ReceiveAsync()
         {
-            var response = await _streamReader.ReadLineAsync();
-            Debug.WriteLine(">" + response);
-            return response;
+            try
+            {
+                var response = await _streamReader.ReadLineAsync();
+                Debug.WriteLine(">" + response);
+                return response;
+            }
+            catch (ObjectDisposedException)
+            {
+                return null;
+            }
         }
 
         public string Receive()

@@ -33,9 +33,6 @@ namespace Decent.Minecraft.Client
         int GetHeight(float x, float z);
         IWorld PostToChat(string message);
         Task<IWorld> PostToChatAsync(string message);
-        Task ClearEventsAsync();
-        void ClearEvents();
-        Task<IEnumerable<ChatMessage>> WaitForChatMessagesAsync();
-        IEnumerable<ChatMessage> WaitForChatMessages();
+        event EventHandler<ChatEventArgs> PostedToChat;
     }
 }

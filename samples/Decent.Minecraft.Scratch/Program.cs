@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Minecraft.Scratch
@@ -58,6 +59,7 @@ C = Build a castle
 I = Render a picture
 H = Height under the player
 S = Add snow
+E = Eavesdrop on chat (CTRL+E to cancel)
 
 Press ESC to quit
 
@@ -66,8 +68,11 @@ Press ESC to quit
                         Vector3 playerPosition = new Vector3();
                         Direction? direction;
 
-                        var cmd = Console.ReadKey();
+                        var cmd = Console.ReadKey(true);
                         Console.WriteLine();
+                        var shift = cmd.Modifiers.HasFlag(ConsoleModifiers.Shift);
+                        var ctrl = cmd.Modifiers.HasFlag(ConsoleModifiers.Control);
+                        var alt = cmd.Modifiers.HasFlag(ConsoleModifiers.Alt);
                         switch (cmd.Key)
                         {
                             case ConsoleKey.Escape:
@@ -127,6 +132,16 @@ Press ESC to quit
                                 world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
                                 Console.WriteLine("Snow added");
                                 break;
+                            case ConsoleKey.E:
+                                if (ctrl)
+                                {
+                                    world.PostedToChat -= _onChatMessage;
+                                }
+                                else
+                                {
+                                    world.PostedToChat += _onChatMessage;
+                                }
+                                break;
                         }
                     }
                 }
@@ -136,6 +151,11 @@ Press ESC to quit
                 Console.WriteLine(e.Message);
             }
         }
+
+        private static EventHandler<ChatEventArgs> _onChatMessage = (object sender, ChatEventArgs args) =>
+        {
+            Console.WriteLine($"{args.EntityId} posted: {args.Message}");
+        };
 
         private static Direction? GetDirection()
         {

@@ -1,8 +1,10 @@
-﻿namespace Decent.Minecraft.Client
+﻿using System;
+
+namespace Decent.Minecraft.Client
 {
-    public class ChatMessage
+    public class ChatEventArgs : EventArgs
     {
-        public ChatMessage(int entityId, string message)
+        public ChatEventArgs(int entityId, string message) : base()
         {
             EntityId = entityId;
             Message = message;

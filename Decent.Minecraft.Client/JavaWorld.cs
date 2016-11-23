@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
@@ -141,9 +141,58 @@ namespace Decent.Minecraft.Client
             ClearEventsAsync().Wait();
         }
 
-        public async Task<IEnumerable<ChatMessage>> WaitForChatMessagesAsync()
+        private EventHandler<ChatEventArgs> _postedToChat;
+        private CancellationTokenSource _listeningToChatCancellationTokenSource;
+        public int ChatPollingInterval { get; set; } = 100;
+
+        public event EventHandler<ChatEventArgs> PostedToChat
+        {
+            add
+            {
+                if (_postedToChat == null)
+                {
+                    _listeningToChatCancellationTokenSource = new CancellationTokenSource();
+
+                    StartListeningToChat(_listeningToChatCancellationTokenSource.Token);
+                }
+                _postedToChat += value;
+            }
+            remove
+            {
+                _postedToChat -= value;
+                if (_postedToChat == null)
+                {
+                    _listeningToChatCancellationTokenSource.Cancel();
+                }
+            }
+        }
+
+        private async void StartListeningToChat(CancellationToken cancellationToken)
+        {
+            // Get current chats and throw them away to clear the mod-side buffer.
+            await Connection.SendAndReceiveAsync("events.chat.posts");
+            // Then start polling
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var chat = await GetChatMessagesAsync();
+                if (chat.Count != 0)
+                {
+                    foreach (var message in chat)
+                    {
+                        _postedToChat?.Invoke(this, message);
+                    }
+                }
+                await Task.Delay(ChatPollingInterval);
+            }
+        }
+
+        private async Task<IList<ChatEventArgs>> GetChatMessagesAsync()
         {
             var response = await Connection.SendAndReceiveAsync("events.chat.posts");
+            if (string.IsNullOrEmpty(response))
+            {
+                return new ChatEventArgs[] { };
+            }
             return response
                 .Split('|')
                 .Select(Util.FixPipe)
@@ -151,15 +200,11 @@ namespace Decent.Minecraft.Client
                 {
                     var comma = msg.IndexOf(',');
                     if (comma == -1) throw new FormatException("Bad message format");
-                    return new ChatMessage(
+                    return new ChatEventArgs(
                         int.Parse(msg.Substring(0, comma)),
                         msg.Substring(comma + 1));
-                });
-        }
-
-        public IEnumerable<ChatMessage> WaitForChatMessages()
-        {
-            return WaitForChatMessagesAsync().Result;
+                })
+                .ToList();
         }
 
         public void Dispose()
