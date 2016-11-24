@@ -1,5 +1,10 @@
 ﻿namespace Decent.Minecraft.Client
 {
+    /// <summary>
+    /// Minecraft block types.
+    /// The values correspond to actual Minecraft block IDs.
+    /// <a href="http://minecraft.gamepedia.com/Data_values/Block_IDs">Gamepedia link</a>.
+    /// </summary>
     public enum BlockType : byte
     {
         Air = 0,

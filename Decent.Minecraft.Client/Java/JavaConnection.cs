@@ -58,10 +58,10 @@ namespace Decent.Minecraft.Client.Java
             Dispose();
         }
 
-        public async Task SendAsync(string function, IEnumerable data)
+        public async Task SendAsync(string command, IEnumerable data)
         {
-            var s = $"{function}({data.FlattenToString()})\n";
-            Debug.WriteLineIf(!function.StartsWith("events."), $"Sending: {s}");
+            var s = $"{command}({data.FlattenToString()})\n";
+            Debug.WriteLineIf(!command.StartsWith("events."), $"Sending: {s}");
             await _semaphore.WaitAsync();
             try
             {
@@ -75,19 +75,19 @@ namespace Decent.Minecraft.Client.Java
             }
         }
 
-        public async Task SendAsync(string function, params object[] data)
+        public async Task SendAsync(string command, params object[] data)
         {
-            await SendAsync(function, (IEnumerable)data);
+            await SendAsync(command, (IEnumerable)data);
         }
 
-        public void Send(string function, IEnumerable data)
+        public void Send(string command, IEnumerable data)
         {
-            SendAsync(function, data).Wait();
+            SendAsync(command, data).Wait();
         }
 
-        public void Send(string function, params object[] data)
+        public void Send(string command, params object[] data)
         {
-            SendAsync(function, data).Wait();
+            SendAsync(command, data).Wait();
         }
 
         public async Task<string> ReceiveAsync()
@@ -114,10 +114,10 @@ namespace Decent.Minecraft.Client.Java
             return ReceiveAsync().Result;
         }
 
-        public async Task<string> SendAndReceiveAsync(string function, IEnumerable data)
+        public async Task<string> SendAndReceiveAsync(string command, IEnumerable data)
         {
-            var s = $"{function}({data.FlattenToString()})\n";
-            Debug.WriteLineIf(!function.StartsWith("events."), $"Sending: {s}");
+            var s = $"{command}({data.FlattenToString()})\n";
+            Debug.WriteLineIf(!command.StartsWith("events."), $"Sending: {s}");
             await _semaphore.WaitAsync();
             try
             {
@@ -137,19 +137,19 @@ namespace Decent.Minecraft.Client.Java
             }
         }
 
-        public async Task<string> SendAndReceiveAsync(string function, params object[] data)
+        public async Task<string> SendAndReceiveAsync(string command, params object[] data)
         {
-            return await SendAndReceiveAsync(function, (IEnumerable)data);
+            return await SendAndReceiveAsync(command, (IEnumerable)data);
         }
 
-        public string SendAndReceive(string function, IEnumerable data)
+        public string SendAndReceive(string command, IEnumerable data)
         {
-            return SendAndReceiveAsync(function, data).Result;
+            return SendAndReceiveAsync(command, data).Result;
         }
 
-        public string SendAndReceive(string function, params object[] data)
+        public string SendAndReceive(string command, params object[] data)
         {
-            return SendAndReceiveAsync(function, data).Result;
+            return SendAndReceiveAsync(command, data).Result;
         }
 
         protected virtual void Dispose(bool disposing)

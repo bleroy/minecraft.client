@@ -1,5 +1,8 @@
 ﻿namespace Decent.Minecraft.Client
 {
+    /// <summary>
+    /// Minecraft block colors, as used by wool, stained clay, stained glass, and carpet.
+    /// </summary>
     public enum Color : byte
     {
         White = 0,

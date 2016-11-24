@@ -36,7 +36,12 @@ namespace Decent.Minecraft.Client.Java
 		
         public Vector3 GetDirection()
         {
-            var response = Connection.SendAndReceiveAsync(Prefix + ".getDirection").Result;
+            return GetDirectionAsync().Result;
+        }
+
+        public async Task<Vector3> GetDirectionAsync()
+        {
+            var response = await Connection.SendAndReceiveAsync(Prefix + ".getDirection");
             return response.ParseCoordinates();
         }
 
