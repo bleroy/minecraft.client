@@ -23,7 +23,7 @@ namespace Decent.Minecraft.Client
         /// Asynchronously gets the direction the entity is facing.
         /// </summary>
         /// <returns>The direction the entity is facing.</returns>
-        Vector3 GetDirectionAsync();
+        Task<Vector3> GetDirectionAsync();
 
         /// <summary>
         /// Gets the position of the entity.
