@@ -1,5 +1,8 @@
 ﻿namespace Decent.Minecraft.Client
 {
+    /// <summary>
+    /// Kinds of stone.
+    /// </summary>
     public enum Mineral : byte
     {
         Stone = 0,

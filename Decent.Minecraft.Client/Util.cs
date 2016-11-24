@@ -7,8 +7,16 @@ using System.Text;
 
 namespace Decent.Minecraft.Client
 {
+    /// <summary>
+    /// A bunch of helpers.
+    /// </summary>
     public static class Util
     {
+        /// <summary>
+        /// Flattens a hierarchy of objects into a flat enumeration of strings.
+        /// </summary>
+        /// <param name="list">The hierarchy of objects.</param>
+        /// <returns>The flattened enumeration.</returns>
         public static IEnumerable Flatten(this IEnumerable list)
         {
             foreach (var item in list)
@@ -40,6 +48,12 @@ namespace Decent.Minecraft.Client
             }
         }
 
+        /// <summary>
+        /// Recursively flattens a list of objects into a
+        /// comma-delimited string representation.
+        /// </summary>
+        /// <param name="list">The list of objects.</param>
+        /// <returns>The serialized comma-delimited list of objects.</returns>
         public static string FlattenToString(this IEnumerable list)
         {
             var listAsString = list as string;
@@ -47,6 +61,11 @@ namespace Decent.Minecraft.Client
             return string.Join(",", Flatten(list).Cast<object>().Select(o => o.ToString()));
         }
 
+        /// <summary>
+        /// Parses three comma-separated coordinates into a `Vector3`.
+        /// </summary>
+        /// <param name="coordinates">The comma-separated string representation of the coordinates.</param>
+        /// <returns>The parsed `Vector3`.</returns>
         public static Vector3 ParseCoordinates(this string coordinates)
         {
             var parsedCoordinates = coordinates.Split(',')
@@ -55,11 +74,23 @@ namespace Decent.Minecraft.Client
             return new Vector3(parsedCoordinates[0], parsedCoordinates[1], parsedCoordinates[2]);
         }
 
+        /// <summary>
+        /// Unescapes pipes and ampersands.
+        /// </summary>
+        /// <param name="s">The string to unescape.</param>
+        /// <returns>The unescaped string.</returns>
         public static string FixPipe(string s)
         {
             return s.Replace("&#124;", "|").Replace("&amp;", "&");
-		}
-		
+        }
+        
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks in a certain direction.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="direction">The direction of the displacement.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
         public static Vector3 Towards(this Vector3 current, Direction direction, int times = 1)
         {
             switch (direction)
@@ -82,9 +113,15 @@ namespace Decent.Minecraft.Client
             return current;
         }
 
-        public static Vector3 Downwards(this Vector3 current, int numOfBlocks = 1)
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks down.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 Downwards(this Vector3 current, int times = 1)
         {
-            current.Y -= numOfBlocks;
+            current.Y -= times;
             return current;
         }
     }
