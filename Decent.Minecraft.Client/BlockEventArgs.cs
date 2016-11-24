@@ -9,7 +9,7 @@ namespace Decent.Minecraft.Client
     /// </summary>
     public class BlockEventArgs : EventArgs
     {
-        public BlockEventArgs(int entityId, Vector3 position, Facing facing) : base()
+        public BlockEventArgs(int entityId, Vector3 position, Direction3 facing) : base()
         {
             EntityId = entityId;
             Position = position;
@@ -31,7 +31,7 @@ namespace Decent.Minecraft.Client
         /// For example, if the player hits the block he's standing on, the direction
         /// will be `Facing.Up`.
         /// </summary>
-        public Facing Facing { get; }
+        public Direction3 Facing { get; }
 
         public override bool Equals(object obj)
         {

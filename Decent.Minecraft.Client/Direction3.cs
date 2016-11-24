@@ -3,7 +3,7 @@
     /// <summary>
     /// A 3D direction.
     /// </summary>
-    public enum Facing
+    public enum Direction3
     {
         Down = 0,
         Up,

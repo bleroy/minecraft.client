@@ -7,13 +7,13 @@
     {
         private Wood(): base(BlockType.Wood) { }
 
-        public Wood(WoodSpecies species = WoodSpecies.Oak, Orientation orientation = Orientation.None): this()
+        public Wood(WoodSpecies species = WoodSpecies.Oak, Axis orientation = Axis.None): this()
         {
             Orientation = orientation;
             Species = species;
         }
 
-        public Orientation Orientation { get; }
+        public Axis Orientation { get; }
 
         public WoodSpecies Species { get; }
     }

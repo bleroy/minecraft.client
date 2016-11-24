@@ -1,6 +1,6 @@
 ﻿namespace Decent.Minecraft.Client
 {
-    public enum Orientation : byte
+    public enum Axis : byte
     {
         UpDown = 0x0,
         EastWest = 0x4,

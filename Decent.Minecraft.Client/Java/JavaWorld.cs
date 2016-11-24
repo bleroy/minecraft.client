@@ -265,9 +265,9 @@ namespace Decent.Minecraft.Client.Java
                     return new BlockEventArgs(
                         int.Parse(splitMsg[4]),
                         new Vector3(int.Parse(splitMsg[0]), int.Parse(splitMsg[1]), int.Parse(splitMsg[2])),
-                        (Facing)Enum.Parse(typeof(Facing), splitMsg[3]));
+                        (Direction3)Enum.Parse(typeof(Direction3), splitMsg[3]));
                 })
-                .Where(hit => hit.Facing != Facing.Nowhere)
+                .Where(hit => hit.Facing != Direction3.Nowhere)
                 .Distinct()
                 .ToList();
         }
