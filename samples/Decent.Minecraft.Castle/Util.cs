@@ -28,7 +28,7 @@ namespace Decent.Minecraft.Castle
             var y = position.Y;
             while (position.Y > y0)
             {
-                if (await World.GetBlockTypeAsync(position.X, y, position.Z) != BlockType.Air)
+                if ((await World.GetBlockAsync(position.X, y, position.Z)).Type != BlockType.Air)
                 {
                     return (int)y;
                 }

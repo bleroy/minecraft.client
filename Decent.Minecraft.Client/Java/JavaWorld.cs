@@ -26,18 +26,6 @@ namespace Decent.Minecraft.Client.Java
             return world;
         }
 
-        public async Task<BlockType> GetBlockTypeAsync(float x, float y, float z)
-        {
-            return (BlockType)int.Parse(await Connection.SendAndReceiveAsync(
-                "world.getBlock",
-                (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z)));
-        }
-
-        public BlockType GetBlockType(float x, float y, float z)
-        {
-            return GetBlockTypeAsync(x, y, z).Result;
-        }
-
         public async Task<T> GetBlockAsync<T>(float x, float y, float z) where T : Block
         {
             var response = await Connection.SendAndReceiveAsync(
