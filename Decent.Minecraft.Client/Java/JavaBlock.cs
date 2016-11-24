@@ -78,12 +78,12 @@ namespace Decent.Minecraft.Client.Java
             };
             _ctors[(int)BlockType.Emerald] = d => new Emerald();
             _ctors[(int)BlockType.EmeraldOre] = d => new EmeraldOre();
-			_ctors[(int)BlockType.EndStone] = d => new EndStone();
+            _ctors[(int)BlockType.EndStone] = d => new EndStone();
             _ctors[(int)BlockType.Farmland] = d => new Farmland(d);
             _ctors[(int)BlockType.Fence] = d => new Fence();
             _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[(int)BlockType.Fire] = d => new Fire(d);
-			_ctors[(int)BlockType.Glowstone] = d => new Glowstone();
+            _ctors[(int)BlockType.Glowstone] = d => new Glowstone();
             _ctors[(int)BlockType.Gold] = d => new Gold();
             _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
             _ctors[(int)BlockType.Grass] = d => new Grass();
@@ -117,7 +117,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[(int)BlockType.TNT] = d => new TNT();
             _ctors[(int)BlockType.WaterLily] = d => new WaterLily();
             _ctors[(int)BlockType.WaterStationary] = d => new Water();
-            _ctors[(int)BlockType.Wood] = d => new Wood((WoodSpecies)(d & 0x3), (Orientation)(d & 0xC));
+            _ctors[(int)BlockType.Wood] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
             _ctors[(int)BlockType.Wool] = d => new Wool((Color)d);
         }
 

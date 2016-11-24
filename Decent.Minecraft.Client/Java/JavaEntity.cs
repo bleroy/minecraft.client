@@ -32,8 +32,8 @@ namespace Decent.Minecraft.Client.Java
         {
             var response = await Connection.SendAndReceiveAsync(Prefix + ".getTile");
             return Util.ParseCoordinates(response);
-		}
-		
+        }
+        
         public Vector3 GetDirection()
         {
             return GetDirectionAsync().Result;
