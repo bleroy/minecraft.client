@@ -52,12 +52,12 @@ minecraft.client <raspberry pi ip>");
                         Console.WriteLine(@"
 Available commands:
 
-P = Get current position
+P = Monitor current position (CTRL+P to cancel)
+H = Height under the player
 T = Transport to a given position
 M = Move towards north/south/east/west
 C = Build a castle
-I = Render a picture
-H = Height under the player
+I = Render a picture with blocks
 S = Add snow
 E = Eavesdrop on chat (CTRL+E to cancel)
 B = Monitor block hits (CTRL+B to cancel)
@@ -79,8 +79,16 @@ Press ESC to quit
                             case ConsoleKey.Escape:
                                 return;
                             case ConsoleKey.P:
-                                playerPosition = await player.GetTilePositionAsync();
-                                Console.WriteLine($"Player is on {playerPosition}.");
+                                if (ctrl)
+                                {
+                                    world.Player.Moved -= _onPlayerMoved;
+                                    Console.WriteLine("Stopped detecting player movement.");
+                                }
+                                else
+                                {
+                                    world.Player.Moved += _onPlayerMoved;
+                                    Console.WriteLine("Started detecting player movement.");
+                                }
                                 break;
                             case ConsoleKey.T:
                                 Console.WriteLine("Where do you want to go? Enter X,Y,Z coordinates and press Enter:");
@@ -166,6 +174,11 @@ Press ESC to quit
                 Console.WriteLine(e.Message);
             }
         }
+
+        private static EventHandler<MoveEventArgs> _onPlayerMoved = (object sender, MoveEventArgs args) =>
+        {
+            Console.WriteLine($"Player moved from {args.PreviousPosition} to {args.NewPosition}.");
+        };
 
         private static EventHandler<ChatEventArgs> _onChatMessage = (object sender, ChatEventArgs args) =>
         {

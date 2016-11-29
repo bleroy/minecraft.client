@@ -12,17 +12,17 @@ namespace Decent.Minecraft.Client.Java
         internal JavaWorld(IConnection connection)
         {
             Connection = connection;
-            Player = new JavaPlayer(connection);
         }
 
         private IConnection Connection { get; }
-        public IPlayer Player { get; }
+        public IPlayer Player { get; private set; }
 
         public static JavaWorld Connect(string address = "localhost", int port = 4711)
         {
             var connection = new JavaConnection(address: address, port: port);
             var world = new JavaWorld(connection);
             connection.Open();
+            world.Player = new JavaPlayer(connection);
             return world;
         }
 

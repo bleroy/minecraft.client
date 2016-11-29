@@ -21,6 +21,10 @@ namespace Decent.Minecraft.Client
         {
             foreach (var item in list)
             {
+                if (item == null)
+                {
+                    continue;
+                }
                 var str = item as string;
                 if (str != null)
                 {

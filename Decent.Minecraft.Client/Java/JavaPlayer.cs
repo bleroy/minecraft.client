@@ -2,8 +2,8 @@
 {
     public class JavaPlayer : JavaEntity, IPlayer
     {
-        public JavaPlayer(IConnection connection)
-            : base(EntityType.ThePlayer, connection, "player")
+        public JavaPlayer(IConnection connection, int? playerId = null)
+            : base(EntityType.ThePlayer, connection, "player", playerId)
         {
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Decent.Minecraft.Client
@@ -12,6 +13,7 @@ namespace Decent.Minecraft.Client
         /// The Minecraft entity type.
         /// </summary>
         EntityType Type { get; }
+        int? Id { get; }
 
         /// <summary>
         /// Gets the direction the entity is facing.
@@ -78,5 +80,11 @@ namespace Decent.Minecraft.Client
         /// <param name="to">The position where to move the entity.</param>
         /// <returns>The new position of the entity.</returns>
         Task<Vector3> SetPositionAsync(Vector3 to);
+
+        /// <summary>
+        /// An event that gets triggered each time an entity moved to a different tile.
+        /// It will not trigger for smaller, sub-tile movement, or for rotations.
+        /// </summary>
+        event EventHandler<MoveEventArgs> Moved;
     }
 }
