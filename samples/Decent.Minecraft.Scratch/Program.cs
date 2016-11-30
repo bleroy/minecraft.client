@@ -1,4 +1,5 @@
-﻿using Decent.Minecraft.Castle;
+﻿using Decent.Minecraft.BlocksToBombs;
+using Decent.Minecraft.Castle;
 using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
 using Decent.Minecraft.Client.Java;
@@ -36,7 +37,7 @@ Modify the source if you want to make it do anything useful.
 
 usage:
 
-minecraft.client <raspberry pi ip>");
+minecraft.client <Minecraft instance ip>");
                 return;
             }
 
@@ -47,25 +48,10 @@ minecraft.client <raspberry pi ip>");
                     await world.PostToChatAsync("Hello from C# and .NET Core!");
                     var player = world.Player;
 
+                    DisplayAvailableCommands();
+
                     while (true)
                     {
-                        Console.WriteLine(@"
-Available commands:
-
-P = Monitor current position (CTRL+P to cancel)
-H = Height under the player
-T = Transport to a given position
-M = Move towards north/south/east/west
-C = Build a castle
-I = Render a picture with blocks
-S = Add snow
-E = Eavesdrop on chat (CTRL+E to cancel)
-B = Monitor block hits (CTRL+B to cancel)
-
-Press ESC to quit
-
-");
-
                         Vector3 playerPosition = new Vector3();
                         Direction? direction;
 
@@ -81,12 +67,12 @@ Press ESC to quit
                             case ConsoleKey.P:
                                 if (ctrl)
                                 {
-                                    world.Player.Moved -= _onPlayerMoved;
+                                    player.Moved -= _onPlayerMoved;
                                     Console.WriteLine("Stopped detecting player movement.");
                                 }
                                 else
                                 {
-                                    world.Player.Moved += _onPlayerMoved;
+                                    player.Moved += _onPlayerMoved;
                                     Console.WriteLine("Started detecting player movement.");
                                 }
                                 break;
@@ -112,19 +98,16 @@ Press ESC to quit
                                 if (direction.HasValue)
                                 {
                                     playerPosition = await player.GetTilePositionAsync();
-                                    new Castle(world, playerPosition.Towards(direction.Value, 30)).Build();
+                                    var castlePosition = playerPosition.Towards(direction.Value, 70);
+                                    Console.WriteLine($"Building a castle at {castlePosition}.");
+                                    new Castle(world, castlePosition).Build();
                                 }
                                 break;
                             case ConsoleKey.I:
                                 direction = GetDirection();
                                 if (direction.HasValue)
                                 {
-                                    playerPosition = await player.GetTilePositionAsync();
-                                    var imageBuilder = new ImageBuilder(world);
-                                    imageBuilder.DrawImage(
-                                        Path.Combine(".", "Media", "Minecraft.gif"),
-                                        playerPosition.Towards(direction.Value, 20),
-                                        maxSize: 100);
+                                    RenderIcon(world, direction);
                                 }
                                 break;
                             case ConsoleKey.H:
@@ -132,14 +115,14 @@ Press ESC to quit
                                 Console.WriteLine($"Height under the player is {height}");
                                 break;
                             case ConsoleKey.S:
-                                playerPosition = await player.GetTilePositionAsync();
-                                // Create grass and put a snowy layer on top of it
-                                // to create a snowy grass block.
-                                var grass = new Grass();
-                                world.SetBlock(grass, playerPosition + new Vector3(0, 0, 3));
-                                var snowLayer = new Snow();
-                                world.SetBlock(snowLayer, playerPosition + new Vector3(0, 1, 3));
-                                Console.WriteLine("Snow added");
+                                direction = GetDirection();
+                                if (direction.HasValue)
+                                {
+                                    Console.WriteLine(@"
+
+It's starting to snow on this particular block...");
+                                    Snow(world, direction);
+                                }
                                 break;
                             case ConsoleKey.E:
                                 if (ctrl)
@@ -150,20 +133,31 @@ Press ESC to quit
                                 else
                                 {
                                     world.PostedToChat += _onChatMessage;
-                                    Console.WriteLine("Started listening to chat messages.");
+                                    Console.WriteLine(@"Started listening to chat messages.
+
+Available commands:
+
+    * `Explode` to explode the tile under the player
+    * `Snow` to create a block north of the player that will get snowed on.
+    * `Castle` to build a castle north of the player
+    * `Image` to render an image north of the player
+");
                                 }
                                 break;
-                            case ConsoleKey.B:
+                            case ConsoleKey.X:
                                 if (ctrl)
                                 {
-                                    world.BlockHit -= _onBlockHit;
-                                    Console.WriteLine("Stopped monitoring block hits.");
+                                    world.BlockHit -= _onBlockHitExplode;
+                                    Console.WriteLine("Stopped exploding blocks when hit.");
                                 }
                                 else
                                 {
-                                    world.BlockHit += _onBlockHit;
-                                    Console.WriteLine("Started monitoring block hits.");
+                                    world.BlockHit += _onBlockHitExplode;
+                                    Console.WriteLine("Started exploding blocks when hit.");
                                 }
+                                break;
+                            default:
+                                DisplayAvailableCommands();
                                 break;
                         }
                     }
@@ -175,6 +169,52 @@ Press ESC to quit
             }
         }
 
+        private static void DisplayAvailableCommands()
+        {
+            Console.WriteLine(@"
+Available commands:
+
+P = Monitor current position (CTRL+P to cancel)
+H = Height under the player
+T = Teleport to a given position
+M = Move towards north/south/east/west
+C = Build a castle
+I = Render a picture with blocks
+S = Add snow
+E = Eavesdrop on chat (CTRL+E to cancel) and take commands from there.
+X = Explode blocks when hit / right-clicked (CTRL+X to cancel)
+
+Press ESC to quit
+
+");
+        }
+
+        private static async void Snow(IWorld world, Direction? direction)
+        {
+            // Create grass and put a snowy layer on top of it
+            // to create a snowy grass block.
+            var grass = new Grass();
+            var playerPosition = await world.Player.GetTilePositionAsync();
+            var awayFromPlayer = playerPosition.Towards(direction.Value, 3);
+            await world.SetBlockAsync(grass, awayFromPlayer);
+            for (var thickness = 0; thickness <= 8; thickness++)
+            {
+                await Task.Delay(1000);
+                var snowLayer = new Snow(thickness);
+                await world.SetBlockAsync(snowLayer, awayFromPlayer + new Vector3(0, 1, 0));
+            }
+        }
+
+        private static async void RenderIcon(IWorld world, Direction? direction)
+        {
+            var playerPosition = await world.Player.GetTilePositionAsync();
+            var imageBuilder = new ImageBuilder(world);
+            imageBuilder.DrawImage(
+                Path.Combine(".", "Media", "Minecraft.gif"),
+                playerPosition.Towards(direction.Value, 20),
+                maxSize: 100);
+        }
+
         private static EventHandler<MoveEventArgs> _onPlayerMoved = (object sender, MoveEventArgs args) =>
         {
             Console.WriteLine($"Player moved from {args.PreviousPosition} to {args.NewPosition}.");
@@ -182,12 +222,33 @@ Press ESC to quit
 
         private static EventHandler<ChatEventArgs> _onChatMessage = (object sender, ChatEventArgs args) =>
         {
-            Console.WriteLine($"{args.EntityId} posted: {args.Message}");
+            var message = args.Message;
+
+            var world = (IWorld)sender;
+            var position = world.Player.GetTilePosition();
+            switch (message.ToLower())
+            {
+                case "explode":
+                    new ExplodingBlock(world, position, 0, 5).Explode();
+                    break;
+                case "snow":
+                    Snow(world, Direction.North);
+                    break;
+                case "castle":
+                    new Castle(world, position.Towards(Direction.North, 60), 31).Build();
+                    break;
+                case "image":
+                    RenderIcon(world, Direction.North);
+                    break;
+                default:
+                    Console.WriteLine($"Somebody said: {message}");
+                    break;
+            }
         };
 
-        private static EventHandler<BlockEventArgs> _onBlockHit = (object sender, BlockEventArgs args) =>
+        private static EventHandler<BlockEventArgs> _onBlockHitExplode = (object sender, BlockEventArgs args) =>
         {
-            Console.WriteLine($"A block was hit by {args.EntityId} at ({args.Position}) facing {args.Facing}.");
+            new ExplodingBlock((IWorld)sender, args.Position, 5, 10).Explode();
         };
 
         private static Direction? GetDirection()
