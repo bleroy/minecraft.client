@@ -6,3 +6,4 @@ obj
 .vscode
 *.GhostDoc.xml
 .idea
+BenchmarkDotNet.Artifacts

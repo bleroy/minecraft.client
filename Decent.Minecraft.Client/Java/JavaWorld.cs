@@ -26,6 +26,11 @@ namespace Decent.Minecraft.Client.Java
             return world;
         }
 
+        public void Dispose()
+        {
+            Connection.Close();
+        }
+
         public async Task<T> GetBlockAsync<T>(float x, float y, float z) where T : Block
         {
             var response = await Connection.SendAndReceiveAsync(
@@ -270,11 +275,6 @@ namespace Decent.Minecraft.Client.Java
                 .Where(hit => hit.Facing != Direction3.Nowhere)
                 .Distinct()
                 .ToList();
-        }
-
-        public void Dispose()
-        {
-            Connection.Close();
         }
 
         public async Task<int> GetHeightAsync(Vector3 coordinates)
