@@ -1,6 +1,5 @@
 ﻿using Decent.Minecraft.BlocksToBombs;
-using Decent.Minecraft.Borromean;
-using Decent.Minecraft.Castle;
+using Decent.Minecraft.Shapes;
 using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
 using Decent.Minecraft.Client.Java;

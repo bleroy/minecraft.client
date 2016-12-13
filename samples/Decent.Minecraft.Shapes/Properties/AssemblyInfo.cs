@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Minecraft.Castle")]
+[assembly: AssemblyProduct("Decent.Minecraft.Shapes")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("71ee233e-2c12-4cb0-9c37-036db072bc27")]
+[assembly: Guid("bf1a4946-2619-46f3-90d2-f5f54170607a")]

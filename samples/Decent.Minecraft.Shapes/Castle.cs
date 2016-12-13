@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace Decent.Minecraft.Castle
+namespace Decent.Minecraft.Shapes
 {
     public class Castle
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using static System.Math;
 
-namespace Decent.Minecraft.Borromean
+namespace Decent.Minecraft.Shapes
 {
     public class Borromean
     {
