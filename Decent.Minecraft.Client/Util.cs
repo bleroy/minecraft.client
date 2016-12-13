@@ -100,17 +100,13 @@ namespace Decent.Minecraft.Client
             switch (direction)
             {
                 case Direction.North:
-                    current.Z -= times;
-                    break;
+                    return new Vector3(current.X, current.Y, current.Z - times);
                 case Direction.South:
-                    current.Z += times;
-                    break;
+                    return new Vector3(current.X, current.Y, current.Z + times);
                 case Direction.West:
-                    current.X -= times;
-                    break;
+                    return new Vector3(current.X - times, current.Y, current.Z);
                 case Direction.East:
-                    current.X += times;
-                    break;
+                    return new Vector3(current.X + times, current.Y, current.Z);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
             }
@@ -125,8 +121,62 @@ namespace Decent.Minecraft.Client
         /// <returns>The displaced vector.</returns>
         public static Vector3 Downwards(this Vector3 current, int times = 1)
         {
-            current.Y -= times;
-            return current;
+            return new Vector3(current.X, current.Y - times, current.Z);
+        }
+
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks up.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 Upwards(this Vector3 current, int times = 1)
+        {
+            return new Vector3(current.X, current.Y + times, current.Z);
+        }
+
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks to the north.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 North(this Vector3 current, int times = 1)
+        {
+            return current.Towards(Direction.North,  times);
+        }
+
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks to the south.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 South(this Vector3 current, int times = 1)
+        {
+            return current.Towards(Direction.South, times);
+        }
+
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks to the east.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 East(this Vector3 current, int times = 1)
+        {
+            return current.Towards(Direction.East, times);
+        }
+
+        /// <summary>
+        /// Computes the displacement of a `Vector3` a number of blocks to the west.
+        /// </summary>
+        /// <param name="current">The coordinates to displace.</param>
+        /// <param name="times">The number of blocks by which to displace.</param>
+        /// <returns>The displaced vector.</returns>
+        public static Vector3 West(this Vector3 current, int times = 1)
+        {
+            return current.Towards(Direction.West, times);
         }
     }
 }

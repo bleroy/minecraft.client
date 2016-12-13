@@ -252,7 +252,7 @@ Press ESC to quit
                     Snow(world, Direction.North);
                     break;
                 case "castle":
-                    new Castle(world, position.Towards(Direction.North, 60), 31).Build();
+                    new Castle(world, position.North(60), 31).Build();
                     break;
                 case "image":
                     RenderIcon(world, Direction.North);
