@@ -1,4 +1,5 @@
 ﻿using Decent.Minecraft.BlocksToBombs;
+using Decent.Minecraft.Borromean;
 using Decent.Minecraft.Castle;
 using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
@@ -93,36 +94,55 @@ minecraft.client <Minecraft instance ip>");
                                     Console.WriteLine($"Player moved {direction} to {playerPosition}");
                                 }
                                 break;
-                            case ConsoleKey.C:
-                                direction = GetDirection();
-                                if (direction.HasValue)
+                            case ConsoleKey.D:
+                                Console.WriteLine(@"
+
+Please choose what to draw:
+    * C is for castle
+    * I is for image
+    * S is for snowy block
+    * B is for Borromean rings
+
+");
+                                var whatToDraw = Console.ReadKey(true);
+                                switch (whatToDraw.Key)
                                 {
-                                    playerPosition = await player.GetTilePositionAsync();
-                                    var castlePosition = playerPosition.Towards(direction.Value, 70);
-                                    Console.WriteLine($"Building a castle at {castlePosition}.");
-                                    new Castle(world, castlePosition).Build();
-                                }
-                                break;
-                            case ConsoleKey.I:
-                                direction = GetDirection();
-                                if (direction.HasValue)
-                                {
-                                    RenderIcon(world, direction);
+                                    case ConsoleKey.C:
+                                        direction = GetDirection();
+                                        if (direction.HasValue)
+                                        {
+                                            playerPosition = await player.GetTilePositionAsync();
+                                            var castlePosition = playerPosition.Towards(direction.Value, 70);
+                                            Console.WriteLine($"Building a castle at {castlePosition}.");
+                                            new Castle(world, castlePosition).Build();
+                                        }
+                                        break;
+                                    case ConsoleKey.I:
+                                        direction = GetDirection();
+                                        if (direction.HasValue)
+                                        {
+                                            RenderIcon(world, direction);
+                                        }
+                                        break;
+                                    case ConsoleKey.S:
+                                        direction = GetDirection();
+                                        if (direction.HasValue)
+                                        {
+                                            Console.WriteLine(@"
+
+It's starting to snow on this particular block...");
+                                            Snow(world, direction);
+                                        }
+                                        break;
+                                    case ConsoleKey.B:
+                                        playerPosition = await player.GetTilePositionAsync();
+                                        new Borromean(world, playerPosition + new Vector3(0, 35, 0)).Build();
+                                        break;
                                 }
                                 break;
                             case ConsoleKey.H:
                                 var height = world.GetHeight(playerPosition);
                                 Console.WriteLine($"Height under the player is {height}");
-                                break;
-                            case ConsoleKey.S:
-                                direction = GetDirection();
-                                if (direction.HasValue)
-                                {
-                                    Console.WriteLine(@"
-
-It's starting to snow on this particular block...");
-                                    Snow(world, direction);
-                                }
                                 break;
                             case ConsoleKey.E:
                                 if (ctrl)
@@ -178,9 +198,7 @@ P = Monitor current position (CTRL+P to cancel)
 H = Height under the player
 T = Teleport to a given position
 M = Move towards north/south/east/west
-C = Build a castle
-I = Render a picture with blocks
-S = Add snow
+D = Draw something
 E = Eavesdrop on chat (CTRL+E to cancel) and take commands from there.
 X = Explode blocks when hit / right-clicked (CTRL+X to cancel)
 

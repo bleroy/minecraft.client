@@ -93,6 +93,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[(int)BlockType.IronOre] = d => new IronOre();
             _ctors[(int)BlockType.Jukebox] = d => new Jukebox();
             _ctors[(int)BlockType.JackOLantern] = d => new JackOLantern();
+            _ctors[(int)BlockType.LapisLazuli] = d => new LapisLazuli();
             _ctors[(int)BlockType.LavaFlowing] = d => new LavaFlowing();
             _ctors[(int)BlockType.LavaStationary] = d => new Lava();
             _ctors[(int)BlockType.Leaves] = d => new Leaves();
