@@ -47,6 +47,7 @@ minecraft.client <Minecraft instance ip>");
                 {
                     await world.PostToChatAsync("Hello from C# and .NET Core!");
                     var player = world.Player;
+                    Bridge bridge = null;
 
                     DisplayAvailableCommands();
 
@@ -175,6 +176,22 @@ Available commands:
                                     Console.WriteLine("Started exploding blocks when hit.");
                                 }
                                 break;
+                            case ConsoleKey.B:
+                                if (ctrl)
+                                {
+                                    if (bridge != null)
+                                    {
+                                        bridge.Dispose();
+                                        bridge = null;
+                                        Console.WriteLine("Stopped building a bridge under the player.");
+                                    }
+                                }
+                                else if (bridge == null)
+                                {
+                                    bridge = new Bridge(world, player);
+                                    Console.WriteLine("Started building a bridge under the player.");
+                                }
+                                break;
                             default:
                                 DisplayAvailableCommands();
                                 break;
@@ -193,15 +210,16 @@ Available commands:
             Console.WriteLine(@"
 Available commands:
 
-P = Monitor current position (CTRL+P to cancel)
-H = Height under the player
-T = Teleport to a given position
-M = Move towards north/south/east/west
-D = Draw something
+P = Monitor current position (CTRL+P to cancel).
+H = Height under the player.
+T = Teleport to a given position.
+M = Move towards north/south/east/west.
+D = Draw something.
+B = Create a bridge under the player as he walks (CTRL+B to stop).
 E = Eavesdrop on chat (CTRL+E to cancel) and take commands from there.
-X = Explode blocks when hit / right-clicked (CTRL+X to cancel)
+X = Explode blocks when hit / right-clicked (CTRL+X to cancel).
 
-Press ESC to quit
+Press ESC to quit.
 
 ");
         }

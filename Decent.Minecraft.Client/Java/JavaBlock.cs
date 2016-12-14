@@ -44,6 +44,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[(int)BlockType.Bricks] = d => new Bricks();
             _ctors[(int)BlockType.Cactus] = d => new Cactus(d);
             _ctors[(int)BlockType.Chest] = d => new Chest(new[] {North, North, South, West, East}[d]);
+            _ctors[(int)BlockType.Clay] = d => new Clay();
             _ctors[(int)BlockType.Coal] = d => new Coal();
             _ctors[(int)BlockType.Cobblestone] = d =>
             {
@@ -83,6 +84,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[(int)BlockType.Fence] = d => new Fence();
             _ctors[(int)BlockType.FenceGate] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[(int)BlockType.Fire] = d => new Fire(d);
+            _ctors[(int)BlockType.Glass] = d => new Glass();
             _ctors[(int)BlockType.Glowstone] = d => new Glowstone();
             _ctors[(int)BlockType.Gold] = d => new Gold();
             _ctors[(int)BlockType.GoldOre] = d => new GoldOre();
@@ -108,6 +110,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[(int)BlockType.Snow] = d => new Snow(8);
             _ctors[(int)BlockType.SnowLayer] = d => new Snow(d);
             _ctors[(int)BlockType.StainedClay] = d => new StainedClay((Color)d);
+            _ctors[(int)BlockType.StainedGlass] = d => new StainedGlass((Color)d);
             _ctors[(int)BlockType.Stone] = d => new Stone((Mineral)d);
             _ctors[(int)BlockType.StoneBricks] = d =>
                 d == 0 ? new StoneBricks() :
@@ -227,6 +230,12 @@ namespace Decent.Minecraft.Client.Java
             if (stainedClay != null)
             {
                 return new JavaBlock(BlockType.Clay, (byte)stainedClay.Color);
+            }
+
+            var stainedGlass = block as StainedGlass;
+            if (stainedGlass != null)
+            {
+                return new JavaBlock(BlockType.StainedGlass, (byte)stainedGlass.Color);
             }
 
             var stoneBrick = block as StoneBricks;
