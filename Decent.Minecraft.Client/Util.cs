@@ -110,7 +110,6 @@ namespace Decent.Minecraft.Client
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
             }
-            return current;
         }
 
         /// <summary>
