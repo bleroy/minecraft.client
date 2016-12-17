@@ -115,6 +115,24 @@ namespace Decent.Minecraft.Client
         IWorld SetBlock(Block block, Vector3 coordinates);
 
         /// <summary>
+        /// Sets a block at specific coordinates.
+        /// </summary>
+        /// <typeparam name="TBlock">The type of the block to set.</typeparam>
+        /// <param name="x">The X coordinate.</param>
+        /// <param name="y">The Y coordinate.</param>
+        /// <param name="z">The Z coordinate.</param>
+        /// <returns>The world, enabling chaining of calls.</returns>
+        IWorld SetBlock<TBlock>(float x, float y, float z) where TBlock : Block, new();
+
+        /// <summary>
+        /// Sets a block at specific coordinates.
+        /// </summary>
+        /// <typeparam name="TBlock">The type of the block to set.</typeparam>
+        /// <param name="coordinates">The coordinates.</param>
+        /// <returns>The world, enabling chaining of calls.</returns>
+        IWorld SetBlock<TBlock>(Vector3 coordinates) where TBlock : Block, new();
+
+        /// <summary>
         /// Asynchronously sets a block at specific coordinates.
         /// </summary>
         /// <param name="block">The block.</param>
@@ -131,6 +149,24 @@ namespace Decent.Minecraft.Client
         /// <param name="coordinates">The coordinates.</param>
         /// <returns>The world, enabling chaining of calls.</returns>
         Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates);
+
+        /// <summary>
+        /// Asynchronously sets a block at specific coordinates.
+        /// </summary>
+        /// <typeparam name="TBlock">The type of the block to set.</typeparam>
+        /// <param name="x">The X coordinate.</param>
+        /// <param name="y">The Y coordinate.</param>
+        /// <param name="z">The Z coordinate.</param>
+        /// <returns>The world, enabling chaining of calls.</returns>
+        Task<IWorld> SetBlockAsync<TBlock>(float x, float y, float z) where TBlock : Block, new();
+
+        /// <summary>
+        /// Asynchronously sets a block at specific coordinates.
+        /// </summary>
+        /// <typeparam name="TBlock">The type of the block to set.</typeparam>
+        /// <param name="coordinates">The coordinates.</param>
+        /// <returns>The world, enabling chaining of calls.</returns>
+        Task<IWorld> SetBlockAsync<TBlock>(Vector3 coordinates) where TBlock : Block, new();
 
         /// <summary>
         /// Fills the parallelepiped between the two corners with the provided block.

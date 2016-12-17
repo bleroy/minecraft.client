@@ -27,7 +27,6 @@ namespace Decent.Minecraft.Shapes
         {
             var r = Sqrt(3) / 3;
 
-            var gold = new Gold();
             _done = new HashSet<Vector3>();
             var t = 0.0;
             while (t < 2 * PI)
@@ -36,11 +35,10 @@ namespace Decent.Minecraft.Shapes
                     Position.X + (int)(Scale * Cos(t)),
                     Position.Y + (int)(Scale * (Sin(t) + r)),
                     Position.Z + (int)(Scale * -Cos(3 * t) / 3));
-                Ball(position, 4, gold);
+                Ball<Gold>(position);
                 t += 2 * PI / 10000;
             }
 
-            var lapis = new LapisLazuli();
             _done = new HashSet<Vector3>();
             t = 0.0;
             while (t < 2 * PI)
@@ -49,11 +47,10 @@ namespace Decent.Minecraft.Shapes
                     Position.X + (int)(Scale * (Cos(t) + 0.5)),
                     Position.Y + (int)(Scale * (Sin(t) - r / 2)),
                     Position.Z + (int)(Scale * -Cos(3 * t) / 3));
-                Ball(position, 4, lapis);
+                Ball<LapisLazuli>(position);
                 t += 2 * PI / 10000;
             }
 
-            var diamond = new Diamond();
             _done = new HashSet<Vector3>();
             t = 0.0;
             while (t < 2 * PI)
@@ -62,9 +59,14 @@ namespace Decent.Minecraft.Shapes
                     Position.X + (int)(Scale * (Cos(t) - 0.5)),
                     Position.Y + (int)(Scale * (Sin(t) - r / 2)),
                     Position.Z + (int)(Scale * -Cos(3 * t) / 3));
-                Ball(position, 4, diamond);
+                Ball<Diamond>(position);
                 t += 2 * PI / 10000;
             }
+        }
+
+        private void Ball<TBlock>(Vector3 center, int radius = 4) where TBlock : Block, new()
+        {
+            Ball(center, radius, new TBlock());
         }
 
         private void Ball(Vector3 center, int radius, Block material)

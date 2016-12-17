@@ -228,10 +228,9 @@ Press ESC to quit.
         {
             // Create grass and put a snowy layer on top of it
             // to create a snowy grass block.
-            var grass = new Grass();
             var playerPosition = await world.Player.GetTilePositionAsync();
             var awayFromPlayer = playerPosition.Towards(direction.Value, 3);
-            await world.SetBlockAsync(grass, awayFromPlayer);
+            await world.SetBlockAsync<Grass>(awayFromPlayer);
             for (var thickness = 0; thickness <= 8; thickness++)
             {
                 await Task.Delay(1000);

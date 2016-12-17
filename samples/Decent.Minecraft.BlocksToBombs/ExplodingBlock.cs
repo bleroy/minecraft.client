@@ -23,11 +23,10 @@ namespace Decent.Minecraft.BlocksToBombs
         public void Explode()
         {
             var block = World.GetBlock(Position);
-            var air = new Air();
             // Flash the block for the duration of the fuse.
             for (var fuse = 0; fuse < Fuse; fuse++)
             {
-                World.SetBlock(air, Position);
+                World.SetBlock<Air>(Position);
                 Task.Delay(500).Wait();
                 World.SetBlock(block, Position);
                 Task.Delay(500).Wait();
@@ -53,7 +52,7 @@ namespace Decent.Minecraft.BlocksToBombs
                                 var currentBlock = World.GetBlock(currentBlockPosition);
                                 if (!(currentBlock is Bedrock || currentBlock is Air))
                                 {
-                                    World.SetBlock(air, currentBlockPosition);
+                                    World.SetBlock<Air>(currentBlockPosition);
                                 }
                             }
                         }

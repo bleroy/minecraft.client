@@ -94,6 +94,18 @@ namespace Decent.Minecraft.Client.Java
             return this;
         }
 
+        public IWorld SetBlock<TBlock>(float x, float y, float z) where TBlock : Block, new()
+        {
+            SetBlockAsync<TBlock>(new Vector3(x, y, z)).Wait();
+            return this;
+        }
+
+        public IWorld SetBlock<TBlock>(Vector3 coordinates) where TBlock : Block, new()
+        {
+            SetBlockAsync<TBlock>(coordinates).Wait();
+            return this;
+        }
+
         public async Task<IWorld> SetBlockAsync(Block block, float x, float y, float z)
         {
             var javaBlock = JavaBlock.From(block);
@@ -108,6 +120,18 @@ namespace Decent.Minecraft.Client.Java
         public async Task<IWorld> SetBlockAsync(Block block, Vector3 coordinates)
         {
             await SetBlockAsync(block, coordinates.X, coordinates.Y, coordinates.Z);
+            return this;
+        }
+
+        public async Task<IWorld> SetBlockAsync<TBlock>(float x, float y, float z) where TBlock : Block, new()
+        {
+            await SetBlockAsync<TBlock>(new Vector3(x, y, z));
+            return this;
+        }
+
+        public async Task<IWorld> SetBlockAsync<TBlock>(Vector3 coordinates) where TBlock : Block, new()
+        {
+            await SetBlockAsync(new TBlock(), coordinates);
             return this;
         }
 
