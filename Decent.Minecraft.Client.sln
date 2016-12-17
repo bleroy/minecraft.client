@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5408FFD6-4142-40D9-8B0C-EFDEBCA99451}"
 	ProjectSection(SolutionItems) = preProject
 		decent.minecraft.png = decent.minecraft.png
+		favicon.ico = favicon.ico
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
