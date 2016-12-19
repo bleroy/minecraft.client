@@ -1,4 +1,5 @@
 ﻿using Decent.Minecraft.Client;
+using Decent.Minecraft.Client.Blocks;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -28,7 +29,7 @@ namespace Decent.Minecraft.Shapes
             var y = position.Y;
             while (position.Y > y0)
             {
-                if ((await World.GetBlockAsync(position.X, y, position.Z)).Type != BlockType.Air)
+                if (!((await World.GetBlockAsync(position.X, y, position.Z)) is Air))
                 {
                     return (int)y;
                 }
@@ -37,7 +38,7 @@ namespace Decent.Minecraft.Shapes
             return (int)Min(await World.GetHeightAsync(position.X, position.Z), y);
         }
 
-        public async Task RectangularPrismAsync(Vector3 corner1, Vector3 corner2, Block block)
+        public async Task RectangularPrismAsync(Vector3 corner1, Vector3 corner2, IBlock block)
         {
             var x1 = (int)Round(corner1.X);
             var y1 = (int)Round(corner1.Y);

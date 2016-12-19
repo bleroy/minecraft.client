@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Soul_Sand">Gamepedia link</a>.
     /// </summary>
-    public class SoulSand : Block
+    public class SoulSand : IBlock
     {
-        public SoulSand() : base(BlockType.SoulSand) { }
     }
 }

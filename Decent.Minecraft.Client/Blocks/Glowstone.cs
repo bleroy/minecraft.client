@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Glowstone">Gamepedia link</a>.
     /// </summary>
-    public class Glowstone : Block
+    public class Glowstone : IBlock
     {
-        public Glowstone() : base(BlockType.Glowstone) { }
     }
 }

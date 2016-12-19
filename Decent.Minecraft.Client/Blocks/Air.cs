@@ -5,8 +5,7 @@
     /// Air is generated when a block is destroyed and cannot be kept in the inventory.<br />
     /// <a href="http://minecraft.gamepedia.com/Air">Gamepedia link</a>.
     /// </summary>
-    public class Air : Block
+    public class Air : IBlock
     {
-        public Air() : base(BlockType.Air) { }
     }
 }

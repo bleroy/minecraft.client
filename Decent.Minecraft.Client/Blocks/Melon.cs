@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Melon_(block)">Gamepedia link</a>.
     /// </summary>
-    public class Melon : Block
+    public class Melon : IBlock
     {
-        public Melon() : base(BlockType.Melon) { }
     }
 }

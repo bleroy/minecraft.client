@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Hay_Bale">Gamepedia link</a>.
     /// </summary>
-    public class Hay : Block
+    public class Hay : IBlock
     {
-        public Hay() : base(BlockType.Hay) { }
     }
 }

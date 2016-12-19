@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Crafting_Table">Gamepedia link</a>.
     /// </summary>
-    public class CraftingTable : Block
+    public class CraftingTable : IBlock
     {
-        public CraftingTable() : base (BlockType.CraftingTable) { }
     }
 }

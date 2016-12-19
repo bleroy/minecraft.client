@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Bookshelf">Gamepedia link</a>.
     /// </summary>
-    public class Bookshelf : Block
+    public class Bookshelf : IBlock
     {
-        public Bookshelf() : base(BlockType.Bookshelf) { }
     }
 }

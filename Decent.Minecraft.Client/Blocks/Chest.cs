@@ -5,9 +5,9 @@ namespace Decent.Minecraft.Client.Blocks
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Chest">Gamepedia link</a>.
     /// </summary>
-    public class Chest : Block
+    public class Chest : IBlock
     {
-        public Chest(Direction facing = North) : base(BlockType.Chest)
+        public Chest(Direction facing = North)
         {
             Facing = facing;
         }

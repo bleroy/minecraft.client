@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Grass">Gamepedia link</a>.
     /// </summary>
-    public class Grass : Block
+    public class Grass : IBlock
     {
-        public Grass() : base(BlockType.Grass) { }
     }
 }

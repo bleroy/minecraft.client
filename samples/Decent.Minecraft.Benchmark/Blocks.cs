@@ -38,10 +38,19 @@ namespace Decent.Minecraft.Benchmark
             World.SetBlock(block, 0, 0, 0);
         }
 
+        private static IBlock[] _blocks = new IBlock[] 
+        {
+            new Air(),
+            new Wood(),
+            new Magma(),
+            new Diamond(),
+            new LapisLazuli()
+        };
+
         [Benchmark]
         public void SetBlocksDifferent()
         {
-            var block = new UnknownBlock((BlockType)Rnd.Next(248));
+            var block = _blocks[Rnd.Next(_blocks.Length)];
             World.SetBlock(block, 0, 0, 0);
         }
     }

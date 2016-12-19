@@ -3,16 +3,14 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Block_of_Iron">Gamepedia link</a>.
     /// </summary>
-    public class Iron : Block
+    public class Iron : IBlock
     {
-        public Iron() : base(BlockType.Iron) { }
     }
 
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Iron_Ore">Gamepedia link</a>.
     /// </summary>
-    public class IronOre : Block
+    public class IronOre : IBlock
     {
-        public IronOre() : base(BlockType.IronOre) { }
     }
 }

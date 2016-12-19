@@ -5,9 +5,9 @@ namespace Decent.Minecraft.Client.Blocks
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Snow">Gamepedia link</a>.
     /// </summary>
-    public class Snow : Block
+    public class Snow : IBlock
     {
-        public Snow(int thickness = 8) : base(BlockType.SnowLayer)
+        public Snow(int thickness = 8)
         {
             if (thickness < 0 || thickness > 8)
             {

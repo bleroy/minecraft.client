@@ -3,9 +3,9 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Fence_Gate">Gamepedia link</a>.
     /// </summary>
-    public class FenceGate : Block
+    public class FenceGate : IBlock
     {
-        public FenceGate(Direction facing, bool isOpen) : base(BlockType.FenceGate)
+        public FenceGate(Direction facing, bool isOpen)
         {
             Facing = facing;
             IsOpen = isOpen;

@@ -5,7 +5,9 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "Decent.Minecraft.Client": "1.0.0-*",
+    "Decent.Minecraft.Client": {
+      "target": "project"
+    },
     "ImageSharp": "1.0.0-alpha-000079",
     "NETStandard.Library": "1.6.0"
   },

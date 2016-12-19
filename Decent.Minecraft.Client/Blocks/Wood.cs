@@ -3,11 +3,9 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Wood">Gamepedia link</a>.
     /// </summary>
-    public class Wood : Block
+    public class Wood : IBlock
     {
-        private Wood(): base(BlockType.Wood) { }
-
-        public Wood(WoodSpecies species = WoodSpecies.Oak, Axis orientation = Axis.None): this()
+        public Wood(WoodSpecies species = WoodSpecies.Oak, Axis orientation = Axis.None)
         {
             Orientation = orientation;
             Species = species;

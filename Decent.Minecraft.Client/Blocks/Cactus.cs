@@ -5,9 +5,9 @@ namespace Decent.Minecraft.Client.Blocks
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Cactus">Gamepedia link</a>.
     /// </summary>
-    public class Cactus : Block
+    public class Cactus : IBlock
     {
-        public Cactus(int age) : base(BlockType.Cactus)
+        public Cactus(int age)
         {
             if (age < 0 || age > 15)
             {

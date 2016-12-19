@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Magma_Block">Gamepedia link</a>.
     /// </summary>
-    public class Magma : Block
+    public class Magma : IBlock
     {
-        public Magma() : base(BlockType.Magma) { }
     }
 }

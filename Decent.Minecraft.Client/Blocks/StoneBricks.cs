@@ -3,11 +3,11 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Stone_Bricks">Gamepedia link</a>.
     /// </summary>
-    public class StoneBricks : Block
+    public class StoneBricks : IBlock
     {
         public StoneBricks() : this(StoneQuality.Normal) { }
 
-        protected StoneBricks(StoneQuality quality) : base(BlockType.Stone)
+        protected StoneBricks(StoneQuality quality)
         {
             Quality = quality;
         }

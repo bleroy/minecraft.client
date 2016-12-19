@@ -3,10 +3,11 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Cobblestone">Gamepedia link</a>.
     /// </summary>
-    public class Cobblestone : Block
+    public class Cobblestone : IBlock
     {
-        public Cobblestone() : base(BlockType.Cobblestone) { }
-        protected Cobblestone(bool mossy) : base(BlockType.Cobblestone)
+        public Cobblestone() : this(false) { }
+
+        protected Cobblestone(bool mossy)
         {
             IsMossy = mossy;
         }

@@ -6,7 +6,9 @@
 
   "dependencies": {
     "BenchmarkDotNet": "0.10.0",
-    "Decent.Minecraft.Client": "1.0.0-*",
+    "Decent.Minecraft.Client": {
+      "target": "project"
+    },
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.1"

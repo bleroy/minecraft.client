@@ -19,7 +19,7 @@ namespace Decent.Minecraft.Client.Test
 
                     var javaBlock = JavaBlock.From(original);
 
-                    javaBlock.Type.Should().Be(BlockType.Stone);
+                    javaBlock.TypeId.Should().Be(JavaBlockTypes.Id<Stone>());
                     javaBlock.Data.Parse().Should().Be(Mineral.SmoothAndesite);
                 }
             }
@@ -34,9 +34,8 @@ namespace Decent.Minecraft.Client.Test
                 [InlineData(null, Mineral.Stone)]
                 public void It_should_return_a_stone_block_with_the_variant_specified(byte serializedData, Mineral? expected)
                 {
-                    var actual = JavaBlock.Create(BlockType.Stone, serializedData) as Stone;
+                    var actual = JavaBlock.Create(JavaBlockTypes.Id<Stone>(), serializedData) as Stone;
                     actual.Should().NotBeNull("deserializing a Stone block should return a Stone object");
-                    actual.Type.Should().Be(BlockType.Stone);
                     actual.Mineral.Should().Be(expected, "the variant should be deserialized correctly");
                 }
             }
@@ -53,7 +52,7 @@ namespace Decent.Minecraft.Client.Test
 
                     var javaBlock = JavaBlock.From(original);
 
-                    javaBlock.Type.Should().Be(BlockType.EndStone);
+                    javaBlock.TypeId.Should().Be(JavaBlockTypes.Id<EndStone>());
                 }
             }
 
@@ -62,9 +61,9 @@ namespace Decent.Minecraft.Client.Test
                 [Fact]
                 public void It_should_return_an_end_stone()
                 {
-                    const BlockType blockType = BlockType.EndStone;
+                    var blockType = JavaBlockTypes.Id<EndStone>();
 
-                    var deserialized = JavaBlock.Create(blockType, new byte()) as EndStone;
+                    var deserialized = JavaBlock.Create(blockType, 0) as EndStone;
 
                     deserialized.Should().NotBeNull();
                 }
@@ -82,7 +81,7 @@ namespace Decent.Minecraft.Client.Test
 
                     var javaBlock = JavaBlock.From(original);
 
-                    javaBlock.Type.Should().Be(BlockType.Glowstone);
+                    javaBlock.TypeId.Should().Be(JavaBlockTypes.Id<Glowstone>());
                 }
             }
 
@@ -91,9 +90,9 @@ namespace Decent.Minecraft.Client.Test
                 [Fact]
                 public void It_should_return_a_glowstone()
                 {
-                    const BlockType blockType = BlockType.Glowstone;
+                    var blockType = JavaBlockTypes.Id<Glowstone>();
 
-                    var deserialized = JavaBlock.Create(blockType, new byte()) as Glowstone;
+                    var deserialized = JavaBlock.Create(blockType, 0) as Glowstone;
 
                     deserialized.Should().NotBeNull();
                 }

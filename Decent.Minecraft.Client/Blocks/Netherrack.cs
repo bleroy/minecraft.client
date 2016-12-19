@@ -4,8 +4,7 @@
     /// This it the Netherrack block found in the Nether world.<br />
     /// <a href="http://minecraft.gamepedia.com/Netherrack">Gamepedia link</a>.
     /// </summary>
-    public class Netherrack : Block
+    public class Netherrack : IBlock
     {
-        public Netherrack() : base(BlockType.Netherrack) { }
     }
 }

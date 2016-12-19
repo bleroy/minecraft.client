@@ -6,8 +6,7 @@
     /// In the nether both the bottom of the world and the top are covered with Bedrock.<br />
     /// <a href="http://minecraft.gamepedia.com/Bedrock">Gamepedia link</a>.
     /// </summary>
-    public class Bedrock : Block
+    public class Bedrock : IBlock
     {
-        public Bedrock() : base(BlockType.Bedrock) { }
     }
 }

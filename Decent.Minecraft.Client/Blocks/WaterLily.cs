@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Lily_Pad">Gamepedia link</a>.
     /// </summary>
-    public class WaterLily : Block
+    public class WaterLily : IBlock
     {
-        public WaterLily() : base(BlockType.WaterLily) { }
     }
 }

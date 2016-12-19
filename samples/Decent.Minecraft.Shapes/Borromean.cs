@@ -64,12 +64,12 @@ namespace Decent.Minecraft.Shapes
             }
         }
 
-        private void Ball<TBlock>(Vector3 center, int radius = 4) where TBlock : Block, new()
+        private void Ball<TBlock>(Vector3 center, int radius = 4) where TBlock : IBlock, new()
         {
             Ball(center, radius, new TBlock());
         }
 
-        private void Ball(Vector3 center, int radius, Block material)
+        private void Ball(Vector3 center, int radius, IBlock material)
         {
             var squaredRadius = radius * radius;
             for (var x = -radius; x <= radius; x++)

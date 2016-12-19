@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Bricks">Gamepedia link</a>.
     /// </summary>
-    public class Bricks : Block
+    public class Bricks : IBlock
     {
-        public Bricks() : base(BlockType.Bricks) { }
     }
 }

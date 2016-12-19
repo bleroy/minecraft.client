@@ -11,7 +11,7 @@ namespace Decent.Minecraft.Shapes
     /// </summary>
     public class Bridge : IDisposable
     {
-        private Queue<Tuple<Vector3, Block>> _bridge;
+        private Queue<Tuple<Vector3, IBlock>> _bridge;
 
         /// <summary>
         /// The length of the bridge.
@@ -31,14 +31,14 @@ namespace Decent.Minecraft.Shapes
             World = world;
             Entity = entity;
             Length = length;
-            _bridge = new Queue<Tuple<Vector3, Block>>(Length);
+            _bridge = new Queue<Tuple<Vector3, IBlock>>(Length);
             _moved = (object sender, MoveEventArgs args) =>
             {
                 var position = args.NewPosition.Downwards();
                 var belowBlock = World.GetBlock(position);
                 if (belowBlock is Air || belowBlock is Water)
                 {
-                    _bridge.Enqueue(new Tuple<Vector3, Block>(position, belowBlock));
+                    _bridge.Enqueue(new Tuple<Vector3, IBlock>(position, belowBlock));
                     World.SetBlock(new StainedGlass(Color.Blue), position);
                     if (_bridge.Count > Length)
                     {

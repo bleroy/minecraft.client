@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Pumpkin">Gamepedia link</a>.
     /// </summary>
-    public class Pumpkin : Block
+    public class Pumpkin : IBlock
     {
-        public Pumpkin() : base(BlockType.Pumpkin) { }
     }
 }

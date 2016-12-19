@@ -5,9 +5,9 @@ namespace Decent.Minecraft.Client.Blocks
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Farmland">Gamepedia link</a>.
     /// </summary>
-    public class Farmland : Block
+    public class Farmland : IBlock
     {
-        public Farmland(int wetness) : base(BlockType.Farmland)
+        public Farmland(int wetness)
         {
             if (wetness < 0 || wetness > 7)
             {

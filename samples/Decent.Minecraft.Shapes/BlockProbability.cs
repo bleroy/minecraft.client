@@ -4,13 +4,13 @@ namespace Decent.Minecraft.Shapes
 {
     public class BlockProbability
     {
-        public BlockProbability(Block block, float percentage)
+        public BlockProbability(IBlock block, float percentage)
         {
             Block = block;
             Percentage = percentage;
         }
 
-        public Block Block { get; }
+        public IBlock Block { get; }
         public float Percentage { get; }
     }
 }

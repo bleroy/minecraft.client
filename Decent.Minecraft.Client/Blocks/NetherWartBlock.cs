@@ -3,8 +3,7 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Nether_Wart">Gamepedia link</a>.
     /// </summary>
-    public class NetherWartBlock : Block
+    public class NetherWartBlock : IBlock
     {
-        public NetherWartBlock() : base(BlockType.NetherWartBlock) { }
     }
 }

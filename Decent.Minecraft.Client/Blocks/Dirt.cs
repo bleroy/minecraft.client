@@ -3,9 +3,8 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Dirt">Gamepedia link</a>.
     /// </summary>
-    public class Dirt : Block
+    public class Dirt : IBlock
     {
-        public Dirt() : base(BlockType.Dirt) { }
     }
 
     /// <summary>

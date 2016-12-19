@@ -4,14 +4,13 @@
     /// TODO: make wood species a property
     /// <a href="http://minecraft.gamepedia.com/Door">Gamepedia link</a>.
     /// </summary>
-    public abstract class Door : Block
+    public abstract class Door : IBlock
     {
-        protected Door(BlockType type) : base(type) { }
     }
 
     public abstract class DoorTop : Door
     {
-        protected DoorTop(BlockType type, bool hingeOnTheLeft, bool powered) : base(type)
+        protected DoorTop(bool hingeOnTheLeft, bool powered)
         {
             HingeOnTheLeft = hingeOnTheLeft;
             Powered = powered;
@@ -24,7 +23,7 @@
 
     public abstract class DoorBottom : Door
     {
-        protected DoorBottom(BlockType type, bool open, Direction facing) : base(type)
+        protected DoorBottom(bool open, Direction facing)
         {
             IsOpen = open;
             Facing = facing;
@@ -35,23 +34,26 @@
         public Direction Facing { get; }
     }
 
-    public class IronDoorTop : DoorTop
+    public interface IronDoor : IBlock { }
+    public interface WoodenDoor : IBlock { }
+
+    public class IronDoorTop : DoorTop, IronDoor
     {
-        public IronDoorTop(bool hingeOnTheLeft, bool powered) : base(BlockType.DoorIron, hingeOnTheLeft, powered) { }
+        public IronDoorTop(bool hingeOnTheLeft, bool powered) : base(hingeOnTheLeft, powered) { }
     }
 
-    public class IronDoorBottom : DoorBottom
+    public class IronDoorBottom : DoorBottom, IronDoor
     {
-        public IronDoorBottom(bool open, Direction facing) : base(BlockType.DoorIron, open, facing) { }
+        public IronDoorBottom(bool open, Direction facing) : base(open, facing) { }
     }
 
-    public class WoodenDoorTop : DoorTop
+    public class WoodenDoorTop : DoorTop, WoodenDoor
     {
-        public WoodenDoorTop(bool hingeOnTheLeft, bool powered) : base(BlockType.DoorWood, hingeOnTheLeft, powered) { }
+        public WoodenDoorTop(bool hingeOnTheLeft, bool powered) : base(hingeOnTheLeft, powered) { }
     }
 
-    public class WoodenDoorBottom : DoorBottom
+    public class WoodenDoorBottom : DoorBottom, WoodenDoor
     {
-        public WoodenDoorBottom(bool open, Direction facing) : base(BlockType.DoorWood, open, facing) { }
+        public WoodenDoorBottom(bool open, Direction facing) : base(open, facing) { }
     }
 }

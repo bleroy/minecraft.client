@@ -3,11 +3,8 @@
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Clay_(block)">Gamepedia link</a>.
     /// </summary>
-    public class Clay : Block
+    public class Clay : IBlock
     {
-        public Clay() : base(BlockType.Clay) { }
-        protected Clay(BlockType type) : base(type) { }
-
     }
 
     /// <summary>
@@ -15,7 +12,6 @@
     /// </summary>
     public class HardenedClay : Clay
     {
-        public HardenedClay() : base(BlockType.HardenedClay) { }
     }
 
     /// <summary>
@@ -23,7 +19,7 @@
     /// </summary>
     public class StainedClay : HardenedClay, IColoredBlock
     {
-        public StainedClay(Color color = Color.White) : base()
+        public StainedClay(Color color = Color.White)
         {
             Color = color;
         }

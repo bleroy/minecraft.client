@@ -5,9 +5,9 @@ namespace Decent.Minecraft.Client.Blocks
     /// <summary>
     /// <a href="http://minecraft.gamepedia.com/Fire">Gamepedia link</a>.
     /// </summary>
-    public class Fire : Block
+    public class Fire : IBlock
     {
-        public Fire(int intensity) : base(BlockType.Fire)
+        public Fire(int intensity)
         {
             if (intensity < 0 || intensity > 15)
             {
