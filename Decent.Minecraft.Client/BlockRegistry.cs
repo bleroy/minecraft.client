@@ -1,5 +1,4 @@
-﻿using Decent.Minecraft.Client.Blocks;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -10,19 +9,22 @@ namespace Decent.Minecraft.Client
         /// <summary>
         /// The list of registered types.
         /// </summary>
-        public IList<BlockType> Types { get; } = new List<BlockType>(255);
-        private Type[] _idToType = new Type[255];
-        private Dictionary<Type, byte> _typeToId = new Dictionary<Type, byte>(255);
+        public IList<BlockType> Types { get; } = new List<BlockType>();
+        private Dictionary<int, Type> _idToType = new Dictionary<int, Type>();
+        private Dictionary<Type, int> _typeToId = new Dictionary<Type, int>();
 
         /// <summary>
         /// Get the type for an id.
         /// </summary>
         /// <param name="typeId">The id</param>
         /// <returns>The type if it exists, UnknownBlock otherwise.</returns>
-        public Type GetType(byte typeId)
+        public Type GetType(int typeId)
         {
-            var type = _idToType[typeId];
-            return type == null ? typeof(UnknownBlock) : type;
+            if (_idToType.ContainsKey(typeId))
+            {
+                return _idToType[typeId];
+            }
+            return null;
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace Decent.Minecraft.Client
         /// </summary>
         /// <typeparam name="TBlock">The block type</typeparam>
         /// <returns>The type id</returns>
-        public byte GetTypeId<TBlock>() where TBlock : IBlock
+        public int GetTypeId<TBlock>() where TBlock : IBlock
         {
             return GetTypeId(typeof(TBlock));
         }
@@ -40,7 +42,7 @@ namespace Decent.Minecraft.Client
         /// </summary>
         /// <param name="type">The block type</param>
         /// <returns>The type id</returns>
-        public byte GetTypeId(Type type)
+        public int GetTypeId(Type type)
         {
             if (_typeToId.ContainsKey(type))
             {
@@ -55,13 +57,13 @@ namespace Decent.Minecraft.Client
         /// <typeparam name="TBlock">The block type to register</typeparam>
         /// <param name="typeId">The type id</param>
         /// <returns>The registry, allowing for chained calls</returns>
-        public BlockRegistry Register<TBlock>(byte typeId) where TBlock : IBlock
+        public BlockRegistry Register<TBlock>(int typeId) where TBlock : IBlock
         {
             var type = typeof(TBlock);
-            Debug.Assert(_idToType[typeId] == null, $"A type has already been registered with the id {typeId}.");
+            Debug.Assert(!_idToType.ContainsKey(typeId), $"A type has already been registered with the id {typeId}.");
             Debug.Assert(!_typeToId.ContainsKey(type), $"Id {typeId} has already been registered for type {type}.");
             Types.Add(new BlockType(typeId, type));
-            _idToType[typeId] = type;
+            _idToType.Add(typeId, type);
             _typeToId.Add(type, typeId);
             return this;
         }
@@ -72,12 +74,12 @@ namespace Decent.Minecraft.Client
         /// <typeparam name="TBlock">The type of block to unregister</typeparam>
         /// <param name="typeId">The type id</param>
         /// <returns>The registry, allowing for chained calls</returns>
-        public BlockRegistry Unregister<TBlock>(byte typeId) where TBlock : IBlock
+        public BlockRegistry Unregister<TBlock>(int typeId) where TBlock : IBlock
         {
             var blockType = Types[typeId];
             Types.Remove(blockType);
             _typeToId.Remove(typeof(TBlock));
-            _idToType[typeId] = null;
+            _idToType.Remove(typeId);
             return this;
         }
     }

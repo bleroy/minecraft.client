@@ -43,7 +43,7 @@ namespace Decent.Minecraft.Client.Java
         {
             var splitResponse = response.Split(',');
             return JavaBlock.Create(
-                byte.Parse(splitResponse[0]),
+                int.Parse(splitResponse[0]),
                 byte.Parse(splitResponse[1]));
         }
 
@@ -112,7 +112,7 @@ namespace Decent.Minecraft.Client.Java
             await Connection.SendAsync(
                 "world.setBlock",
                 (int)Math.Floor(x), (int)Math.Floor(y), (int)Math.Floor(z),
-                (byte)javaBlock.TypeId, javaBlock.Data & 0xF,
+                javaBlock.TypeId, javaBlock.Data & 0xF,
                 "{}"); // Total hack: pass an empty NBT block to force the java mod to go through a codepath that doesn't have commented out code for data.
             return this;
         }
@@ -374,7 +374,7 @@ namespace Decent.Minecraft.Client.Java
                 "world.setBlocks",
                 (int)Math.Floor(corner1.X), (int)Math.Floor(corner1.Y), (int)Math.Floor(corner1.Z),
                 (int)Math.Floor(corner2.X), (int)Math.Floor(corner2.Y), (int)Math.Floor(corner2.Z),
-                (byte)javaBlock.TypeId, javaBlock.Data & 0xF);
+                javaBlock.TypeId, javaBlock.Data & 0xF);
             return this;
         }
     }

@@ -11,7 +11,7 @@ namespace Decent.Minecraft.Client
     /// </summary>
     public class BlockType
     {
-        public BlockType(byte typeId, Type type)
+        public BlockType(int typeId, Type type)
         {
             TypeId = typeId;
             Type = type;
@@ -20,7 +20,7 @@ namespace Decent.Minecraft.Client
         /// <summary>
         /// The id of the type as it must be communicated in Java API calls.
         /// </summary>
-        public byte TypeId { get; }
+        public int TypeId { get; }
 
         /// <summary>
         /// The block type.

@@ -20,9 +20,9 @@ namespace Decent.Minecraft.Client.Java
         /// <summary>
         /// The Java Minecraft type of this block.
         /// </summary>
-        public byte TypeId { get; }
+        public int TypeId { get; }
 
-        public JavaBlock(byte type, byte data = 0)
+        public JavaBlock(int type, byte data = 0)
         {
             Data = data;
             TypeId = type;
@@ -31,12 +31,12 @@ namespace Decent.Minecraft.Client.Java
         // This is an array of construction logic so building the right type of block is just a lookup in a table.
         // I'm aware that this is slightly ugly, and I wish the compiler would make that super-efficient while I
         // could just write a simple switch statement, but eh.
-        private static Func<byte, IBlock>[] _ctors;
+        private static Func<int, IBlock>[] _ctors;
 
         static JavaBlock()
         {
             // Prepare the lookup table once and for all.
-            _ctors = new Func<byte, IBlock>[0x100];
+            _ctors = new Func<int, IBlock>[0x100];
 
             // Let's loop over the Java block registry:
             foreach(var blockType in Types)
@@ -84,7 +84,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
 
-        public static IBlock Create(byte typeId, byte data)
+        public static IBlock Create(int typeId, byte data)
         {
             // Look-up the right construction logic
             var ctor = _ctors[typeId];

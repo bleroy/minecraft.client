@@ -29,7 +29,7 @@ namespace Decent.Minecraft.Client.Java
         /// </summary>
         /// <param name="typeId">The id of the type</param>
         /// <returns>The type, or UnknownBlock if not found</returns>
-        public static Type GetType(byte typeId)
+        public static Type GetType(int typeId)
         {
             return _registry.GetType(typeId);
         }
@@ -39,7 +39,7 @@ namespace Decent.Minecraft.Client.Java
         /// </summary>
         /// <typeparam name="TBlock">The block type</typeparam>
         /// <returns>The type id</returns>
-        public static byte Id<TBlock>() where TBlock : IBlock
+        public static int Id<TBlock>() where TBlock : IBlock
         {
             return GetTypeId(typeof(TBlock));
         }
@@ -49,7 +49,7 @@ namespace Decent.Minecraft.Client.Java
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The id for the type</returns>
-        public static byte GetTypeId(Type type)
+        public static int GetTypeId(Type type)
         {
             return _registry.GetTypeId(type);
         }
