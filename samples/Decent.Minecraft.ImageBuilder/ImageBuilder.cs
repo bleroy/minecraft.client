@@ -1,6 +1,7 @@
 ﻿using Decent.Minecraft.Client;
 using Decent.Minecraft.Client.Blocks;
 using ImageSharp;
+using ImageSharp.Formats;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,10 @@ namespace Decent.Minecraft.ImageBuilder
         /// </summary>
         static ImageBuilder()
         {
+            Configuration.Default.AddImageFormat(new JpegFormat());
+            Configuration.Default.AddImageFormat(new PngFormat());
+            Configuration.Default.AddImageFormat(new GifFormat());
+            Configuration.Default.AddImageFormat(new BmpFormat());
             _colorPalette = new Dictionary<ImageColor, MinecraftColor>()
             {
                 { new ImageColor(221, 221, 221), MinecraftColor.White },
@@ -53,7 +58,7 @@ namespace Decent.Minecraft.ImageBuilder
             using (var stream = File.OpenRead(imagePath))
             {
                 var image = new Image(stream);
-                Image<ImageColor, uint> resized = null;
+                Image<ImageColor> resized = null;
                 // resize image
                 if (image.Width > maxSize || image.Height > maxSize)
                 {

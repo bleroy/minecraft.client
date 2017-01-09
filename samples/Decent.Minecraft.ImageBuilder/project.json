@@ -8,7 +8,12 @@
     "Decent.Minecraft.Client": {
       "target": "project"
     },
-    "ImageSharp": "1.0.0-alpha-000079",
+    "ImageSharp": "1.0.0-alpha1-00035",
+    "ImageSharp.Formats.Bmp": "1.0.0-alpha1-00015",
+    "ImageSharp.Formats.Gif": "1.0.0-alpha1-00015",
+    "ImageSharp.Formats.Jpeg": "1.0.0-alpha1-00015",
+    "ImageSharp.Formats.Png": "1.0.0-alpha1-00015",
+    "ImageSharp.Processing": "1.0.0-alpha1-00015",
     "NETStandard.Library": "1.6.0"
   },
 
