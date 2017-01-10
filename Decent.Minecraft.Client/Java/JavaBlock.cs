@@ -80,7 +80,9 @@ namespace Decent.Minecraft.Client.Java
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
-            _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
+            // Wood is both 17 and 162 depending on species
+            _ctors[17] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
+            _ctors[162] = d => new Wood((WoodSpecies)(d & 0x3 + 4), (Axis)(d & 0xC));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
 
@@ -206,8 +208,18 @@ namespace Decent.Minecraft.Client.Java
             var wood = block as Wood;
             if (wood != null)
             {
-                return new JavaBlock(Id<Wood>(),
-                    (byte)((byte)wood.Species ^ (byte)wood.Orientation));
+                if ((byte)wood.Species < 0x4)
+                {
+                    return new JavaBlock(17,
+                        (byte)((byte)wood.Species ^ (byte)wood.Orientation));
+
+                }
+                else
+                {
+                    return new JavaBlock(162,
+                        (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
+
+                }
             }
 
             var wool = block as Wool;

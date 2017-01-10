@@ -221,7 +221,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<StainedClay>(159)
                 //.Register<StainedGlassPane>(160)
                 //.Register<AcaciaLeaves>(161)
-                //.Register<AcaciaWood>(162)
+                .Register<Wood>(162)
                 //.Register<AcaciaStairs>(163)
                 //.Register<DarkOakStairs>(164)
                 //.Register<Slime>(165)

@@ -244,7 +244,7 @@ Press ESC to quit.
             var playerPosition = await world.Player.GetTilePositionAsync();
             var imageBuilder = new ImageBuilder(world);
             imageBuilder.DrawImage(
-                Path.Combine(".", "Media", "Ashley.jpg"),
+                Path.Combine(".", "Media", "Minecraft.gif"),
                 playerPosition.Towards(direction.Value, 20),
                 maxSize: 100);
         }
