@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <Description>A library creating Minecraft blocks using an image.</Description>
+    <Copyright>Roman Schacherl 2016</Copyright>
+    <Authors>Roman Schacherl</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>Decent.Minecraft.ImageBuilder</AssemblyName>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" />
+    <EmbeddedResource Include="**\*.resx" />
+    <EmbeddedResource Include="compiler\resources\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Decent.Minecraft.Client\Decent.Minecraft.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="ImageSharp.Formats.Bmp" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="ImageSharp.Formats.Gif" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="ImageSharp.Formats.Jpeg" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="ImageSharp.Formats.Png" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="ImageSharp.Processing" Version="1.0.0-alpha1-00015" />
+    <PackageReference Include="NETStandard.Library">
+      <Version>1.6.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+  </PropertyGroup>
+</Project>
