@@ -208,18 +208,9 @@ namespace Decent.Minecraft.Client.Java
             var wood = block as Wood;
             if (wood != null)
             {
-                if ((byte)wood.Species < 0x4)
-                {
-                    return new JavaBlock(17,
-                        (byte)((byte)wood.Species ^ (byte)wood.Orientation));
-
-                }
-                else
-                {
-                    return new JavaBlock(162,
-                        (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
-
-                }
+               return (byte)(wood.Species) < 0x4 ?                    
+                    new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
+                    new JavaBlock(AcaciaWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
             }
 
             var wool = block as Wool;

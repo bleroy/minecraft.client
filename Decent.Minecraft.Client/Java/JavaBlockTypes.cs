@@ -54,7 +54,9 @@ namespace Decent.Minecraft.Client.Java
             return _registry.GetTypeId(type);
         }
 
+        // Constants for blocks that are represented by other block types.
         public static byte SnowLayer = 78;
+        public static byte AcaciaWood = 162;
 
         static JavaBlockTypes()
         {
@@ -221,7 +223,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<StainedClay>(159)
                 //.Register<StainedGlassPane>(160)
                 //.Register<AcaciaLeaves>(161)
-                .Register<Wood>(162)
+                //.Register<AcaciaWood>(162) // No Class for AcaciaWood as its all rolled into Wood.
                 //.Register<AcaciaStairs>(163)
                 //.Register<DarkOakStairs>(164)
                 //.Register<Slime>(165)
