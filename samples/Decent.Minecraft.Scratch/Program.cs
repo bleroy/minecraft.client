@@ -216,7 +216,7 @@ Available commands:
                 Console.WriteLine(e.Message);
             }
         }
-        
+
         private static void DisplayAvailableCommands()
         {
             Console.WriteLine(@"

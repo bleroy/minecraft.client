@@ -80,7 +80,6 @@ namespace Decent.Minecraft.Client.Java
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
-            // Wood is both 17 and 162 depending on species
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
             _ctors[AcaciaWood] = d => new Wood((WoodSpecies)(d & 0x3 + 4), (Axis)(d & 0xC));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
