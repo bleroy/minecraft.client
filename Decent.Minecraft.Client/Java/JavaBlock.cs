@@ -81,6 +81,7 @@ namespace Decent.Minecraft.Client.Java
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
+            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)(d & 0x3 + 4), (Axis)(d & 0xC));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
 
@@ -206,8 +207,9 @@ namespace Decent.Minecraft.Client.Java
             var wood = block as Wood;
             if (wood != null)
             {
-                return new JavaBlock(Id<Wood>(),
-                    (byte)((byte)wood.Species ^ (byte)wood.Orientation));
+               return (byte)(wood.Species) < 0x4 ?                    
+                    new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
+                    new JavaBlock(AcaciaWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
             }
 
             var wool = block as Wool;

@@ -192,6 +192,18 @@ Available commands:
                                     Console.WriteLine("Started building a bridge under the player.");
                                 }
                                 break;
+                            case ConsoleKey.I:
+                                if (ctrl)
+                                {
+                                    world.BlockHit -= _onBlockHitIdentify;
+                                    Console.WriteLine("Stopped block identification mode.");
+                                }
+                                else
+                                {
+                                    world.BlockHit += _onBlockHitIdentify;
+                                    Console.WriteLine("Started blocks identification mode.");
+                                }
+                                break;
                             default:
                                 DisplayAvailableCommands();
                                 break;
@@ -218,6 +230,7 @@ D = Draw something.
 B = Create a bridge under the player as he walks (CTRL+B to stop).
 E = Eavesdrop on chat (CTRL+E to cancel) and take commands from there.
 X = Explode blocks when hit / right-clicked (CTRL+X to cancel).
+I = Identify a block type (CTRL+I to cancel).
 
 Press ESC to quit.
 
@@ -244,7 +257,7 @@ Press ESC to quit.
             var playerPosition = await world.Player.GetTilePositionAsync();
             var imageBuilder = new ImageBuilder(world);
             imageBuilder.DrawImage(
-                Path.Combine(".", "Media", "Ashley.jpg"),
+                Path.Combine(".", "Media", "Minecraft.gif"),
                 playerPosition.Towards(direction.Value, 20),
                 maxSize: 100);
         }
@@ -283,6 +296,21 @@ Press ESC to quit.
         private static EventHandler<BlockEventArgs> _onBlockHitExplode = (object sender, BlockEventArgs args) =>
         {
             new ExplodingBlock((IWorld)sender, args.Position, 5, 10).Explode();
+        };
+
+        private static EventHandler<BlockEventArgs> _onBlockHitIdentify = (object sender, BlockEventArgs args) =>
+        {
+            IBlock block = ((IWorld)sender).GetBlock(args.Position);
+            try
+            {
+                Type t = block.GetType();
+                int id = JavaBlockTypes.GetTypeId(t);
+                ((IWorld)sender).PostToChatAsync(String.Format("{0} : {1}", t.Name, JavaBlockTypes.GetTypeId(t)));
+            }
+            catch (Exception)
+            {
+                ((IWorld)sender).PostToChatAsync("Unknown : Unknown");
+            }
         };
 
         private static Direction? GetDirection()
