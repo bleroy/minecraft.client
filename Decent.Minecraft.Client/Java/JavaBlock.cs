@@ -234,9 +234,7 @@ namespace Decent.Minecraft.Client.Java
             var water = block as Water;
             if (water != null)
             {
-                return (water.IsFlowing) ?
-                     new JavaBlock(Id<Water>(), (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0))) :
-                     new JavaBlock(StationaryWater, (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0)));
+                return new JavaBlock(water.IsFlowing ? Id<Water>() : StationaryWater, (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0)));
             }
 
             var wood = block as Wood;
