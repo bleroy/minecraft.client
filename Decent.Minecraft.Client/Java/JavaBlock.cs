@@ -85,8 +85,8 @@ namespace Decent.Minecraft.Client.Java
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
 
-            _ctors[Id<Water>()] = d => new Water((WaterLevel)(d & 0x7), false, (d & 0x8) != 0);
-            _ctors[StationaryWater] = d => new Water((WaterLevel)(d & 0x7), true, (d & 0x8) != 0);
+            _ctors[Id<Water>()] = d => new Water((WaterLevel)(d & 0x7), true, (d & 0x8) != 0);
+            _ctors[StationaryWater] = d => new Water((WaterLevel)(d & 0x7), false, (d & 0x8) != 0);
 
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
             _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));

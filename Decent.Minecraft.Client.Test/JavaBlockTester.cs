@@ -20,7 +20,7 @@ namespace Decent.Minecraft.Client.Test
                     var javaBlock = JavaBlock.From(original);
 
                     javaBlock.TypeId.Should().Be(JavaBlockTypes.Id<Stone>());
-                    javaBlock.Data.Parse().Should().Be(Mineral.SmoothAndesite);
+                    javaBlock.Data.ToEnum<Mineral>().Should().Be(Mineral.SmoothAndesite);
                 }
             }
 
@@ -99,13 +99,43 @@ namespace Decent.Minecraft.Client.Test
             }
         }
 
+        public class For_a_water_block
+        {
+            public class When_serializing_and_deserializing
+            {
+                [Theory]
+                [InlineData(WaterLevel.Source, true, false, 8, 0x0)]
+                [InlineData(WaterLevel.Highest, true, true, 8, 0x9)]
+                [InlineData(WaterLevel.Lowest, false, false, 9, 0x7)]
+                [InlineData(WaterLevel.Mid, false, true, 9, 0xC)]
+                public void It_should_return_a_JavaBlock_with_variants_as_bytes(WaterLevel level, bool isFlowing, bool isFalling, int expectedId, byte expectedData)
+                {
+                    // Create the block from IBlock Properties
+                    var original = new Water(level, isFlowing, isFalling);
+                    var javaBlock = JavaBlock.From(original);
+
+                    javaBlock.TypeId.Should().Be(expectedId);
+                    javaBlock.Data.Should().Be(expectedData);
+
+                    // Create Block from id and data
+                    var actual = JavaBlock.Create(expectedId, expectedData) as Water;
+
+                    // Ensure the properties are equivalent coming from the other direction
+
+                    actual.Level.Should().Be(level);
+                    actual.IsFalling.Should().Be(isFalling);
+                    actual.IsFlowing.Should().Be(isFlowing);
+                }
+            }
+        }
+
     }
 
     public static class ByteExtensions
     {
-        public static Mineral Parse(this byte input)
+        public static T ToEnum<T>(this byte input)
         {
-            return (Mineral)Enum.Parse(typeof(Mineral), input.ToString());
+            return (T)Enum.Parse(typeof(T), input.ToString());
         }
     }
 }
