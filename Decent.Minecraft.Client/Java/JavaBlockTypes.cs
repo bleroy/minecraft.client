@@ -111,7 +111,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Bookshelf>(47)
                 .Register<MossStone>(48)
                 .Register<Obsidian>(49)
-                //.Register<Torch>(50)
+                .Register<Torch>(50)
                 .Register<Fire>(51)
                 //.Register<MobSpawner>(52)
                 //.Register<StairsWood>(53)
