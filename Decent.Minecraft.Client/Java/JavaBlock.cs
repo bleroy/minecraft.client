@@ -71,8 +71,10 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
             _ctors[Id<Sapling>()] = d => new Sapling((WoodSpecies)(d & 0x3), (d & 0x8) != 0);
+
             _ctors[Id<Snow>()] = d => new Snow(8);
             _ctors[SnowLayer] = d => new Snow(d);
+
             _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
             _ctors[Id<StainedClay>()] = d => new StainedClay((Color)d);
             _ctors[Id<StainedGlass>()] = d => new StainedGlass((Color)d);
@@ -82,8 +84,13 @@ namespace Decent.Minecraft.Client.Java
                 d == 1 ? new MossyStoneBricks() :
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
+
+            _ctors[Id<Water>()] = d => new Water((WaterLevel)(d & 0x7), false, (d & 0x8) != 0);
+            _ctors[StationaryWater] = d => new Water((WaterLevel)(d & 0x7), true, (d & 0x8) != 0);
+
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
             _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
+
             _ctors[Id<WoodPlanks>()] = d => new WoodPlanks((WoodSpecies)(d & 0x3));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
@@ -222,6 +229,14 @@ namespace Decent.Minecraft.Client.Java
                     torch.Facing == Direction3.South? 3 :
                     torch.Facing == Direction3.North? 4 :
                     5));
+            }
+
+            var water = block as Water;
+            if (water != null)
+            {
+                return (water.IsFlowing) ?
+                     new JavaBlock(Id<Water>(), (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0))) :
+                     new JavaBlock(StationaryWater, (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0)));
             }
 
             var wood = block as Wood;
