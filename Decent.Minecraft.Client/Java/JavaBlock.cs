@@ -70,6 +70,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+            _ctors[Id<Sapling>()] = d => new Sapling((WoodSpecies)(d & 0x3), (d & 0x8) != 0);
             _ctors[Id<Snow>()] = d => new Snow(8);
             _ctors[SnowLayer] = d => new Snow(d);
             _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
@@ -178,6 +179,12 @@ namespace Decent.Minecraft.Client.Java
             if (fire != null)
             {
                 return new JavaBlock(Id<Fire>(), (byte)fire.Intensity);
+            }
+
+            var sapling = block as Sapling;
+            if (sapling != null)
+            {
+                return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
             }
 
             var snow = block as Snow;

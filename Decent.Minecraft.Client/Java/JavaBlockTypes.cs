@@ -67,7 +67,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Dirt>(3)
                 .Register<Cobblestone>(4)
                 .Register<WoodPlanks>(5)
-                //.Register<Sapling>(6)
+                .Register<Sapling>(6)
                 .Register<Bedrock>(7)
                 .Register<Water>(8)
                 //.Register<WaterStationary>(9)
