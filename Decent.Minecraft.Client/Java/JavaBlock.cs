@@ -81,7 +81,7 @@ namespace Decent.Minecraft.Client.Java
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
-            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)(d & 0x3 + 4), (Axis)(d & 0xC));
+            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
 
