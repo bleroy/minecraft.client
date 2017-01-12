@@ -58,20 +58,21 @@ namespace Decent.Minecraft.Client.Java
                 (Bed)new BedFoot((Direction)(d & 0x3), (d & 0x4) != 0) :
                 new BedHead((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Cactus>()] = d => new Cactus(d);
-            _ctors[Id<Chest>()] = d => new Chest(new[] { North, North, South, West, East }[d]);
+            _ctors[Id<Chest>()] = d => new Chest(new[] { Direction.North, Direction.North, Direction.South, Direction.West, Direction.East }[d]);
             _ctors[Id<Cobblestone>()] = d => d == 1 ? new MossyCobblestone() : new Cobblestone();
             _ctors[Id<Dirt>()] = d => d == 2 ? new Podzol() : d == 1 ? new CoarseDirt() : new Dirt();
             _ctors[Id<IronDoor>()] = d => (d & 0x8) == 0 ?
-                (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { East, South, West, North }[(d & 0xC) >> 2]) :
+                (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
                 new IronDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
             _ctors[Id<WoodenDoor>()] = d => (d & 0x8) == 0 ?
-                (WoodenDoor)new WoodenDoorBottom((d & 0x4) != 0, new[] { East, South, West, North }[(d & 0xC) >> 2]) :
+                (WoodenDoor)new WoodenDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
                 new WoodenDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
             _ctors[Id<Snow>()] = d => new Snow(8);
             _ctors[SnowLayer] = d => new Snow(d);
+            _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
             _ctors[Id<StainedClay>()] = d => new StainedClay((Color)d);
             _ctors[Id<StainedGlass>()] = d => new StainedGlass((Color)d);
             _ctors[Id<Stone>()] = d => new Stone((Mineral)d);
@@ -81,7 +82,8 @@ namespace Decent.Minecraft.Client.Java
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
-            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)(d & 0x3 + 4), (Axis)(d & 0xC));
+            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
+            _ctors[Id<WoodPlanks>()] = d => new WoodPlanks((WoodSpecies)(d & 0x3));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
         }
 
@@ -117,9 +119,9 @@ namespace Decent.Minecraft.Client.Java
             if (chest != null)
             {
                 return new JavaBlock(Id<Chest>(), (byte)(
-                    chest.Facing == North ? 2 :
-                    chest.Facing == South ? 3 :
-                    chest.Facing == West ? 4 :
+                    chest.Facing == Direction.North ? 2 :
+                    chest.Facing == Direction.South ? 3 :
+                    chest.Facing == Direction.West ? 4 :
                     5));
             }
 
@@ -153,9 +155,9 @@ namespace Decent.Minecraft.Client.Java
             {
                 return new JavaBlock(doorBottom is IronDoorBottom ? Id<IronDoor>() : Id<WoodenDoor>(),
                     (byte)((doorBottom.IsOpen ? 0x4 : 0x0) |
-                    (doorBottom.Facing == East ? 0 :
-                    doorBottom.Facing == South ? 1 :
-                    doorBottom.Facing == West ? 2 :
+                    (doorBottom.Facing == Direction.East ? 0 :
+                    doorBottom.Facing == Direction.South ? 1 :
+                    doorBottom.Facing == Direction.West ? 2 :
                     3)));
             }
 
@@ -204,12 +206,29 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(Id<StoneBricks>(), (byte)stoneBrick.Quality);
             }
 
+            var torch = block as Torch;
+            if (torch != null)
+            {
+                return new JavaBlock(Id<Torch>(), (byte)(
+                    torch.Facing == Direction3.East? 1 :
+                    torch.Facing == Direction3.West? 2 :
+                    torch.Facing == Direction3.South? 3 :
+                    torch.Facing == Direction3.North? 4 :
+                    5));
+            }
+
             var wood = block as Wood;
             if (wood != null)
             {
                return (byte)(wood.Species) < 0x4 ?                    
                     new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
                     new JavaBlock(AcaciaWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
+            }
+
+            var woodPlanks = block as WoodPlanks;
+            if (woodPlanks != null)
+            {
+                return new JavaBlock(Id<WoodPlanks>(), (byte)woodPlanks.Species);
             }
 
             var wool = block as Wool;
