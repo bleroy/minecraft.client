@@ -99,26 +99,43 @@ namespace Decent.Minecraft.Client.Test
             }
         }
 
-        public class For_a_water_block
+        public class For_a_liquid_block
         {
             public class When_serializing_and_deserializing
             {
                 [Theory]
-                [InlineData(WaterLevel.Source, true, false, 8, 0x0)]
-                [InlineData(WaterLevel.Highest, true, true, 8, 0x9)]
-                [InlineData(WaterLevel.Lowest, false, false, 9, 0x7)]
-                [InlineData(WaterLevel.Mid, false, true, 9, 0xC)]
-                public void It_should_return_a_JavaBlock_with_variants_as_bytes(WaterLevel level, bool isFlowing, bool isFalling, int expectedId, byte expectedData)
+                [InlineData(Level.Source, true, false, 8, 0x0)]
+                [InlineData(Level.Highest, true, true, 8, 0x9)]
+                [InlineData(Level.Lowest, false, false, 9, 0x7)]
+                [InlineData(Level.Mid, false, true, 9, 0xC)]
+                public void It_should_round_trip_water(Level level, bool isFlowing, bool isFalling, int expectedId, byte expectedData)
                 {
                     // Create the block from IBlock Properties
                     var original = new Water(level, isFlowing, isFalling);
+                    javaBlockRoundTrip(level, isFlowing, isFalling, expectedId, expectedData, original);
+                }
+
+                [Theory]
+                [InlineData(Level.Source, true, false, 10, 0x0)]
+                [InlineData(Level.Highest, true, true, 10, 0x9)]
+                [InlineData(Level.Lowest, false, false, 11, 0x7)]
+                [InlineData(Level.Mid, false, true, 11, 0xC)]
+                public void It_should_round_trip_lava(Level level, bool isFlowing, bool isFalling, int expectedId, byte expectedData)
+                {
+                    // Create the block from IBlock Properties
+                    var original = new Lava(level, isFlowing, isFalling);
+                    javaBlockRoundTrip(level, isFlowing, isFalling, expectedId, expectedData, original);
+                }
+
+                private void javaBlockRoundTrip(Level level, bool isFlowing, bool isFalling, int expectedId, byte expectedData, IBlock original)
+                {
                     var javaBlock = JavaBlock.From(original);
 
                     javaBlock.TypeId.Should().Be(expectedId);
                     javaBlock.Data.Should().Be(expectedData);
 
                     // Create Block from id and data
-                    var actual = JavaBlock.Create(expectedId, expectedData) as Water;
+                    var actual = JavaBlock.Create(expectedId, expectedData) as Liquid;
 
                     // Ensure the properties are equivalent coming from the other direction
 

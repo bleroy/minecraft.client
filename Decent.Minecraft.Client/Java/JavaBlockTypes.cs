@@ -56,6 +56,7 @@ namespace Decent.Minecraft.Client.Java
 
         // Constants for blocks that are represented by other block types.
         public static byte StationaryWater = 9;
+        public static byte StationaryLava = 11;
         public static byte SnowLayer = 78;
         public static byte AcaciaWood = 162;
 
