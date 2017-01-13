@@ -6,7 +6,7 @@
     public enum Level : byte
     {
         ///<summary>Source means a block at the highest level setting and originates liquid flow. 
-        /// Only liquid source blocks for can be collected in a bucket. </summary>
+        /// Only liquid source blocks can be collected in a bucket. </summary>
         Source = 0,
         Highest,
         Higher,
