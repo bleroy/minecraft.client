@@ -56,6 +56,7 @@ namespace Decent.Minecraft.Client.Java
 
         // Constants for blocks that are represented by other block types.
         public static byte StationaryWater = 9;
+        public static byte StationaryLava = 11;
         public static byte SnowLayer = 78;
         public static byte AcaciaWood = 162;
 
@@ -141,7 +142,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<RedstoneTorch>(76)
                 //.Register<StoneButton>(77)
                 //.Register<SnowLayer>(78) // No class for snow layer, as it's all rolled into Snow.
-                //.Register<Ice>(79)
+                .Register<Ice>(79)
                 .Register<Snow>(80)
                 .Register<Cactus>(81)
                 .Register<Clay>(82)

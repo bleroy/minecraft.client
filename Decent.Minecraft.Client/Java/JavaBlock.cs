@@ -64,6 +64,10 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<IronDoor>()] = d => (d & 0x8) == 0 ?
                 (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
                 new IronDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
+
+            _ctors[Id<Lava>()] = d => new Lava((Level)(d & 0x7), true, (d & 0x8) != 0);
+            _ctors[StationaryLava] = d => new Lava((Level)(d & 0x7), false, (d & 0x8) != 0);
+
             _ctors[Id<WoodenDoor>()] = d => (d & 0x8) == 0 ?
                 (WoodenDoor)new WoodenDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
                 new WoodenDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
@@ -85,8 +89,8 @@ namespace Decent.Minecraft.Client.Java
                 d == 2 ? new CrackedStoneBricks() :
                 (StoneBricks)new ChiseledStoneBricks();
 
-            _ctors[Id<Water>()] = d => new Water((WaterLevel)(d & 0x7), true, (d & 0x8) != 0);
-            _ctors[StationaryWater] = d => new Water((WaterLevel)(d & 0x7), false, (d & 0x8) != 0);
+            _ctors[Id<Water>()] = d => new Water((Level)(d & 0x7), true, (d & 0x8) != 0);
+            _ctors[StationaryWater] = d => new Water((Level)(d & 0x7), false, (d & 0x8) != 0);
 
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
             _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
@@ -131,12 +135,6 @@ namespace Decent.Minecraft.Client.Java
                     chest.Facing == Direction.South ? 3 :
                     chest.Facing == Direction.West ? 4 :
                     5));
-            }
-
-            var stone = block as Stone;
-            if (stone != null)
-            {
-                return new JavaBlock(Id<Stone>(), (byte)stone.Mineral);
             }
 
             var cobblestone = block as Cobblestone;
@@ -188,6 +186,12 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(Id<Fire>(), (byte)fire.Intensity);
             }
 
+            var lava = block as Lava;
+            if (lava != null)
+            {
+                return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
+            }
+
             var sapling = block as Sapling;
             if (sapling != null)
             {
@@ -212,6 +216,12 @@ namespace Decent.Minecraft.Client.Java
             if (stainedGlass != null)
             {
                 return new JavaBlock(Id<StainedGlass>(), (byte)stainedGlass.Color);
+            }
+
+            var stone = block as Stone;
+            if (stone != null)
+            {
+                return new JavaBlock(Id<Stone>(), (byte)stone.Mineral);
             }
 
             var stoneBrick = block as StoneBricks;

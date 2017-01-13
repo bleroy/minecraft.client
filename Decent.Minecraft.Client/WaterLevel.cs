@@ -3,7 +3,7 @@
     /// <summary>
     /// Species of wood.
     /// </summary>
-    public enum WaterLevel : byte
+    public enum Level : byte
     {
         Source = 0,
         Highest,
