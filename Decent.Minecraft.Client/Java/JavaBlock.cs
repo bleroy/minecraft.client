@@ -96,6 +96,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[SnowLayer] = d => new Snow(d);
 
             _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
+            _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
             _ctors[Id<StainedClay>()] = d => new StainedClay((Color)d);
             _ctors[Id<StainedGlass>()] = d => new StainedGlass((Color)d);
             _ctors[Id<Stone>()] = d => new Stone((Mineral)d);
@@ -211,6 +212,12 @@ namespace Decent.Minecraft.Client.Java
             if (sapling != null)
             {
                 return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
+            }
+            
+            var sand = block as Sand;
+            if (sand != null)
+            {
+                return new JavaBlock(Id<Sand>(), (byte)(sand is RedSand ? 1 : 0));
             }
 
             var snow = block as Snow;
