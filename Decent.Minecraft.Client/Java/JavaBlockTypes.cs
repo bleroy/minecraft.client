@@ -51,14 +51,21 @@ namespace Decent.Minecraft.Client.Java
         /// <returns>The id for the type</returns>
         public static int GetTypeId(Type type)
         {
-            return _registry.GetTypeId(type);
+             return _registry.GetTypeId(type);
         }
 
         // Constants for blocks that are represented by other block types.
         public static byte StationaryWater = 9;
         public static byte StationaryLava = 11;
         public static byte SnowLayer = 78;
-        public static byte AcaciaWood = 162;
+        public static byte AcaciaAndDarkOakWood = 162;
+
+        public static byte OakWoodenDoor = 64;
+        public static byte SpruceWoodenDoor = 193;
+        public static byte BirchWoodenDoor = 194;
+        public static byte JungleWoodenDoor = 195;
+        public static byte AcaciaWoodenDoor = 196;
+        public static byte DarkOakWoodenDoor = 197;
 
         static JavaBlockTypes()
         {
@@ -74,7 +81,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Water>(8)
                 //.Register<WaterStationary>(9) // No BlockType for StationaryWater, it's all handled in Water
                 .Register<Lava>(10)
-                //.Register<LavaStationary>(11)
+                //.Register<LavaStationary>(11) // No BlockType for StationaryLava, it's all handled in Lava
                 //.Register<Sand>(12)
                 //.Register<Gravel>(13)
                 .Register<GoldOre>(14)

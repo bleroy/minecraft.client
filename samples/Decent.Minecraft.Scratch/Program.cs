@@ -300,18 +300,18 @@ Press ESC to quit.
 
         private static EventHandler<BlockEventArgs> _onBlockHitIdentify = (object sender, BlockEventArgs args) =>
         {
-            IBlock block = ((IWorld)sender).GetBlock(args.Position);
+            IBlock incoming = ((IWorld)sender).GetBlock(args.Position);
+            Type t = incoming.GetType();
             try
             {
-                Type t = block.GetType();
-                int id = JavaBlockTypes.GetTypeId(t);
-                ((IWorld)sender).PostToChatAsync(String.Format("{0} : {1}", t.Name, JavaBlockTypes.GetTypeId(t)));
+                JavaBlock outgoing = JavaBlock.From(incoming);
+                ((IWorld)sender).PostToChatAsync($"{t.Name} : {outgoing.TypeId},{outgoing.Data}");
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
-                ((IWorld)sender).PostToChatAsync("Unknown : Unknown");
+                ((IWorld)sender).PostToChatAsync("Unknown");
             }
-        };
+         };
 
         private static Direction? GetDirection()
         {

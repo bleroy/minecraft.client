@@ -145,7 +145,96 @@ namespace Decent.Minecraft.Client.Test
                 }
             }
         }
+        public class For_a_door_block
+        {
+            public class When_serializing_and_deserializing
+            {
+                [Theory]
+                [InlineData(true, false, WoodSpecies.Oak, 64, 0x9)]
+                [InlineData(false, false, WoodSpecies.DarkOak, 197, 0x8)]
+                [InlineData(false, true, WoodSpecies.Spruce, 193, 0xA)]
+                [InlineData(true, true, null, 71, 0xB)]
+                public void It_should_round_trip_a_top(bool isHingeOnTheRight, bool isPowered, WoodSpecies? species, int expectedId, byte expectedData)
+                {
+                    if (species != null) // It's a wooden door
+                    {
+                        // Create the block from IBlock Properties
+                        var original = new WoodenDoorTop(isHingeOnTheRight, isPowered, (WoodSpecies)species);
+                        var javaBlock = JavaBlock.From(original);
 
+                        javaBlock.TypeId.Should().Be(expectedId);
+                        javaBlock.Data.Should().Be(expectedData);
+
+                        // Create Block from id and data
+                        var actual = JavaBlock.Create(expectedId, expectedData) as WoodenDoorTop;
+
+                        // Ensure the properties are equivalent coming from the other direction.
+                        actual.Species.Should().Be(species);
+                        actual.IsPowered.Should().Be(isPowered);
+                        actual.IsHingeOnTheRight.Should().Be(isHingeOnTheRight);
+
+                    }
+                    else // It's an iron door
+                    {
+                        // Create the block from IBlock Properties
+                        var original = new IronDoorTop(isHingeOnTheRight, isPowered);
+                        var javaBlock = JavaBlock.From(original);
+
+                        javaBlock.TypeId.Should().Be(expectedId);
+                        javaBlock.Data.Should().Be(expectedData);
+
+                        // Create Block from id and data
+                        var actual = JavaBlock.Create(expectedId, expectedData) as IronDoorTop;
+
+                        // Ensure the properties are equivalent coming from the other direction.
+                        actual.IsPowered.Should().Be(isPowered);
+                        actual.IsHingeOnTheRight.Should().Be(isHingeOnTheRight);
+                    }
+                }
+
+                [Theory]
+                [InlineData(true, Direction.North, WoodSpecies.Birch, 194, 0x7)]
+                [InlineData(false, Direction.South, WoodSpecies.Jungle, 195, 0x1)]
+                [InlineData(true, Direction.East, WoodSpecies.Acacia, 196, 0x4)]
+                [InlineData(false, Direction.West, null, 71, 0x2)]
+                public void It_should_round_trip_bottom(bool isOpen, Direction facing, WoodSpecies? species, int expectedId, byte expectedData)
+                {
+                    if (species != null) // It's a wooden door
+                    {
+                        // Create the block from IBlock Properties
+                        var original = new WoodenDoorBottom(isOpen, facing, (WoodSpecies)species);
+                        var javaBlock = JavaBlock.From(original);
+
+                        javaBlock.TypeId.Should().Be(expectedId);
+                        javaBlock.Data.Should().Be(expectedData);
+
+                        // Create Block from id and data
+                        var actual = JavaBlock.Create(expectedId, expectedData) as WoodenDoorBottom;
+
+                        // Ensure the properties are equivalent coming from the other direction.
+                        actual.IsOpen.Should().Be(isOpen);
+                        actual.Facing.Should().Be(facing);
+                    }
+                    else // It's an iron door
+                    {
+                        // Create the block from IBlock Properties
+                        var original = new IronDoorBottom(isOpen, facing);
+                        var javaBlock = JavaBlock.From(original);
+
+                        javaBlock.TypeId.Should().Be(expectedId);
+                        javaBlock.Data.Should().Be(expectedData);
+
+                        // Create Block from id and data
+                        var actual = JavaBlock.Create(expectedId, expectedData) as IronDoorBottom;
+
+                        // Ensure the properties are equivalent coming from the other direction.
+                        actual.IsOpen.Should().Be(isOpen);
+                        actual.Facing.Should().Be(facing);
+
+                    }
+                }
+            }
+        }
     }
 
     public static class ByteExtensions
