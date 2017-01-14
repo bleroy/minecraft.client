@@ -51,7 +51,7 @@ namespace Decent.Minecraft.Client.Java
         /// <returns>The id for the type</returns>
         public static int GetTypeId(Type type)
         {
-             return _registry.GetTypeId(type);
+            return _registry.GetTypeId(type);
         }
 
         // Constants for blocks that are represented by other block types.
