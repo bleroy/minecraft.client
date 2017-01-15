@@ -91,7 +91,9 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+            _ctors[Id<RedSandstone>()] = d => d == 2 ? new RedSandstone((Finish)Finish.Smooth) : d == 1 ? new RedSandstone((Finish)Finish.Chiseled) : new RedSandstone((Finish)Finish.None);
             _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
+            _ctors[Id<Sandstone>()] = d => d == 2 ? new Sandstone((Finish)Finish.Smooth) : d == 1 ? new Sandstone((Finish)Finish.Chiseled) : new Sandstone((Finish)Finish.None);
             _ctors[Id<Sapling>()] = d => new Sapling((WoodSpecies)(d & 0x3), (d & 0x8) != 0);
 
             _ctors[Id<Snow>()] = d => new Snow(8);
@@ -222,16 +224,28 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
             }
 
+            var redSandstone = block as RedSandstone;
+            if (redSandstone != null)
+            {
+                return new JavaBlock(Id<RedSandstone>(), (byte)(redSandstone.Finish == Finish.Smooth ? 2 : redSandstone.Finish == Finish.Chiseled ? 1 : 0));
+            }
+
             var sapling = block as Sapling;
             if (sapling != null)
             {
                 return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
             }
-            
+
             var sand = block as Sand;
             if (sand != null)
             {
                 return new JavaBlock(Id<Sand>(), (byte)(sand is RedSand ? 1 : 0));
+            }
+
+            var sandstone = block as Sandstone;
+            if (sandstone != null)
+            {
+                return new JavaBlock(Id<Sandstone>(), (byte)(sandstone.Finish == Finish.Smooth ? 2 : sandstone.Finish == Finish.Chiseled ? 1 : 0));
             }
 
             var snow = block as Snow;
