@@ -192,7 +192,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<EndPortal>(119)
                 //.Register<EndPortalFrame>(120)
                 .Register<EndStone>(121)
-                //.Register<DragonEgg>(122)
+                .Register<DragonEgg>(122)
                 //.Register<RedstoneLamp>(123)
                 //.Register<LitRedstoneLamp>(124)
                 //.Register<DoubleWoodenSlab>(125)
