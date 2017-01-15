@@ -95,7 +95,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<LapisLazuli>(22)
                 .Register<Dispenser>(23)
                 .Register<Sandstone>(24)
-                //.Register<Note>(25)
+                .Register<Note>(25)
                 .Register<Bed>(26)
                 //.Register<PoweredRail>(27)
                 //.Register<DetectorRail>(28)
