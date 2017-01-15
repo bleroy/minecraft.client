@@ -90,13 +90,14 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+            _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
             _ctors[Id<Sapling>()] = d => new Sapling((WoodSpecies)(d & 0x3), (d & 0x8) != 0);
 
             _ctors[Id<Snow>()] = d => new Snow(8);
             _ctors[SnowLayer] = d => new Snow(d);
 
+            _ctors[Id<Sponge>()] = d => d == 1 ? new WetSponge() : new Sponge();
             _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
-            _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
             _ctors[Id<StainedClay>()] = d => new StainedClay((Color)d);
             _ctors[Id<StainedGlass>()] = d => new StainedGlass((Color)d);
             _ctors[Id<Stone>()] = d => new Stone((Mineral)d);
@@ -226,6 +227,12 @@ namespace Decent.Minecraft.Client.Java
                 return snow.Thickness == 8 ?
                     new JavaBlock(Id<Snow>()) :
                     new JavaBlock(SnowLayer, (byte)snow.Thickness);
+            }
+
+            var sponge = block as Sponge;
+            if (sponge != null)
+            {
+                return new JavaBlock(Id<Sponge>(), (byte)(sponge is Sponge ? 1 : 0));
             }
 
             var stainedClay = block as StainedClay;
