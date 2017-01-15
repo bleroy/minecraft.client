@@ -91,7 +91,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Leaves>(18)
                 .Register<Sponge>(19)
                 .Register<Glass>(20)
-                //.Register<LapisLazuliOre>(21)
+                .Register<LapisLazuliOre>(21)
                 .Register<LapisLazuli>(22)
                 //.Register<Dispenser>(23)
                 //.Register<Sandstone>(24)
