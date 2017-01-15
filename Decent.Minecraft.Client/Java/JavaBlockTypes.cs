@@ -83,7 +83,7 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Lava>(10)
                 //.Register<LavaStationary>(11) // No BlockType for StationaryLava, it's all handled in Lava
                 .Register<Sand>(12)
-                //.Register<Gravel>(13)
+                .Register<Gravel>(13)
                 .Register<GoldOre>(14)
                 .Register<IronOre>(15)
                 .Register<CoalOre>(16)
