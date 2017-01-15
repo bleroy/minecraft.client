@@ -1,5 +1,6 @@
 ﻿using Decent.Minecraft.Client.Blocks;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using static Decent.Minecraft.Client.Direction;
@@ -33,6 +34,16 @@ namespace Decent.Minecraft.Client.Java
         // could just write a simple switch statement, but eh.
         private static Func<int, IBlock>[] _ctors;
 
+        private static Dictionary<WoodSpecies, int> _speciesToDoorId = new Dictionary<WoodSpecies, int>()
+            {
+                {WoodSpecies.Acacia, AcaciaWoodenDoor},
+                {WoodSpecies.Birch, BirchWoodenDoor},
+                {WoodSpecies.DarkOak, DarkOakWoodenDoor},
+                {WoodSpecies.Jungle, JungleWoodenDoor},
+                {WoodSpecies.Oak, OakWoodenDoor},
+                {WoodSpecies.Spruce, SpruceWoodenDoor}
+            };
+
         static JavaBlock()
         {
             // Prepare the lookup table once and for all.
@@ -61,24 +72,34 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Chest>()] = d => new Chest(new[] { Direction.North, Direction.North, Direction.South, Direction.West, Direction.East }[d]);
             _ctors[Id<Cobblestone>()] = d => d == 1 ? new MossyCobblestone() : new Cobblestone();
             _ctors[Id<Dirt>()] = d => d == 2 ? new Podzol() : d == 1 ? new CoarseDirt() : new Dirt();
+            _ctors[Id<Dispenser>()] = d => new Dispenser(new[] { Direction3.Down, Direction3.Up, Direction3.North, Direction3.South, Direction3.West, Direction3.East}[d], (d & 0x8) != 0);
             _ctors[Id<IronDoor>()] = d => (d & 0x8) == 0 ?
-                (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
-                new IronDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
+                (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0x3)]) :
+                new IronDoorTop((d & 0x1) == 1, (d & 0x2) != 0);
 
             _ctors[Id<Lava>()] = d => new Lava((Level)(d & 0x7), true, (d & 0x8) != 0);
             _ctors[StationaryLava] = d => new Lava((Level)(d & 0x7), false, (d & 0x8) != 0);
 
-            _ctors[Id<WoodenDoor>()] = d => (d & 0x8) == 0 ?
-                (WoodenDoor)new WoodenDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0xC) >> 2]) :
-                new WoodenDoorTop((d & 0x1) != 0, (d & 0x2) != 0);
+            // Handle all the wooden doors
+            foreach (KeyValuePair<WoodSpecies, int> pair in _speciesToDoorId)
+            {
+                _ctors[pair.Value] = d => (d & 0x8) == 0 ?
+                (WoodenDoor)new WoodenDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0x3)], pair.Key) :
+                new WoodenDoorTop((d & 0x1) == 1, (d & 0x2) != 0, pair.Key);
+            }
+
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+            _ctors[Id<RedSandstone>()] = d => d == 2 ? new RedSandstone((Finish)Finish.Smooth) : d == 1 ? new RedSandstone((Finish)Finish.Chiseled) : new RedSandstone((Finish)Finish.None);
+            _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
+            _ctors[Id<Sandstone>()] = d => d == 2 ? new Sandstone((Finish)Finish.Smooth) : d == 1 ? new Sandstone((Finish)Finish.Chiseled) : new Sandstone((Finish)Finish.None);
             _ctors[Id<Sapling>()] = d => new Sapling((WoodSpecies)(d & 0x3), (d & 0x8) != 0);
 
             _ctors[Id<Snow>()] = d => new Snow(8);
             _ctors[SnowLayer] = d => new Snow(d);
 
+            _ctors[Id<Sponge>()] = d => d == 1 ? new WetSponge() : new Sponge();
             _ctors[Id<Torch>()] = d => new Torch(new[] { Direction3.Nowhere, Direction3.East, Direction3.West, Direction3.South, Direction3.North, Direction3.Up }[d]);
             _ctors[Id<StainedClay>()] = d => new StainedClay((Color)d);
             _ctors[Id<StainedGlass>()] = d => new StainedGlass((Color)d);
@@ -93,7 +114,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[StationaryWater] = d => new Water((Level)(d & 0x7), false, (d & 0x8) != 0);
 
             _ctors[Id<Wood>()] = d => new Wood((WoodSpecies)(d & 0x3), (Axis)(d & 0xC));
-            _ctors[AcaciaWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
+            _ctors[AcaciaAndDarkOakWood] = d => new Wood((WoodSpecies)((d & 0x3) + 4), (Axis)(d & 0xC));
 
             _ctors[Id<WoodPlanks>()] = d => new WoodPlanks((WoodSpecies)(d & 0x3));
             _ctors[Id<Wool>()] = d => new Wool((Color)d);
@@ -149,24 +170,35 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(Id<Dirt>(), (byte)(dirt is CoarseDirt ? 1 : dirt is Podzol ? 2 : 0));
             }
 
+            var dispenser = block as Dispenser;
+            if (dispenser != null)
+            {
+                return new JavaBlock(Id<Dispenser>(), (byte)((dispenser.IsActivated ? 8 : 0) |
+                    (dispenser.Facing == Direction3.Down ? 0 :
+                    dispenser.Facing == Direction3.Up ? 1 :
+                    dispenser.Facing == Direction3.North ? 2 :
+                    dispenser.Facing == Direction3.South ? 3 :
+                    dispenser.Facing == Direction3.West ? 4 :
+                    5)));
+            }
+
             var doorTop = block as DoorTop;
             if (doorTop != null)
             {
-                return new JavaBlock(doorTop is IronDoorTop ? Id<IronDoor>() : Id<WoodenDoor>(),
-                    (byte)(0x8 | (doorTop.HingeOnTheLeft ? 0x1 : 0x0) | (doorTop.Powered ? 0x2 : 0x0)));
+                return new JavaBlock(doorTop is IronDoorTop ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorTop)doorTop).Species],
+                    (byte)(0x8 | (doorTop.IsHingeOnTheRight ? 0x1 : 0x0) | (doorTop.IsPowered ? 0x2 : 0x0)));
             }
 
             var doorBottom = block as DoorBottom;
             if (doorBottom != null)
             {
-                return new JavaBlock(doorBottom is IronDoorBottom ? Id<IronDoor>() : Id<WoodenDoor>(),
+                return new JavaBlock(doorBottom is IronDoorBottom ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorBottom)doorBottom).Species],
                     (byte)((doorBottom.IsOpen ? 0x4 : 0x0) |
                     (doorBottom.Facing == Direction.East ? 0 :
                     doorBottom.Facing == Direction.South ? 1 :
                     doorBottom.Facing == Direction.West ? 2 :
                     3)));
             }
-
 
             var farmland = block as Farmland;
             if (farmland != null)
@@ -192,10 +224,28 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
             }
 
+            var redSandstone = block as RedSandstone;
+            if (redSandstone != null)
+            {
+                return new JavaBlock(Id<RedSandstone>(), (byte)(redSandstone.Finish == Finish.Smooth ? 2 : redSandstone.Finish == Finish.Chiseled ? 1 : 0));
+            }
+
             var sapling = block as Sapling;
             if (sapling != null)
             {
                 return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
+            }
+
+            var sand = block as Sand;
+            if (sand != null)
+            {
+                return new JavaBlock(Id<Sand>(), (byte)(sand is RedSand ? 1 : 0));
+            }
+
+            var sandstone = block as Sandstone;
+            if (sandstone != null)
+            {
+                return new JavaBlock(Id<Sandstone>(), (byte)(sandstone.Finish == Finish.Smooth ? 2 : sandstone.Finish == Finish.Chiseled ? 1 : 0));
             }
 
             var snow = block as Snow;
@@ -204,6 +254,12 @@ namespace Decent.Minecraft.Client.Java
                 return snow.Thickness == 8 ?
                     new JavaBlock(Id<Snow>()) :
                     new JavaBlock(SnowLayer, (byte)snow.Thickness);
+            }
+
+            var sponge = block as Sponge;
+            if (sponge != null)
+            {
+                return new JavaBlock(Id<Sponge>(), (byte)(sponge is Sponge ? 1 : 0));
             }
 
             var stainedClay = block as StainedClay;
@@ -252,7 +308,7 @@ namespace Decent.Minecraft.Client.Java
             {
                return (byte)(wood.Species) < 0x4 ?                    
                     new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
-                    new JavaBlock(AcaciaWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
+                    new JavaBlock(AcaciaAndDarkOakWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
             }
 
             var woodPlanks = block as WoodPlanks;

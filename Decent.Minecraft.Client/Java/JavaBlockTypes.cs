@@ -58,7 +58,14 @@ namespace Decent.Minecraft.Client.Java
         public static byte StationaryWater = 9;
         public static byte StationaryLava = 11;
         public static byte SnowLayer = 78;
-        public static byte AcaciaWood = 162;
+        public static byte AcaciaAndDarkOakWood = 162;
+
+        public static byte OakWoodenDoor = 64;
+        public static byte SpruceWoodenDoor = 193;
+        public static byte BirchWoodenDoor = 194;
+        public static byte JungleWoodenDoor = 195;
+        public static byte AcaciaWoodenDoor = 196;
+        public static byte DarkOakWoodenDoor = 197;
 
         static JavaBlockTypes()
         {
@@ -74,21 +81,21 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Water>(8)
                 //.Register<WaterStationary>(9) // No BlockType for StationaryWater, it's all handled in Water
                 .Register<Lava>(10)
-                //.Register<LavaStationary>(11)
-                //.Register<Sand>(12)
-                //.Register<Gravel>(13)
+                //.Register<LavaStationary>(11) // No BlockType for StationaryLava, it's all handled in Lava
+                .Register<Sand>(12)
+                .Register<Gravel>(13)
                 .Register<GoldOre>(14)
                 .Register<IronOre>(15)
                 .Register<CoalOre>(16)
                 .Register<Wood>(17)
                 .Register<Leaves>(18)
-                //.Register<Sponge>(19)
+                .Register<Sponge>(19)
                 .Register<Glass>(20)
-                //.Register<LapisLazuliOre>(21)
+                .Register<LapisLazuliOre>(21)
                 .Register<LapisLazuli>(22)
-                //.Register<Dispenser>(23)
-                //.Register<Sandstone>(24)
-                //.Register<Note>(25)
+                .Register<Dispenser>(23)
+                .Register<Sandstone>(24)
+                .Register<Note>(25)
                 .Register<Bed>(26)
                 //.Register<PoweredRail>(27)
                 //.Register<DetectorRail>(28)
@@ -185,7 +192,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<EndPortal>(119)
                 //.Register<EndPortalFrame>(120)
                 .Register<EndStone>(121)
-                //.Register<DragonEgg>(122)
+                .Register<DragonEgg>(122)
                 //.Register<RedstoneLamp>(123)
                 //.Register<LitRedstoneLamp>(124)
                 //.Register<DoubleWoodenSlab>(125)
@@ -242,7 +249,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<StandingBanner>(176)
                 //.Register<WallBanner>(177)
                 //.Register<InvertedDaylightSensor>(178)
-                //.Register<RedSandstone>(179)
+                .Register<RedSandstone>(179)
                 //.Register<RedSandstoneStairs>(180)
                 //.Register<DoubleRedSandstoneSlab>(181)
                 //.Register<RedSandstoneSlab>(182)

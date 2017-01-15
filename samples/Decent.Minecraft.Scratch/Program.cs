@@ -102,6 +102,7 @@ Please choose what to draw:
     * I is for image
     * S is for snowy block
     * B is for Borromean rings
+    * D is for a Dragon Egg
 
 ");
                                 var whatToDraw = Console.ReadKey(true);
@@ -137,6 +138,17 @@ It's starting to snow on this particular block...");
                                     case ConsoleKey.B:
                                         playerPosition = await player.GetTilePositionAsync();
                                         new Borromean(world, playerPosition + new Vector3(0, 35, 0)).Build();
+                                        break;
+
+                                    case ConsoleKey.D:
+                                        direction = GetDirection();
+                                        if (direction.HasValue)
+                                        {
+                                            Console.WriteLine(@"
+
+Here comes the egg...");
+                                            LayDragonEgg(world, direction);
+                                        }
                                         break;
                                 }
                                 break;
@@ -251,6 +263,12 @@ Press ESC to quit.
                 await world.SetBlockAsync(snowLayer, awayFromPlayer + new Vector3(0, 1, 0));
             }
         }
+        private static async void LayDragonEgg(IWorld world, Direction? direction)
+        {
+            var playerPosition = await world.Player.GetTilePositionAsync();
+            var awayFromPlayer = playerPosition.Towards(direction.Value, 3);
+            await world.SetBlockAsync<DragonEgg>(awayFromPlayer);
+        }
 
         private static async void RenderIcon(IWorld world, Direction? direction)
         {
@@ -300,18 +318,18 @@ Press ESC to quit.
 
         private static EventHandler<BlockEventArgs> _onBlockHitIdentify = (object sender, BlockEventArgs args) =>
         {
-            IBlock block = ((IWorld)sender).GetBlock(args.Position);
+            IBlock incoming = ((IWorld)sender).GetBlock(args.Position);
+            Type t = incoming.GetType();
             try
             {
-                Type t = block.GetType();
-                int id = JavaBlockTypes.GetTypeId(t);
-                ((IWorld)sender).PostToChatAsync(String.Format("{0} : {1}", t.Name, JavaBlockTypes.GetTypeId(t)));
+                JavaBlock outgoing = JavaBlock.From(incoming);
+                ((IWorld)sender).PostToChatAsync($"{t.Name} : {outgoing.TypeId},{outgoing.Data}");
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
-                ((IWorld)sender).PostToChatAsync("Unknown : Unknown");
+                ((IWorld)sender).PostToChatAsync("Unknown");
             }
-        };
+         };
 
         private static Direction? GetDirection()
         {
