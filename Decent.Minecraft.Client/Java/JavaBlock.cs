@@ -72,6 +72,7 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Chest>()] = d => new Chest(new[] { Direction.North, Direction.North, Direction.South, Direction.West, Direction.East }[d]);
             _ctors[Id<Cobblestone>()] = d => d == 1 ? new MossyCobblestone() : new Cobblestone();
             _ctors[Id<Dirt>()] = d => d == 2 ? new Podzol() : d == 1 ? new CoarseDirt() : new Dirt();
+            _ctors[Id<Dispenser>()] = d => new Dispenser(new[] { Direction3.Down, Direction3.Up, Direction3.North, Direction3.South, Direction3.West, Direction3.East}[d], (d & 0x8) != 0);
             _ctors[Id<IronDoor>()] = d => (d & 0x8) == 0 ?
                 (IronDoor)new IronDoorBottom((d & 0x4) != 0, new[] { Direction.East, Direction.South, Direction.West, Direction.North }[(d & 0x3)]) :
                 new IronDoorTop((d & 0x1) == 1, (d & 0x2) != 0);
@@ -165,6 +166,18 @@ namespace Decent.Minecraft.Client.Java
             if (dirt != null)
             {
                 return new JavaBlock(Id<Dirt>(), (byte)(dirt is CoarseDirt ? 1 : dirt is Podzol ? 2 : 0));
+            }
+
+            var dispenser = block as Dispenser;
+            if (dispenser != null)
+            {
+                return new JavaBlock(Id<Dispenser>(), (byte)((dispenser.IsActivated ? 8 : 0) |
+                    (dispenser.Facing == Direction3.Down ? 0 :
+                    dispenser.Facing == Direction3.Up ? 1 :
+                    dispenser.Facing == Direction3.North ? 2 :
+                    dispenser.Facing == Direction3.South ? 3 :
+                    dispenser.Facing == Direction3.West ? 4 :
+                    5)));
             }
 
             var doorTop = block as DoorTop;
