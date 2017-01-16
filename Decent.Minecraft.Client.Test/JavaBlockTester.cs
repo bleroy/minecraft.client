@@ -145,6 +145,7 @@ namespace Decent.Minecraft.Client.Test
                 }
             }
         }
+
         public class For_a_door_block
         {
             public class When_serializing_and_deserializing
@@ -232,6 +233,41 @@ namespace Decent.Minecraft.Client.Test
                         actual.Facing.Should().Be(facing);
 
                     }
+                }
+            }
+        }
+        public class For_a_rail_block
+        {
+            public class When_serializing_and_deserializing
+            {
+                [Theory]
+                [InlineData(RailDirections.NorthSouth, 66, 0x0)]
+                [InlineData(RailDirections.EastWest, 66, 0x1)]
+                [InlineData(RailDirections.AscendingEast, 66, 0x2)]
+                [InlineData(RailDirections.AscendingWest, 66, 0x3)]
+                [InlineData(RailDirections.AscendingNorth, 66, 0x4)]
+                [InlineData(RailDirections.AscendingSouth, 66, 0x5)]
+                [InlineData(RailDirections.TurningSouthEast, 66, 0x6)]
+                [InlineData(RailDirections.TurningSouthWest, 66, 0x7)]
+                [InlineData(RailDirections.TurningNorthWest, 66, 0x8)]
+                [InlineData(RailDirections.TurningNorthEast, 66, 0x9)]
+                public void It_should_round_trip(RailDirections directions, int expectedId, byte expectedData)
+                {
+                    // Create the block from IBlock Properties
+                    Rail original = new Rail(directions);
+
+                    var javaBlock = JavaBlock.From(original);
+
+                    javaBlock.TypeId.Should().Be(expectedId);
+                    javaBlock.Data.Should().Be(expectedData);
+
+                    // Create Block from id and data
+                    var actual = JavaBlock.Create(expectedId, expectedData) as Rail;
+
+                    // Ensure the properties are equivalent coming from the other direction
+                    actual.IsAscending.Should().Be(original.IsAscending);
+                    actual.IsTurning.Should().Be(original.IsTurning);
+                    actual.Directions.Should().Be(original.Directions);
                 }
             }
         }

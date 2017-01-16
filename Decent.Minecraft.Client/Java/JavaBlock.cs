@@ -91,6 +91,18 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+            _ctors[Id<Rail>()] = d =>
+                d == 0 ? new Rail() :
+                d == 1 ? new Rail(RailDirections.EastWest) :
+                d == 2 ? new Rail(RailDirections.AscendingEast) :
+                d == 3 ? new Rail(RailDirections.AscendingWest) :
+                d == 4 ? new Rail(RailDirections.AscendingNorth) :
+                d == 5 ? new Rail(RailDirections.AscendingSouth) :
+                d == 6 ? new Rail(RailDirections.TurningSouthEast) :
+                d == 7 ? new Rail(RailDirections.TurningSouthWest) :
+                d == 8 ? new Rail(RailDirections.TurningNorthWest) :
+                new Rail(RailDirections.TurningNorthEast);
+
             _ctors[Id<RedSandstone>()] = d => d == 2 ? new RedSandstone((Finish)Finish.Smooth) : d == 1 ? new RedSandstone((Finish)Finish.Chiseled) : new RedSandstone((Finish)Finish.None);
             _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
             _ctors[Id<Sandstone>()] = d => d == 2 ? new Sandstone((Finish)Finish.Smooth) : d == 1 ? new Sandstone((Finish)Finish.Chiseled) : new Sandstone((Finish)Finish.None);
@@ -222,6 +234,22 @@ namespace Decent.Minecraft.Client.Java
             if (lava != null)
             {
                 return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
+            }
+
+            var rail = block as Rail;
+            if (rail != null)
+            {
+                return new JavaBlock(Id<Rail>(), (byte)(
+                    rail.Directions == RailDirections.NorthSouth ? 0 :
+                    rail.Directions == RailDirections.EastWest ? 1 :
+                    rail.Directions == RailDirections.AscendingEast ? 2 :
+                    rail.Directions == RailDirections.AscendingWest ? 3 :
+                    rail.Directions == RailDirections.AscendingNorth ? 4 :
+                    rail.Directions == RailDirections.AscendingSouth ? 5 :
+                    rail.Directions == RailDirections.TurningSouthEast ? 6 :
+                    rail.Directions == RailDirections.TurningSouthWest ? 7 :
+                    rail.Directions == RailDirections.TurningNorthWest ? 8 :
+                    9));
             }
 
             var redSandstone = block as RedSandstone;

@@ -136,7 +136,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<StandingSign>(63)
                 .Register<WoodenDoor>(64)
                 //.Register<Ladder>(65)
-                //.Register<Rail>(66)
+                .Register<Rail>(66)
                 //.Register<StairsCobbleStone>(67)
                 //.Register<WallSign>(68)
                 //.Register<Lever>(69)
