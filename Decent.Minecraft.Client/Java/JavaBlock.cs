@@ -286,7 +286,7 @@ namespace Decent.Minecraft.Client.Java
             var sponge = block as Sponge;
             if (sponge != null)
             {
-                return new JavaBlock(Id<Sponge>(), (byte)(sponge is Sponge ? 1 : 0));
+                return new JavaBlock(Id<Sponge>(), (byte)(sponge is WetSponge ? 1 : 0));
             }
 
             var stainedClay = block as StainedClay;

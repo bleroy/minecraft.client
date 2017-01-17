@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Reflection;
 using Decent.Minecraft.Client.Blocks;
 using Decent.Minecraft.Client.Java;
+using static Decent.Minecraft.Client.Java.JavaBlockTypes;
 using FluentAssertions;
 using Xunit;
 
@@ -8,6 +11,37 @@ namespace Decent.Minecraft.Client.Test
 {
     public class JavaBlockTester
     {
+        public class For_all_simple_blocks
+        {
+            public class When_serializing_and_deserializing
+            {
+                [Fact]
+                public void It_should_round_trip()
+                { 
+                    // Let's loop over the Java block registry:
+                    foreach (var blockType in Types)
+                    {
+                        var type = blockType.Type;
+                        var typeInfo = type.GetTypeInfo();
+                        var typeId = blockType.TypeId;
+                        // Look for a parameterless constructor, so we can do the work
+                        // without the block author having to bother about it.
+                        var ctor = typeInfo.GetConstructor(Type.EmptyTypes);
+                        if (ctor != null)
+                        {
+                            Func<int, IBlock> _ctor = d => (Expression.Lambda<Func<IBlock>>(Expression.New(type))).Compile()();
+                            var original = _ctor(0);
+                            var javaBlock = JavaBlock.From(original);
+                            var originalTypeId = JavaBlockTypes.GetTypeId(type);
+
+                            javaBlock.Data.Should().Be(0);
+                            javaBlock.TypeId.Should().Be(originalTypeId);
+                        }
+                    }
+                }
+            }
+        }
+
         public class For_a_stone_block
         {
             public class When_serializing
