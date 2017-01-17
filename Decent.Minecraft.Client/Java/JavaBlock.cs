@@ -91,17 +91,11 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
-            _ctors[Id<Rail>()] = d =>
-                d == 0 ? new Rail() :
-                d == 1 ? new Rail(RailDirections.EastWest) :
-                d == 2 ? new Rail(RailDirections.AscendingEast) :
-                d == 3 ? new Rail(RailDirections.AscendingWest) :
-                d == 4 ? new Rail(RailDirections.AscendingNorth) :
-                d == 5 ? new Rail(RailDirections.AscendingSouth) :
-                d == 6 ? new Rail(RailDirections.TurningSouthEast) :
-                d == 7 ? new Rail(RailDirections.TurningSouthWest) :
-                d == 8 ? new Rail(RailDirections.TurningNorthWest) :
-                new Rail(RailDirections.TurningNorthEast);
+
+            _ctors[Id<Rail>()] = d => railCtorMap(Id<Rail>(), d);
+            _ctors[PoweredRail] = d => railCtorMap(PoweredRail, d);
+            _ctors[ActivatorRail] = d => railCtorMap(ActivatorRail, d);
+            _ctors[DetectorRail] = d => railCtorMap(DetectorRail, d);
 
             _ctors[Id<RedSandstone>()] = d => d == 2 ? new RedSandstone((Finish)Finish.Smooth) : d == 1 ? new RedSandstone((Finish)Finish.Chiseled) : new RedSandstone((Finish)Finish.None);
             _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
@@ -239,17 +233,22 @@ namespace Decent.Minecraft.Client.Java
             var rail = block as Rail;
             if (rail != null)
             {
-                return new JavaBlock(Id<Rail>(), (byte)(
-                    rail.Directions == RailDirections.NorthSouth ? 0 :
-                    rail.Directions == RailDirections.EastWest ? 1 :
-                    rail.Directions == RailDirections.AscendingEast ? 2 :
-                    rail.Directions == RailDirections.AscendingWest ? 3 :
-                    rail.Directions == RailDirections.AscendingNorth ? 4 :
-                    rail.Directions == RailDirections.AscendingSouth ? 5 :
-                    rail.Directions == RailDirections.TurningSouthEast ? 6 :
-                    rail.Directions == RailDirections.TurningSouthWest ? 7 :
-                    rail.Directions == RailDirections.TurningNorthWest ? 8 :
-                    9));
+                return new JavaBlock((rail.Type == RailType.Simple ? Id<Rail>() :
+                                rail.Type == RailType.Powered ? PoweredRail :
+                                rail.Type == RailType.Detector ? DetectorRail :
+                                ActivatorRail), 
+                                (byte)(
+                                rail.Directions == RailDirections.NorthSouth ? (0 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.EastWest ? (1 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.AscendingEast ? (2 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.AscendingWest ? (3 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.AscendingNorth ? (4 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.AscendingSouth ? (5 | (rail.IsActive ? 0x8 : 0x0)) :
+                                rail.Directions == RailDirections.TurningSouthEast ? 6 :
+                                rail.Directions == RailDirections.TurningSouthWest ? 7 :
+                                rail.Directions == RailDirections.TurningNorthWest ? 8 :
+                                9));
+
             }
 
             var redSandstone = block as RedSandstone;
@@ -359,6 +358,37 @@ namespace Decent.Minecraft.Client.Java
 
             // All other types are simply represented.
             return new JavaBlock(GetTypeId(block.GetType()));
+        }
+
+        private static IBlock railCtorMap(int id, int d)
+        {
+            RailType type = id == 66 ? RailType.Simple : 
+                            id == 27 ? RailType.Powered : 
+                            id == 28 ? RailType.Detector : 
+                            RailType.Activator;
+
+            if (type == RailType.Simple)
+            {
+                return (d == 0 ? new Rail(RailDirections.NorthSouth) :
+                    d == 1 ? new Rail(RailDirections.EastWest) :
+                    d == 2 ? new Rail(RailDirections.AscendingEast) :
+                    d == 3 ? new Rail(RailDirections.AscendingWest) :
+                    d == 4 ? new Rail(RailDirections.AscendingNorth) :
+                    d == 5 ? new Rail(RailDirections.AscendingSouth) :
+                    d == 6 ? new Rail(RailDirections.TurningSouthEast) :
+                    d == 7 ? new Rail(RailDirections.TurningSouthWest) :
+                    d == 8 ? new Rail(RailDirections.TurningNorthWest) :
+                    new Rail(RailDirections.TurningNorthEast));
+            }
+            else
+            {
+                return ((d & 0x7) == 0 ? new Rail(RailDirections.NorthSouth, type, (d & 0x8) != 0x0) :
+                        (d & 0x7) == 1 ? new Rail(RailDirections.EastWest, type, (d & 0x8) != 0x0) :
+                        (d & 0x7) == 2 ? new Rail(RailDirections.AscendingEast, type, (d & 0x8) != 0x0) :
+                        (d & 0x7) == 3 ? new Rail(RailDirections.AscendingWest, type, (d & 0x8) != 0x0) :
+                        (d & 0x7) == 4 ? new Rail(RailDirections.AscendingNorth, type, (d & 0x8) != 0x0) :
+                        new Rail(RailDirections.AscendingSouth, type, (d & 0x8) != 0x0));
+            }
         }
     }
 }
