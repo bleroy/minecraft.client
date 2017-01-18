@@ -275,31 +275,19 @@ namespace Decent.Minecraft.Client.Test
             public class When_serializing_and_deserializing
             {
                 [Theory]
-                [InlineData(RailDirections.NorthSouth, RailType.Simple, false, 66, 0x0)]
-                [InlineData(RailDirections.NorthSouth, RailType.Powered, false, 27, 0x0)]
-                [InlineData(RailDirections.NorthSouth, RailType.Powered, true, 27, 0x8)]
-                [InlineData(RailDirections.NorthSouth, RailType.Detector, false, 28, 0x0)]
-                [InlineData(RailDirections.NorthSouth, RailType.Detector, true, 28, 0x8)]
-                [InlineData(RailDirections.NorthSouth, RailType.Activator, false, 157, 0x0)]
-                [InlineData(RailDirections.NorthSouth, RailType.Activator, true, 157, 0x8)]
-                [InlineData(RailDirections.EastWest, RailType.Simple, false, 66, 0x1)]
-                [InlineData(RailDirections.AscendingEast, RailType.Simple, false, 66, 0x2)]
-                [InlineData(RailDirections.AscendingEast, RailType.Powered, false, 27, 0x2)]
-                [InlineData(RailDirections.AscendingEast, RailType.Powered, true, 27, 0xA)]
-                [InlineData(RailDirections.AscendingWest, RailType.Simple, false, 66, 0x3)]
-                [InlineData(RailDirections.AscendingWest, RailType.Detector, false, 28, 0x3)]
-                [InlineData(RailDirections.AscendingWest, RailType.Detector, true, 28, 0xB)]
-                [InlineData(RailDirections.AscendingNorth, RailType.Simple, false, 66, 0x4)]
-                [InlineData(RailDirections.AscendingNorth, RailType.Activator, false, 157, 0x4)]
-                [InlineData(RailDirections.AscendingSouth, RailType.Activator, true, 157, 0xD)]
-                [InlineData(RailDirections.TurningSouthEast, RailType.Simple, false, 66, 0x6)]
-                [InlineData(RailDirections.TurningSouthWest, RailType.Simple, false, 66, 0x7)]
-                [InlineData(RailDirections.TurningNorthWest, RailType.Simple, false, 66, 0x8)]
-                [InlineData(RailDirections.TurningNorthEast, RailType.Simple, false, 66, 0x9)]
-                public void It_should_round_trip(RailDirections directions, RailType type, bool isActive, int expectedId, byte expectedData)
+                [InlineData(RailDirections.NorthSouth, 66, 0x0)]
+                [InlineData(RailDirections.EastWest, 66, 0x1)]
+                [InlineData(RailDirections.AscendingEast, 66, 0x2)]
+                [InlineData(RailDirections.AscendingWest, 66, 0x3)]
+                [InlineData(RailDirections.AscendingNorth, 66, 0x4)]
+                [InlineData(RailDirections.TurningSouthEast, 66, 0x6)]
+                [InlineData(RailDirections.TurningSouthWest, 66, 0x7)]
+                [InlineData(RailDirections.TurningNorthWest, 66, 0x8)]
+                [InlineData(RailDirections.TurningNorthEast, 66, 0x9)]
+                public void It_should_round_trip_simple_rails(RailDirections directions, int expectedId, byte expectedData)
                 {
                     // Create the block from IBlock Properties
-                    Rail original = new Rail(directions, type, isActive);
+                    Rail original = new Rail(directions);
 
                     var javaBlock = JavaBlock.From(original);
 
@@ -312,28 +300,44 @@ namespace Decent.Minecraft.Client.Test
                     // Ensure the properties are equivalent coming from the other direction
                     actual.IsAscending.Should().Be(original.IsAscending);
                     actual.IsTurning.Should().Be(original.IsTurning);
-                    actual.IsActive.Should().Be(original.IsActive);
-                    actual.Type.Should().Be(original.Type);
                     actual.Directions.Should().Be(original.Directions);
                 }
 
+
                 [Theory]
-                [InlineData(RailDirections.NorthSouth, RailType.Simple, true)]
-                [InlineData(RailDirections.TurningSouthEast, RailType.Powered, false)]
-                public void It_should_fail_to_deserialize(RailDirections directions, RailType type, bool isActive)
+                [InlineData(RailDirections.AscendingNorth, typeof(ActivatorRail), false, 157, 0x4)]
+                [InlineData(RailDirections.AscendingSouth, typeof(ActivatorRail), true, 157, 0xD)]
+                [InlineData(RailDirections.AscendingWest, typeof(DetectorRail), false, 28, 0x3)]
+                [InlineData(RailDirections.AscendingWest, typeof(DetectorRail), true, 28, 0xB)]
+                [InlineData(RailDirections.AscendingEast, typeof(PoweredRail), false, 27, 0x2)]
+                [InlineData(RailDirections.AscendingEast, typeof(PoweredRail), true, 27, 0xA)]
+                [InlineData(RailDirections.NorthSouth, typeof(PoweredRail), false, 27, 0x0)]
+                [InlineData(RailDirections.NorthSouth, typeof(PoweredRail), true, 27, 0x8)]
+                [InlineData(RailDirections.NorthSouth, typeof(DetectorRail), false, 28, 0x0)]
+                [InlineData(RailDirections.NorthSouth, typeof(DetectorRail), true, 28, 0x8)]
+                [InlineData(RailDirections.NorthSouth, typeof(ActivatorRail), false, 157, 0x0)]
+                [InlineData(RailDirections.NorthSouth, typeof(ActivatorRail), true, 157, 0x8)]
+                public void It_should_round_trip_activatable_rails(RailDirections directions, Type t, bool isActive, int expectedId, byte expectedData)
                 {
                     // Create the block from IBlock Properties
-                    bool exceptionThrown = false;
-                    try
-                    {
-                        Rail original = new Rail(directions, type, isActive);
-                    }
-                    catch (ArgumentException)
-                    {
-                        exceptionThrown = true;
-                    }
+                    Activator.CreateInstance(t, directions, isActive);
+                    var original = Activator.CreateInstance(t, directions, isActive) as IActivatableRail;
 
-                    exceptionThrown.Should().BeTrue();
+                    var javaBlock = JavaBlock.From((IBlock)original);
+
+                    // Create Block from id and data
+                    javaBlock.TypeId.Should().Be(expectedId);
+                    javaBlock.Data.Should().Be(expectedData);
+
+                    // Ensure the properties are equivalent coming from the other direction
+                    var actual = JavaBlock.Create(expectedId, expectedData) as IActivatableRail;
+                    actual.IsAscending.Should().Be(original.IsAscending);
+                    actual.IsTurning.Should().Be(original.IsTurning);
+                    actual.IsActive.Should().Be(original.IsActive);
+                    actual.Directions.Should().Be(original.Directions);
+
+                    // Verify the right types come from both directions.
+                    actual.GetType().Should().Be(original.GetType());
                 }
             }
         }

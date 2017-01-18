@@ -177,26 +177,5 @@ namespace Decent.Minecraft.Client
         {
             return current.Towards(Direction.West, times);
         }
-
-        /// <summary>
-        /// Gets the opposite direction of the value given.
-        /// </summary>
-        /// <param name="direction">The direction used to determine the opposite.</param>
-        /// <returns>Returns the opposite direction.</returns>
-        public static Direction GetOppositeDirection(Direction direction)
-        {
-            return (Direction)((((int)direction) + 2) % 4);
-        }
-
-        /// <summary>
-        /// Determines if the values given are opposite directions.
-        /// </summary>
-        /// <param name="direction1">The first direction to compare.</param>
-        /// <param name="direction2">The second direction to compare.</param>
-        /// <returns>Returns true if the directions are opposite.</returns>
-        public static bool AreOppositeDirections(Direction direction1, Direction direction2)
-        {
-            return ((((int)direction1) + 2) % 4) == (int)direction2;
-        }
     }
 }

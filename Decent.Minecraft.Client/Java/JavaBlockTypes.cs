@@ -67,9 +67,9 @@ namespace Decent.Minecraft.Client.Java
         public static byte AcaciaWoodenDoor = 196;
         public static byte DarkOakWoodenDoor = 197;
         // Rails
-        public static byte PoweredRail = 27;
-        public static byte DetectorRail = 28;
-        public static byte ActivatorRail = 157;
+        public static byte PoweredRailId = 27;
+        public static byte DetectorRailId = 28;
+        public static byte ActivatorRailId = 157;
 
         static JavaBlockTypes()
         {

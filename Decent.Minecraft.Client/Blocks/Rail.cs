@@ -5,18 +5,8 @@
     /// </summary>
     public class Rail : IBlock
     {
-        public Rail(RailDirections directions = RailDirections.NorthSouth, RailType type = RailType.Simple, bool isActive = false)
+        public Rail(RailDirections directions = RailDirections.NorthSouth)
         {
-            if ((int)directions > 5 && (int)type > 0)
-            {
-                throw new System.ArgumentOutOfRangeException(nameof(directions), $"Only simple rails can turn.");
-            }
-
-            if ((int)type < 1 && isActive)
-            {
-                throw new System.ArgumentOutOfRangeException(nameof(directions), $"Simple rails cannot be active.");
-            }
-
             if ((int)directions < 2)
             {
                 IsAscending = false;
@@ -32,10 +22,8 @@
                 IsAscending = false;
                 IsTurning = true;
             }
-
+            
             Directions = directions;
-            IsActive = isActive;
-            Type = type;
         }
 
         public RailDirections Directions { get; }
@@ -43,9 +31,56 @@
         public bool IsTurning { get; }
 
         public bool IsAscending { get; }
+    }
 
-        public RailType Type { get; }
+    public class PoweredRail : Rail, IActivatableRail
+    {
+        public PoweredRail(RailDirections directions = RailDirections.NorthSouth, bool isActive = false) : base(directions)
+        {
+            if ((int)directions > 5)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(directions), $"Only simple rails can turn.");
+            }
 
+            IsActive = isActive;
+        }
         public bool IsActive { get; }
+    }
+    public class ActivatorRail : Rail, IActivatableRail
+    {
+        public ActivatorRail(RailDirections directions = RailDirections.NorthSouth, bool isActive = false) : base(directions)
+        {
+            if ((int)directions > 5)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(directions), $"Only simple rails can turn.");
+            }
+
+            IsActive = isActive;
+        }
+        public bool IsActive { get; }
+    }
+    public class DetectorRail : Rail, IActivatableRail
+    {
+        public DetectorRail(RailDirections directions = RailDirections.NorthSouth, bool isActive = false) : base(directions)
+        {
+            if ((int)directions > 5)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(directions), $"Only simple rails can turn.");
+            }
+
+            IsActive = isActive;
+        }
+        public bool IsActive { get; }
+    }
+
+    public interface IActivatableRail
+    {
+        bool IsActive { get; }
+
+        RailDirections Directions { get; }
+
+        bool IsTurning { get; }
+
+        bool IsAscending { get; }
     }
 }
