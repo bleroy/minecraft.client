@@ -66,10 +66,6 @@ namespace Decent.Minecraft.Client.Java
         public static byte JungleWoodenDoor = 195;
         public static byte AcaciaWoodenDoor = 196;
         public static byte DarkOakWoodenDoor = 197;
-        // Rails
-        public static byte PoweredRailId = 27;
-        public static byte DetectorRailId = 28;
-        public static byte ActivatorRailId = 157;
 
         static JavaBlockTypes()
         {
@@ -101,8 +97,8 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Sandstone>(24)
                 .Register<Note>(25)
                 .Register<Bed>(26)
-                //.Register<PoweredRail>(27) No BlockType for PoweredRail, it's all handled in Rail.
-                //.Register<DetectorRail>(28) No BlockType for DetectorRail, it's all handled in Rail.
+                .Register<PoweredRail>(27)
+                .Register<DetectorRail>(28)
                 //.Register<StickyPiston>(29)
                 .Register<Cobweb>(30)
                 //.Register<GrassTall>(31)
@@ -231,7 +227,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<Hopper>(154)
                 .Register<Quartz>(155)
                 //.Register<QuartzStairs>(156)
-                //.Register<ActivatorRail>(157) No BlockType for ActivatorRail, it's all handled in Rail.
+                .Register<ActivatorRail>(157)
                 //.Register<Dropper>(158)
                 .Register<StainedClay>(159)
                 //.Register<StainedGlassPane>(160)

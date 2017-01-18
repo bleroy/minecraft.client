@@ -102,19 +102,19 @@ namespace Decent.Minecraft.Client.Java
                                         d == 7 ? new Rail(RailDirections.TurningSouthWest) :
                                         d == 8 ? new Rail(RailDirections.TurningNorthWest) :
                                         new Rail(RailDirections.TurningNorthEast));
-            _ctors[PoweredRailId] = d => ((d & 0x7) == 0 ? new PoweredRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+            _ctors[Id<PoweredRail>()] = d => ((d & 0x7) == 0 ? new PoweredRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 1 ? new PoweredRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 2 ? new PoweredRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 3 ? new PoweredRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 4 ? new PoweredRail(RailDirections.AscendingNorth, (d & 0x8) != 0x0) :
                                         new PoweredRail(RailDirections.AscendingSouth, (d & 0x8) != 0x0));
-            _ctors[ActivatorRailId] = d => ((d & 0x7) == 0 ? new ActivatorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+            _ctors[Id<ActivatorRail>()] = d => ((d & 0x7) == 0 ? new ActivatorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 1 ? new ActivatorRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 2 ? new ActivatorRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 3 ? new ActivatorRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 4 ? new ActivatorRail(RailDirections.AscendingNorth, (d & 0x8) != 0x0) :
                                         new ActivatorRail(RailDirections.AscendingSouth, (d & 0x8) != 0x0));
-            _ctors[DetectorRailId] = d => ((d & 0x7) == 0 ? new DetectorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+            _ctors[Id<DetectorRail>()] = d => ((d & 0x7) == 0 ? new DetectorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 1 ? new DetectorRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 2 ? new DetectorRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
                                         (d & 0x7) == 3 ? new DetectorRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
@@ -260,7 +260,7 @@ namespace Decent.Minecraft.Client.Java
                 var poweredRail = block as PoweredRail;
                 if (poweredRail != null)
                 {
-                    return new JavaBlock(PoweredRailId, (byte)(
+                    return new JavaBlock(Id<PoweredRail>(), (byte)(
                                 poweredRail.Directions == RailDirections.NorthSouth ? (0 | (poweredRail.IsActive ? 0x8 : 0x0)) :
                                 poweredRail.Directions == RailDirections.EastWest ? (1 | (poweredRail.IsActive ? 0x8 : 0x0)) :
                                 poweredRail.Directions == RailDirections.AscendingEast ? (2 | (poweredRail.IsActive ? 0x8 : 0x0)) :
@@ -272,7 +272,7 @@ namespace Decent.Minecraft.Client.Java
                 var activatorRail = block as ActivatorRail;
                 if (activatorRail != null)
                 {
-                    return new JavaBlock(ActivatorRailId, (byte)(
+                    return new JavaBlock(Id<ActivatorRail>(), (byte)(
                                 activatorRail.Directions == RailDirections.NorthSouth ? (0 | (activatorRail.IsActive ? 0x8 : 0x0)) :
                                 activatorRail.Directions == RailDirections.EastWest ? (1 | (activatorRail.IsActive ? 0x8 : 0x0)) :
                                 activatorRail.Directions == RailDirections.AscendingEast ? (2 | (activatorRail.IsActive ? 0x8 : 0x0)) :
@@ -284,7 +284,7 @@ namespace Decent.Minecraft.Client.Java
                 var detectorRail = block as DetectorRail;
                 if (detectorRail != null)
                 {
-                    return new JavaBlock(DetectorRailId, (byte)(
+                    return new JavaBlock(Id<DetectorRail>(), (byte)(
                                 detectorRail.Directions == RailDirections.NorthSouth ? (0 | (detectorRail.IsActive ? 0x8 : 0x0)) :
                                 detectorRail.Directions == RailDirections.EastWest ? (1 | (detectorRail.IsActive ? 0x8 : 0x0)) :
                                 detectorRail.Directions == RailDirections.AscendingEast ? (2 | (detectorRail.IsActive ? 0x8 : 0x0)) :
