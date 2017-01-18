@@ -59,7 +59,7 @@ namespace Decent.Minecraft.Client.Java
         public static byte StationaryLava = 11;
         public static byte SnowLayer = 78;
         public static byte AcaciaAndDarkOakWood = 162;
-
+        // Doors
         public static byte OakWoodenDoor = 64;
         public static byte SpruceWoodenDoor = 193;
         public static byte BirchWoodenDoor = 194;
@@ -97,8 +97,8 @@ namespace Decent.Minecraft.Client.Java
                 .Register<Sandstone>(24)
                 .Register<Note>(25)
                 .Register<Bed>(26)
-                //.Register<PoweredRail>(27)
-                //.Register<DetectorRail>(28)
+                .Register<PoweredRail>(27)
+                .Register<DetectorRail>(28)
                 //.Register<StickyPiston>(29)
                 .Register<Cobweb>(30)
                 //.Register<GrassTall>(31)
@@ -136,7 +136,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<StandingSign>(63)
                 .Register<WoodenDoor>(64)
                 //.Register<Ladder>(65)
-                //.Register<Rail>(66)
+                .Register<Rail>(66)
                 //.Register<StairsCobbleStone>(67)
                 //.Register<WallSign>(68)
                 //.Register<Lever>(69)
@@ -227,7 +227,7 @@ namespace Decent.Minecraft.Client.Java
                 //.Register<Hopper>(154)
                 .Register<Quartz>(155)
                 //.Register<QuartzStairs>(156)
-                //.Register<ActivatorRail>(157)
+                .Register<ActivatorRail>(157)
                 //.Register<Dropper>(158)
                 .Register<StainedClay>(159)
                 //.Register<StainedGlassPane>(160)

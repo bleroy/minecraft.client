@@ -91,6 +91,36 @@ namespace Decent.Minecraft.Client.Java
             _ctors[Id<Farmland>()] = d => new Farmland(d);
             _ctors[Id<FenceGate>()] = d => new FenceGate((Direction)(d & 0x3), (d & 0x4) != 0);
             _ctors[Id<Fire>()] = d => new Fire(d);
+
+            _ctors[Id<Rail>()] = d => (d == 0 ? new Rail(RailDirections.NorthSouth) :
+                                        d == 1 ? new Rail(RailDirections.EastWest) :
+                                        d == 2 ? new Rail(RailDirections.AscendingEast) :
+                                        d == 3 ? new Rail(RailDirections.AscendingWest) :
+                                        d == 4 ? new Rail(RailDirections.AscendingNorth) :
+                                        d == 5 ? new Rail(RailDirections.AscendingSouth) :
+                                        d == 6 ? new Rail(RailDirections.TurningSouthEast) :
+                                        d == 7 ? new Rail(RailDirections.TurningSouthWest) :
+                                        d == 8 ? new Rail(RailDirections.TurningNorthWest) :
+                                        new Rail(RailDirections.TurningNorthEast));
+            _ctors[Id<PoweredRail>()] = d => ((d & 0x7) == 0 ? new PoweredRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 1 ? new PoweredRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 2 ? new PoweredRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 3 ? new PoweredRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 4 ? new PoweredRail(RailDirections.AscendingNorth, (d & 0x8) != 0x0) :
+                                        new PoweredRail(RailDirections.AscendingSouth, (d & 0x8) != 0x0));
+            _ctors[Id<ActivatorRail>()] = d => ((d & 0x7) == 0 ? new ActivatorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 1 ? new ActivatorRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 2 ? new ActivatorRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 3 ? new ActivatorRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 4 ? new ActivatorRail(RailDirections.AscendingNorth, (d & 0x8) != 0x0) :
+                                        new ActivatorRail(RailDirections.AscendingSouth, (d & 0x8) != 0x0));
+            _ctors[Id<DetectorRail>()] = d => ((d & 0x7) == 0 ? new DetectorRail(RailDirections.NorthSouth, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 1 ? new DetectorRail(RailDirections.EastWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 2 ? new DetectorRail(RailDirections.AscendingEast, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 3 ? new DetectorRail(RailDirections.AscendingWest, (d & 0x8) != 0x0) :
+                                        (d & 0x7) == 4 ? new DetectorRail(RailDirections.AscendingNorth, (d & 0x8) != 0x0) :
+                                        new DetectorRail(RailDirections.AscendingSouth, (d & 0x8) != 0x0));
+
             _ctors[Id<RedSandstone>()] = d => d == 2 ? new RedSandstone((Finish)Finish.Smooth) : d == 1 ? new RedSandstone((Finish)Finish.Chiseled) : new RedSandstone((Finish)Finish.None);
             _ctors[Id<Sand>()] = d => d == 1 ? new RedSand() : new Sand();
             _ctors[Id<Sandstone>()] = d => d == 2 ? new Sandstone((Finish)Finish.Smooth) : d == 1 ? new Sandstone((Finish)Finish.Chiseled) : new Sandstone((Finish)Finish.None);
@@ -224,6 +254,58 @@ namespace Decent.Minecraft.Client.Java
                 return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
             }
 
+            var rail = block as Rail;
+            if (rail != null)
+            {
+                var poweredRail = block as PoweredRail;
+                if (poweredRail != null)
+                {
+                    return new JavaBlock(Id<PoweredRail>(), (byte)(
+                                poweredRail.Directions == RailDirections.NorthSouth ? (0 | (poweredRail.IsActive ? 0x8 : 0x0)) :
+                                poweredRail.Directions == RailDirections.EastWest ? (1 | (poweredRail.IsActive ? 0x8 : 0x0)) :
+                                poweredRail.Directions == RailDirections.AscendingEast ? (2 | (poweredRail.IsActive ? 0x8 : 0x0)) :
+                                poweredRail.Directions == RailDirections.AscendingWest ? (3 | (poweredRail.IsActive ? 0x8 : 0x0)) :
+                                poweredRail.Directions == RailDirections.AscendingNorth ? (4 | (poweredRail.IsActive ? 0x8 : 0x0)) :
+                                (5 | (poweredRail.IsActive ? 0x8 : 0x0))));
+                }
+
+                var activatorRail = block as ActivatorRail;
+                if (activatorRail != null)
+                {
+                    return new JavaBlock(Id<ActivatorRail>(), (byte)(
+                                activatorRail.Directions == RailDirections.NorthSouth ? (0 | (activatorRail.IsActive ? 0x8 : 0x0)) :
+                                activatorRail.Directions == RailDirections.EastWest ? (1 | (activatorRail.IsActive ? 0x8 : 0x0)) :
+                                activatorRail.Directions == RailDirections.AscendingEast ? (2 | (activatorRail.IsActive ? 0x8 : 0x0)) :
+                                activatorRail.Directions == RailDirections.AscendingWest ? (3 | (activatorRail.IsActive ? 0x8 : 0x0)) :
+                                activatorRail.Directions == RailDirections.AscendingNorth ? (4 | (activatorRail.IsActive ? 0x8 : 0x0)) :
+                                (5 | (activatorRail.IsActive ? 0x8 : 0x0))));
+                }
+
+                var detectorRail = block as DetectorRail;
+                if (detectorRail != null)
+                {
+                    return new JavaBlock(Id<DetectorRail>(), (byte)(
+                                detectorRail.Directions == RailDirections.NorthSouth ? (0 | (detectorRail.IsActive ? 0x8 : 0x0)) :
+                                detectorRail.Directions == RailDirections.EastWest ? (1 | (detectorRail.IsActive ? 0x8 : 0x0)) :
+                                detectorRail.Directions == RailDirections.AscendingEast ? (2 | (detectorRail.IsActive ? 0x8 : 0x0)) :
+                                detectorRail.Directions == RailDirections.AscendingWest ? (3 | (detectorRail.IsActive ? 0x8 : 0x0)) :
+                                detectorRail.Directions == RailDirections.AscendingNorth ? (4 | (detectorRail.IsActive ? 0x8 : 0x0)) :
+                                (5 | (detectorRail.IsActive ? 0x8 : 0x0))));
+                }
+
+                return new JavaBlock(Id<Rail>(), (byte)(
+                                rail.Directions == RailDirections.NorthSouth ? 0 :
+                                rail.Directions == RailDirections.EastWest ? 1 :
+                                rail.Directions == RailDirections.AscendingEast ? 2 :
+                                rail.Directions == RailDirections.AscendingWest ? 3 :
+                                rail.Directions == RailDirections.AscendingNorth ? 4 :
+                                rail.Directions == RailDirections.AscendingSouth ? 5 :
+                                rail.Directions == RailDirections.TurningSouthEast ? 6 :
+                                rail.Directions == RailDirections.TurningSouthWest ? 7 :
+                                rail.Directions == RailDirections.TurningNorthWest ? 8 :
+                                9));
+            }
+
             var redSandstone = block as RedSandstone;
             if (redSandstone != null)
             {
@@ -259,7 +341,7 @@ namespace Decent.Minecraft.Client.Java
             var sponge = block as Sponge;
             if (sponge != null)
             {
-                return new JavaBlock(Id<Sponge>(), (byte)(sponge is Sponge ? 1 : 0));
+                return new JavaBlock(Id<Sponge>(), (byte)(sponge is WetSponge ? 1 : 0));
             }
 
             var stainedClay = block as StainedClay;
