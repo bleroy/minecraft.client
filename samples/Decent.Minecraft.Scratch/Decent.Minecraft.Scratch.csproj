@@ -9,20 +9,10 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
-    <EmbeddedResource Include="**\*.resx" />
-    <EmbeddedResource Include="compiler\resources\**\*" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Decent.Minecraft.Client\Decent.Minecraft.Client.csproj" />
     <ProjectReference Include="..\Decent.Minecraft.BlocksToBombs\Decent.Minecraft.BlocksToBombs.csproj" />
     <ProjectReference Include="..\Decent.Minecraft.ImageBuilder\Decent.Minecraft.ImageBuilder.csproj" />
     <ProjectReference Include="..\Decent.Minecraft.Shapes\Decent.Minecraft.Shapes.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.App">
-      <Version>1.0.0</Version>
-    </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
