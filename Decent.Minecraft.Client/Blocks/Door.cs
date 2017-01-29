@@ -1,7 +1,6 @@
 ﻿namespace Decent.Minecraft.Client.Blocks
 {
     /// <summary>
-    /// TODO: make wood species a property
     /// <a href="http://minecraft.gamepedia.com/Door">Gamepedia link</a>.
     /// </summary>
     public abstract class Door : IBlock
@@ -10,15 +9,15 @@
 
     public abstract class DoorTop : Door
     {
-        protected DoorTop(bool hingeOnTheLeft, bool powered)
+        protected DoorTop(bool isHingeOnTheRight, bool isPowered)
         {
-            HingeOnTheLeft = hingeOnTheLeft;
-            Powered = powered;
+            IsHingeOnTheRight = isHingeOnTheRight;
+            IsPowered = isPowered;
         }
 
-        public bool HingeOnTheLeft { get; }
+        public bool IsHingeOnTheRight { get; }
 
-        public bool Powered { get; }
+        public bool IsPowered { get; }
     }
 
     public abstract class DoorBottom : Door
@@ -26,6 +25,7 @@
         protected DoorBottom(bool open, Direction facing)
         {
             IsOpen = open;
+            // A Door is facing the direction you are facing when you place it or the direction it swings in.
             Facing = facing;
         }
 
@@ -39,21 +39,29 @@
 
     public class IronDoorTop : DoorTop, IronDoor
     {
-        public IronDoorTop(bool hingeOnTheLeft, bool powered) : base(hingeOnTheLeft, powered) { }
+        public IronDoorTop(bool isHingeOnTheRight, bool powered) : base(isHingeOnTheRight, powered) { }
     }
 
     public class IronDoorBottom : DoorBottom, IronDoor
     {
-        public IronDoorBottom(bool open, Direction facing) : base(open, facing) { }
+        public IronDoorBottom(bool open = false, Direction facing = Direction.South) : base(open, facing) { }
     }
 
     public class WoodenDoorTop : DoorTop, WoodenDoor
     {
-        public WoodenDoorTop(bool hingeOnTheLeft, bool powered) : base(hingeOnTheLeft, powered) { }
+        public WoodenDoorTop(bool isHingeOnTheRight = false, bool powered = false, WoodSpecies species = WoodSpecies.Oak) : base(isHingeOnTheRight, powered)
+        {
+            Species = species;
+        }
+        public WoodSpecies Species { get; }
     }
 
     public class WoodenDoorBottom : DoorBottom, WoodenDoor
     {
-        public WoodenDoorBottom(bool open, Direction facing) : base(open, facing) { }
+        public WoodenDoorBottom(bool open = false, Direction facing = Direction.South, WoodSpecies species = WoodSpecies.Oak) : base(open, facing)
+        {
+            Species = species;
+        }
+        public WoodSpecies Species { get; }
     }
 }
