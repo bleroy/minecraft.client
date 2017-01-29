@@ -7,3 +7,4 @@ obj
 *.GhostDoc.xml
 .idea
 BenchmarkDotNet.Artifacts
+PublishProfiles
