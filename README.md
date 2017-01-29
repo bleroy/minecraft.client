@@ -62,6 +62,11 @@ I also want to be able to run this with Mono (that should actually already work,
 this is just .NET Standard) on a Raspberry Pi: the protocol that Raspberry Jam implements
 is natively present on the Raspberry Pi version.
 
+Building from source
+--------------------
+
+The project must now be built with [csproj-based tooling (Visual Studio 2017 with Core tooling or .NET Core CLI Preview 3 or later)](https://www.microsoft.com/net/download/core).
+
 Can I help? - Up for grabs
 --------------------------
 
@@ -82,10 +87,7 @@ A block is a class that derives from `Block`.
 In the simplest case, the class is empty:
 
 ```csharp
-public class Diamond : Block
-{
-    public Diamond() : base(BlockType.Diamond) { }
-}
+public class Diamond : IBlock {}
 ```
 
 The block class is only part of the implementation, that is supposed to be a simple data structure
@@ -94,10 +96,12 @@ The code that does know about the protocol must be implemented in `JavaBlock`, i
 static constructor, and in the `public static JavaBlock From(Block block)` method.
 
 The static constructor describes how to instantiate the correct block type from data that was
-passed in. In simple cases, there is no data, and the block contruction logic can be very simple:
+passed in. In simple cases, there is no data, and no need to implement construction logic.
+
+When blocks have data, the block contruction logic must build the correct block from the wire data:
 
 ```csharp
-_ctors[(int)BlockType.Diamond] = d => new Diamond();
+_ctors[Id<Farmland>()] = d => new Farmland(d);
 ```
 
 In more complex cases, the data must be decomposed and the corresponding properties must be set
