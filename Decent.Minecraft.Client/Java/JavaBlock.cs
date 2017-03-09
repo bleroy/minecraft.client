@@ -162,104 +162,52 @@ namespace Decent.Minecraft.Client.Java
 
         public static JavaBlock From(IBlock block)
         {
-            // This will look so much better in C# 7 with pattern matching...
-            var bed = block as Bed;
-            if (bed != null)
+            switch (block)
             {
-                return new JavaBlock(Id<Bed>(), (byte)(
-                    (byte)bed.HeadFacing |
-                    (bed.Occupied ? 0x4 : 0x0) |
-                    (bed is BedHead ? 0x8 : 0x0)));
-            }
-
-            var cactus = block as Cactus;
-            if (cactus != null)
-            {
-                return new JavaBlock(Id<Cactus>(), (byte)cactus.Age);
-            }
-
-            var chest = block as Chest;
-            if (chest != null)
-            {
-                return new JavaBlock(Id<Chest>(), (byte)(
-                    chest.Facing == Direction.North ? 2 :
-                    chest.Facing == Direction.South ? 3 :
-                    chest.Facing == Direction.West ? 4 :
-                    5));
-            }
-
-            var cobblestone = block as Cobblestone;
-            if (cobblestone != null)
-            {
-                return new JavaBlock(Id<Cobblestone>(), (byte)(cobblestone is MossyCobblestone ? 1 : 0));
-            }
-
-            var dirt = block as Dirt;
-            if (dirt != null)
-            {
-                return new JavaBlock(Id<Dirt>(), (byte)(dirt is CoarseDirt ? 1 : dirt is Podzol ? 2 : 0));
-            }
-
-            var dispenser = block as Dispenser;
-            if (dispenser != null)
-            {
-                return new JavaBlock(Id<Dispenser>(), (byte)((dispenser.IsActivated ? 8 : 0) |
-                    (dispenser.Facing == Direction3.Down ? 0 :
-                    dispenser.Facing == Direction3.Up ? 1 :
-                    dispenser.Facing == Direction3.North ? 2 :
-                    dispenser.Facing == Direction3.South ? 3 :
-                    dispenser.Facing == Direction3.West ? 4 :
-                    5)));
-            }
-
-            var doorTop = block as DoorTop;
-            if (doorTop != null)
-            {
-                return new JavaBlock(doorTop is IronDoorTop ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorTop)doorTop).Species],
-                    (byte)(0x8 | (doorTop.IsHingeOnTheRight ? 0x1 : 0x0) | (doorTop.IsPowered ? 0x2 : 0x0)));
-            }
-
-            var doorBottom = block as DoorBottom;
-            if (doorBottom != null)
-            {
-                return new JavaBlock(doorBottom is IronDoorBottom ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorBottom)doorBottom).Species],
-                    (byte)((doorBottom.IsOpen ? 0x4 : 0x0) |
-                    (doorBottom.Facing == Direction.East ? 0 :
-                    doorBottom.Facing == Direction.South ? 1 :
-                    doorBottom.Facing == Direction.West ? 2 :
-                    3)));
-            }
-
-            var farmland = block as Farmland;
-            if (farmland != null)
-            {
-                return new JavaBlock(Id<Farmland>(), (byte)farmland.Wetness);
-            }
-
-            var fenceGate = block as FenceGate;
-            if (fenceGate != null)
-            {
-                return new JavaBlock(Id<FenceGate>(), (byte)((byte)fenceGate.Facing | (fenceGate.IsOpen ? 0x4 : 0x0)));
-            }
-
-            var fire = block as Fire;
-            if (fire != null)
-            {
-                return new JavaBlock(Id<Fire>(), (byte)fire.Intensity);
-            }
-
-            var lava = block as Lava;
-            if (lava != null)
-            {
-                return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
-            }
-
-            var rail = block as Rail;
-            if (rail != null)
-            {
-                var poweredRail = block as PoweredRail;
-                if (poweredRail != null)
-                {
+                case Bed bed:
+                    return new JavaBlock(Id<Bed>(), (byte)(
+                        (byte)bed.HeadFacing |
+                        (bed.Occupied ? 0x4 : 0x0) |
+                        (bed is BedHead ? 0x8 : 0x0)));
+                case Cactus cactus:
+                    return new JavaBlock(Id<Cactus>(), (byte)cactus.Age);
+                case Chest chest:
+                    return new JavaBlock(Id<Chest>(), (byte)(
+                        chest.Facing == Direction.North ? 2 :
+                        chest.Facing == Direction.South ? 3 :
+                        chest.Facing == Direction.West ? 4 :
+                        5));
+                case Cobblestone cobblestone:
+                    return new JavaBlock(Id<Cobblestone>(), (byte)(cobblestone is MossyCobblestone ? 1 : 0));
+                case Dirt dirt:
+                    return new JavaBlock(Id<Dirt>(), (byte)(dirt is CoarseDirt ? 1 : dirt is Podzol ? 2 : 0));
+                case Dispenser dispenser:
+                    return new JavaBlock(Id<Dispenser>(), (byte)((dispenser.IsActivated ? 8 : 0) |
+                        (dispenser.Facing == Direction3.Down ? 0 :
+                        dispenser.Facing == Direction3.Up ? 1 :
+                        dispenser.Facing == Direction3.North ? 2 :
+                        dispenser.Facing == Direction3.South ? 3 :
+                        dispenser.Facing == Direction3.West ? 4 :
+                        5)));
+                case DoorTop doorTop:
+                    return new JavaBlock(doorTop is IronDoorTop ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorTop)doorTop).Species],
+                        (byte)(0x8 | (doorTop.IsHingeOnTheRight ? 0x1 : 0x0) | (doorTop.IsPowered ? 0x2 : 0x0)));
+                case DoorBottom doorBottom:
+                    return new JavaBlock(doorBottom is IronDoorBottom ? Id<IronDoor>() : _speciesToDoorId[((WoodenDoorBottom)doorBottom).Species],
+                        (byte)((doorBottom.IsOpen ? 0x4 : 0x0) |
+                        (doorBottom.Facing == Direction.East ? 0 :
+                        doorBottom.Facing == Direction.South ? 1 :
+                        doorBottom.Facing == Direction.West ? 2 :
+                        3)));
+                case Farmland farmland:
+                    return new JavaBlock(Id<Farmland>(), (byte)farmland.Wetness);
+                case FenceGate fenceGate:
+                    return new JavaBlock(Id<FenceGate>(), (byte)((byte)fenceGate.Facing | (fenceGate.IsOpen ? 0x4 : 0x0)));
+                case Fire fire:
+                    return new JavaBlock(Id<Fire>(), (byte)fire.Intensity);
+                case Lava lava:
+                    return new JavaBlock(lava.IsFlowing ? Id<Lava>() : StationaryLava, (byte)((byte)lava.Level | (lava.IsFalling ? 0x8 : 0x0)));
+                case PoweredRail poweredRail:
                     return new JavaBlock(Id<PoweredRail>(), (byte)(
                                 poweredRail.Directions == RailDirections.NorthSouth ? (0 | (poweredRail.IsActive ? 0x8 : 0x0)) :
                                 poweredRail.Directions == RailDirections.EastWest ? (1 | (poweredRail.IsActive ? 0x8 : 0x0)) :
@@ -267,11 +215,7 @@ namespace Decent.Minecraft.Client.Java
                                 poweredRail.Directions == RailDirections.AscendingWest ? (3 | (poweredRail.IsActive ? 0x8 : 0x0)) :
                                 poweredRail.Directions == RailDirections.AscendingNorth ? (4 | (poweredRail.IsActive ? 0x8 : 0x0)) :
                                 (5 | (poweredRail.IsActive ? 0x8 : 0x0))));
-                }
-
-                var activatorRail = block as ActivatorRail;
-                if (activatorRail != null)
-                {
+                case ActivatorRail activatorRail:
                     return new JavaBlock(Id<ActivatorRail>(), (byte)(
                                 activatorRail.Directions == RailDirections.NorthSouth ? (0 | (activatorRail.IsActive ? 0x8 : 0x0)) :
                                 activatorRail.Directions == RailDirections.EastWest ? (1 | (activatorRail.IsActive ? 0x8 : 0x0)) :
@@ -279,11 +223,7 @@ namespace Decent.Minecraft.Client.Java
                                 activatorRail.Directions == RailDirections.AscendingWest ? (3 | (activatorRail.IsActive ? 0x8 : 0x0)) :
                                 activatorRail.Directions == RailDirections.AscendingNorth ? (4 | (activatorRail.IsActive ? 0x8 : 0x0)) :
                                 (5 | (activatorRail.IsActive ? 0x8 : 0x0))));
-                }
-
-                var detectorRail = block as DetectorRail;
-                if (detectorRail != null)
-                {
+                case DetectorRail detectorRail:
                     return new JavaBlock(Id<DetectorRail>(), (byte)(
                                 detectorRail.Directions == RailDirections.NorthSouth ? (0 | (detectorRail.IsActive ? 0x8 : 0x0)) :
                                 detectorRail.Directions == RailDirections.EastWest ? (1 | (detectorRail.IsActive ? 0x8 : 0x0)) :
@@ -291,128 +231,66 @@ namespace Decent.Minecraft.Client.Java
                                 detectorRail.Directions == RailDirections.AscendingWest ? (3 | (detectorRail.IsActive ? 0x8 : 0x0)) :
                                 detectorRail.Directions == RailDirections.AscendingNorth ? (4 | (detectorRail.IsActive ? 0x8 : 0x0)) :
                                 (5 | (detectorRail.IsActive ? 0x8 : 0x0))));
-                }
-
-                return new JavaBlock(Id<Rail>(), (byte)(
-                                rail.Directions == RailDirections.NorthSouth ? 0 :
-                                rail.Directions == RailDirections.EastWest ? 1 :
-                                rail.Directions == RailDirections.AscendingEast ? 2 :
-                                rail.Directions == RailDirections.AscendingWest ? 3 :
-                                rail.Directions == RailDirections.AscendingNorth ? 4 :
-                                rail.Directions == RailDirections.AscendingSouth ? 5 :
-                                rail.Directions == RailDirections.TurningSouthEast ? 6 :
-                                rail.Directions == RailDirections.TurningSouthWest ? 7 :
-                                rail.Directions == RailDirections.TurningNorthWest ? 8 :
-                                9));
+                case Rail rail:
+                    return new JavaBlock(Id<Rail>(), (byte)(
+                                    rail.Directions == RailDirections.NorthSouth ? 0 :
+                                    rail.Directions == RailDirections.EastWest ? 1 :
+                                    rail.Directions == RailDirections.AscendingEast ? 2 :
+                                    rail.Directions == RailDirections.AscendingWest ? 3 :
+                                    rail.Directions == RailDirections.AscendingNorth ? 4 :
+                                    rail.Directions == RailDirections.AscendingSouth ? 5 :
+                                    rail.Directions == RailDirections.TurningSouthEast ? 6 :
+                                    rail.Directions == RailDirections.TurningSouthWest ? 7 :
+                                    rail.Directions == RailDirections.TurningNorthWest ? 8 :
+                                    9));
+                case RedSandstone redSandstone:
+                    return new JavaBlock(Id<RedSandstone>(),
+                        (byte)(redSandstone.Finish == Finish.Smooth ? 2 : redSandstone.Finish == Finish.Chiseled ? 1 : 0));
+                case Sapling sapling:
+                    return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
+                case Sand sand:
+                    return new JavaBlock(Id<Sand>(), (byte)(sand is RedSand ? 1 : 0));
+                case Sandstone sandstone:
+                    return new JavaBlock(Id<Sandstone>(),
+                        (byte)(sandstone.Finish == Finish.Smooth ? 2 : sandstone.Finish == Finish.Chiseled ? 1 : 0));
+                case Snow snow:
+                    return snow.Thickness == 8 ?
+                        new JavaBlock(Id<Snow>()) :
+                        new JavaBlock(SnowLayer, (byte)snow.Thickness);
+                case Sponge sponge:
+                    return new JavaBlock(Id<Sponge>(), (byte)(sponge is WetSponge ? 1 : 0));
+                case StainedClay stainedClay:
+                    return new JavaBlock(Id<Clay>(), (byte)stainedClay.Color);
+                case StainedGlass stainedGlass:
+                    return new JavaBlock(Id<StainedGlass>(), (byte)stainedGlass.Color);
+                case Stone stone:
+                    return new JavaBlock(Id<Stone>(), (byte)stone.Mineral);
+                case StoneBricks stoneBrick:
+                    return new JavaBlock(Id<StoneBricks>(), (byte)stoneBrick.Quality);
+                case Torch torch:
+                    return new JavaBlock(Id<Torch>(), (byte)(
+                        torch.Facing == Direction3.East ? 1 :
+                        torch.Facing == Direction3.West ? 2 :
+                        torch.Facing == Direction3.South ? 3 :
+                        torch.Facing == Direction3.North ? 4 :
+                        5));
+                case Water water:
+                    return new JavaBlock(water.IsFlowing ? Id<Water>() : StationaryWater,
+                        (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0)));
+                case Wood wood:
+                    return (byte)(wood.Species) < 0x4 ?
+                         new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
+                         new JavaBlock(AcaciaAndDarkOakWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
+                case WoodPlanks woodPlanks:
+                    return new JavaBlock(Id<WoodPlanks>(), (byte)woodPlanks.Species);
+                case Wool wool:
+                    return new JavaBlock(Id<Wool>(), (byte)wool.Color);
+                case UnknownBlock unknown:
+                    throw new InvalidOperationException("Can't serialize an unknown block.");
+                default:
+                    // All other types are simply represented.
+                    return new JavaBlock(GetTypeId(block.GetType()));
             }
-
-            var redSandstone = block as RedSandstone;
-            if (redSandstone != null)
-            {
-                return new JavaBlock(Id<RedSandstone>(), (byte)(redSandstone.Finish == Finish.Smooth ? 2 : redSandstone.Finish == Finish.Chiseled ? 1 : 0));
-            }
-
-            var sapling = block as Sapling;
-            if (sapling != null)
-            {
-                return new JavaBlock(Id<Sapling>(), (byte)((byte)sapling.Species | (sapling.IsReadyToGrow ? 0x8 : 0x0)));
-            }
-
-            var sand = block as Sand;
-            if (sand != null)
-            {
-                return new JavaBlock(Id<Sand>(), (byte)(sand is RedSand ? 1 : 0));
-            }
-
-            var sandstone = block as Sandstone;
-            if (sandstone != null)
-            {
-                return new JavaBlock(Id<Sandstone>(), (byte)(sandstone.Finish == Finish.Smooth ? 2 : sandstone.Finish == Finish.Chiseled ? 1 : 0));
-            }
-
-            var snow = block as Snow;
-            if (snow != null)
-            {
-                return snow.Thickness == 8 ?
-                    new JavaBlock(Id<Snow>()) :
-                    new JavaBlock(SnowLayer, (byte)snow.Thickness);
-            }
-
-            var sponge = block as Sponge;
-            if (sponge != null)
-            {
-                return new JavaBlock(Id<Sponge>(), (byte)(sponge is WetSponge ? 1 : 0));
-            }
-
-            var stainedClay = block as StainedClay;
-            if (stainedClay != null)
-            {
-                return new JavaBlock(Id<Clay>(), (byte)stainedClay.Color);
-            }
-
-            var stainedGlass = block as StainedGlass;
-            if (stainedGlass != null)
-            {
-                return new JavaBlock(Id<StainedGlass>(), (byte)stainedGlass.Color);
-            }
-
-            var stone = block as Stone;
-            if (stone != null)
-            {
-                return new JavaBlock(Id<Stone>(), (byte)stone.Mineral);
-            }
-
-            var stoneBrick = block as StoneBricks;
-            if (stoneBrick != null)
-            {
-                return new JavaBlock(Id<StoneBricks>(), (byte)stoneBrick.Quality);
-            }
-
-            var torch = block as Torch;
-            if (torch != null)
-            {
-                return new JavaBlock(Id<Torch>(), (byte)(
-                    torch.Facing == Direction3.East? 1 :
-                    torch.Facing == Direction3.West? 2 :
-                    torch.Facing == Direction3.South? 3 :
-                    torch.Facing == Direction3.North? 4 :
-                    5));
-            }
-
-            var water = block as Water;
-            if (water != null)
-            {
-                return new JavaBlock(water.IsFlowing ? Id<Water>() : StationaryWater, (byte)((byte)water.Level | (water.IsFalling ? 0x8 : 0x0)));
-            }
-
-            var wood = block as Wood;
-            if (wood != null)
-            {
-               return (byte)(wood.Species) < 0x4 ?                    
-                    new JavaBlock(Id<Wood>(), (byte)((byte)wood.Species ^ (byte)wood.Orientation)) :
-                    new JavaBlock(AcaciaAndDarkOakWood, (byte)(((byte)wood.Species - 4) ^ (byte)wood.Orientation));
-            }
-
-            var woodPlanks = block as WoodPlanks;
-            if (woodPlanks != null)
-            {
-                return new JavaBlock(Id<WoodPlanks>(), (byte)woodPlanks.Species);
-            }
-
-            var wool = block as Wool;
-            if (wool != null)
-            {
-                return new JavaBlock(Id<Wool>(), (byte)wool.Color);
-            }
-
-            var unknown = block as UnknownBlock;
-            if (unknown != null)
-            {
-                throw new InvalidOperationException("Can't serialize an unknown block.");
-            }
-
-            // All other types are simply represented.
-            return new JavaBlock(GetTypeId(block.GetType()));
         }
     }
 }
